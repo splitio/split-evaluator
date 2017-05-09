@@ -1,0 +1,29 @@
+{
+  "name": "callhome-nodejs",
+  "version": "9.1.1",
+  "description": "Split SDK web services",
+  "main": "server.js",
+  "scripts": {
+    "start": "SPLITIO_DEBUG=enable node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/splitio/testing-node-js.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/splitio/testing-node-js/issues"
+  },
+  "homepage": "https://github.com/splitio/testing-node-js#readme",
+  "dependencies": {
+    "@splitsoftware/splitio": "9.1.1",
+    "config": "1.25.1",
+    "express": "4.13.4",
+    "lodash": "4.12.0"
+  },
+  "engines": {
+    "node": "6.10.3",
+    "npm": "3.10.10"
+  }
+}
