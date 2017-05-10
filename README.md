@@ -6,7 +6,8 @@
 2. `npm install`
 3. `API_KEY=xxxxxxx PORT=4444 npm start`
 
-   API_KEY could be override using this env variable. But we recommend to use [node-config](https://github.com/lorenwest/node-config#quick-start)
+   API_KEY could be overriden quickly, but we recommend the usage of [node-config](https://github.com/lorenwest/node-config#quick-start),
+   switch the environment variable NODE_ENV. Please read the details [here](https://github.com/lorenwest/node-config#quick-start).
 
 ## Docs
 
