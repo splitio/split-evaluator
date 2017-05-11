@@ -9,7 +9,7 @@
    API_KEY could be overriden quickly, but we recommend the usage of [node-config](https://github.com/lorenwest/node-config#quick-start),
    switch the environment variable NODE_ENV. Please read the details [here](https://github.com/lorenwest/node-config#quick-start).
 
-## Docs
+## Services
 
     GET
       /get-treatment
