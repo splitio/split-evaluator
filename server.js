@@ -47,7 +47,7 @@ app.get('/get-treatment', (req, res) => {
   } catch (e) {}
 
   function asyncResult(treatment) {
-    res.send({ treatment });
+    res.set('Cache-Control', config.get('cacheControl')).send({ treatment });
   }
 
   const eventuallyAvailableValue = client.getTreatment(key, split, attributes);
@@ -89,7 +89,7 @@ app.get('/get-treatments', (req, res) => {
   } catch (e) {}
 
   function asyncResult(treatments) {
-    res.type('json').send(treatments);
+    res.set('Cache-Control', config.get('cacheControl')).send(treatments);
   }
 
   const eventuallyAvailableValue = client.getTreatments(key, splits, attributes);
