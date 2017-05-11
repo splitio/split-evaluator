@@ -11,6 +11,7 @@ const utils = require('./utils');
 
 const api = require('./sdk');
 const client = api.client();
+const manager = api.manager();
 
 const port = process.env.PORT || 80;
 
@@ -81,21 +82,27 @@ app.get('/describe/get-treatments', (req, res) => {
 app.get('/get-treatments', (req, res) => {
   const state = req.query;
   const key = utils.parseKey(state.key, state['bucketing-key']);
-  const splits = state['split-names'].split(',');
+
+  let splits;
   let attributes;
+
+  if (state['split-names'] && state['split-names'].length > 0) {
+    splits = state['split-names'].split(',');
+  } else {
+    splits = Promise.resolve(manager.splits()).then(views => views.map(v => v.name));
+  }
 
   try {
     attributes = JSON.parse(state['attributes']);
   } catch (e) {}
 
-  function asyncResult(treatments) {
-    res.set('Cache-Control', config.get('cacheControl')).send(treatments);
-  }
-
-  const eventuallyAvailableValue = client.getTreatments(key, splits, attributes);
-
-  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
-  else asyncResult(eventuallyAvailableValue);
+  Promise.resolve(splits)
+    // Call getTreatments
+    .then(names => client.getTreatments(key, names, attributes))
+    // Send the response to the client
+    .then(treatments => res.set('Cache-Control', config.get('cacheControl')).type('json').send(treatments))
+    // 500 on error
+    .catch(() => res.sendStatus(500));
 });
 
 app.get('/version', (req, res) => {
