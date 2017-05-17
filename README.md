@@ -25,7 +25,7 @@
         (Optional) This should be a json string of the attributes you want to include in the getTreatment call.
 
     EXAMPLE
-      curl 'http://localhost:4444/get-treatment?key=my-customer-key&split=my-experiment'
+      curl 'http://localhost:4444/get-treatment?key=my-customer-key&split-name=my-experiment'
 
 
 
