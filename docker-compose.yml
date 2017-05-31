@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+  webservice:
+    image: callhome-nodejs:9.2.1
+    build: .
+    volumes:
+      - .:/callhome-nodejs
+      - /callhome-nodejs/node_modules
+    command: bash -c "API_KEY=9tnua8udt2ap4i20sls8aa37k7fgi9sg13ec PORT=4444 npm start"
+    ports:
+      - '4444:4444'
