@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 
 services:
   webservice:
@@ -7,6 +7,9 @@ services:
     volumes:
       - .:/callhome-nodejs
       - /callhome-nodejs/node_modules
-    command: bash -c "API_KEY=9tnua8udt2ap4i20sls8aa37k7fgi9sg13ec PORT=4444 npm start"
+    environment:
+      - API_KEY=${API_KEY}
+      - PORT=${PORT}
+    command: bash -c "API_KEY=${API_KEY} PORT=7548 npm start"
     ports:
-      - '4444:4444'
+      - "${PORT:-7548}:7548"

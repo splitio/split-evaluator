@@ -1,7 +1,7 @@
 FROM alpine:3.5
  RUN mkdir callhome-nodejs
  WORKDIR callhome-nodejs
- EXPOSE 4444
+ EXPOSE 7548
 
  COPY . .
 
