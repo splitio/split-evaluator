@@ -10,6 +10,6 @@ services:
     environment:
       - API_KEY=${API_KEY}
       - PORT=${PORT}
-    command: bash -c "API_KEY=${API_KEY} PORT=7548 npm start"
+    command: bash -c "API_KEY=${API_KEY} PORT=7548 BIND=${PORT:-7548} npm start"
     ports:
       - "${PORT:-7548}:7548"
