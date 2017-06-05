@@ -4,7 +4,7 @@
   "description": "Split SDK web services",
   "main": "server.js",
   "scripts": {
-    "start": "DEBUG=splitio* node server.js",
+    "start": "SPLITIO_DEBUG='on' node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

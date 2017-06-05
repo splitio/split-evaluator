@@ -10,4 +10,4 @@ FROM alpine:3.5
  RUN apk add git
  RUN apk add nodejs
  RUN rm -rf /var/cache/apk/*
- RUN npm install --save
+ RUN npm install
