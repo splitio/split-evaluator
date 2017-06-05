@@ -5,9 +5,7 @@ const path = require('path');
 
 module.exports = {
   sdk: {
-    core: {
-      authorizationKey: 'localhost',
-    },
+    // In case someone uses localhost with the same file
     features: path.join(__dirname, '.split'),
   },
   // Block the ExpressJS server till the SDK is ready.
