@@ -1,0 +1,15 @@
+version: '2.1'
+
+services:
+  webservice:
+    image: callhome-nodejs:9.2.1
+    build: .
+    volumes:
+      - .:/callhome-nodejs
+      - /callhome-nodejs/node_modules
+    environment:
+      - API_KEY=${API_KEY}
+      - PORT=${PORT}
+    command: bash -c "API_KEY=${API_KEY} PORT=7548 BIND=${PORT:-7548} npm start"
+    ports:
+      - "${PORT:-7548}:7548"

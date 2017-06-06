@@ -132,6 +132,7 @@ app.get('*', function (req, res) {
 function spinUpServer() {
   app.listen(port, '0.0.0.0', function () {
     console.log('Server is Up and Running at Port : ' + port);
+    console.log('Container Binding Port: ' + process.env.BIND);
   });
 }
 

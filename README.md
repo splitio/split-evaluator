@@ -44,3 +44,20 @@
 
      EXAMPLE
        curl 'http://localhost:4444/get-treatments?key=my-customer-key&split-names=my-experiment,another-experiment'
+
+4. Running the service in Docker container
+
+    Pre-requisite :
+    - docker engine
+    - docker-compose
+
+    Command to build & run the docker container :
+    - `API_KEY=xxxxxxx PORT=90 -E docker-compose up`
+
+      API_KEY : Api-Key for you Split Environment <br>
+      PORT : TCP Port on host, where this service will be accessed.
+
+    The container will serve the above endpoints.
+    - /get-treatment
+    - /get-treatments
+
