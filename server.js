@@ -143,7 +143,7 @@ app.get('*', function (req, res) {
 });
 
 function spinUpServer() {
-  app.listen(8081, '127.0.0.1', function () {
+  app.listen(port, '0.0.0.0', function () {
     console.log('Server is Up and Running at Port : ' + port);
   });
 }
