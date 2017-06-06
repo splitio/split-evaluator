@@ -17,6 +17,8 @@ if (process.env.API_KEY) {
       authorizationKey: process.env.API_KEY
     }
   });
+} else {
+  throw new Error('API Key cannot be empty or null.');
 }
 
 module.exports = SplitFactory(settings);
