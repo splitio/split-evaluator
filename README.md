@@ -52,7 +52,7 @@
     - docker-compose
 
     Command to build & run the docker container :
-    - `API_KEY=xxxxxxx PORT=90 -E docker-compose up`
+    - `SPLITIO_API_KEY=xxxxxxx SPLITIO_PORT=90 -E docker-compose up`
 
       API_KEY : Api-Key for you Split Environment <br>
       PORT : TCP Port on host, where this service will be accessed.
