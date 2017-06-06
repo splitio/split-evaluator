@@ -44,3 +44,5 @@
 
      EXAMPLE
        curl 'http://localhost:4444/get-treatments?key=my-customer-key&split-names=my-experiment,another-experiment'
+
+4. Running the service in Docker container
