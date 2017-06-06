@@ -14,6 +14,19 @@ const client = api.client();
 const manager = api.manager();
 
 const port = process.env.PORT || 80;
+const EXT_API_KEY = process.env.EXT_API_KEY;
+
+if (!EXT_API_KEY) {
+  throw new Error('External API Key cannot be empty or null.');
+}
+
+app.use((req, res, next) => {
+  if (req.headers.Authorization == EXT_API_KEY) {
+    next();
+  } else {
+    res.status(401).send('Unauthorized');    
+  }
+});
 
 app.get('/describe/get-treatment', (req, res) => {
 
@@ -130,7 +143,7 @@ app.get('*', function (req, res) {
 });
 
 function spinUpServer() {
-  app.listen(port, '0.0.0.0', function () {
+  app.listen(8081, '127.0.0.1', function () {
     console.log('Server is Up and Running at Port : ' + port);
   });
 }
