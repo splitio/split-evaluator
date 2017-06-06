@@ -54,7 +54,7 @@
     Command to build & run the docker container :
     - `SPLITIO_EXT_API_KEY=yyyyyyy SPLITIO_API_KEY=xxxxxxx SPLITIO_PORT=90 -E docker-compose up`
 
-      SPLITIO_EXT_API_KEY : Callhome will validate every request using this key. It is not a Split API key but an arbitrary value <br>
+      SPLITIO_EXT_API_KEY : Callhome will validate every request against Authorization header. This is not a Split API key but an arbitrary value <br>
       SPLITIO_API_KEY : Api-Key for you Split Environment <br>
       SPLITIO_PORT : TCP Port on host, where this service will be accessed.
 
