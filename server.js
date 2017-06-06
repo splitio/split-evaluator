@@ -14,6 +14,19 @@ const client = api.client();
 const manager = api.manager();
 
 const port = process.env.PORT || 80;
+const EXT_API_KEY = process.env.EXT_API_KEY;
+
+if (!EXT_API_KEY) {
+  throw new Error('External API Key cannot be empty or null.');
+}
+
+app.use((req, res, next) => {
+  if (req.headers.Authorization == EXT_API_KEY) {
+    next();
+  } else {
+    res.status(401).send('Unauthorized');    
+  }
+});
 
 app.get('/describe/get-treatment', (req, res) => {
 
