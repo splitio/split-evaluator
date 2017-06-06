@@ -54,8 +54,8 @@
     Command to build & run the docker container :
     - `API_KEY=xxxxxxx PORT=90 -E docker-compose up`
 
-        API_KEY : Api-Key for you Split Environment
-        PORT : TCP Port on host, where this service will be accessed.
+      API_KEY : Api-Key for you Split Environment \n
+      PORT : TCP Port on host, where this service will be accessed.
 
     The container will serve the above endpoints.
     - /get-treatment
