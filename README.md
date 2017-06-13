@@ -52,10 +52,11 @@
     - docker-compose
 
     Command to build & run the docker container :
-    - `API_KEY=xxxxxxx PORT=90 -E docker-compose up`
+    - `SPLITIO_EXT_API_KEY=yyyyyyy SPLITIO_API_KEY=xxxxxxx SPLITIO_PORT=90 -E docker-compose up`
 
-      API_KEY : Api-Key for you Split Environment <br>
-      PORT : TCP Port on host, where this service will be accessed.
+      SPLITIO_EXT_API_KEY : Callhome will validate every request against Authorization header. This is not a Split API key but an arbitrary value <br>
+      SPLITIO_API_KEY : Api-Key for you Split Environment <br>
+      SPLITIO_PORT : TCP Port on host, where this service will be accessed.
 
     The container will serve the above endpoints.
     - /get-treatment
