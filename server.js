@@ -21,10 +21,10 @@ if (!EXT_API_KEY) {
 }
 
 app.use((req, res, next) => {
-  if (req.headers.Authorization == EXT_API_KEY) {
+  if (req.headers.authorization == EXT_API_KEY) {
     next();
   } else {
-    res.status(401).send('Unauthorized');    
+    res.status(401).send('Unauthorized');
   }
 });
 
@@ -145,7 +145,6 @@ app.get('*', function (req, res) {
 function spinUpServer() {
   app.listen(port, '0.0.0.0', function () {
     console.log('Server is Up and Running at Port : ' + port);
-    console.log('Container Binding Port: ' + process.env.BIND);
   });
 }
 
