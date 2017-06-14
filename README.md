@@ -62,3 +62,52 @@
     - /get-treatment
     - /get-treatments
 
+## Running the service in Docker container
+
+### Command to build & run the docker container :
+*Pull the image:* `docker pull splitsoftware/callhome:1.0`
+*Run the container:*
+```shell
+docker run -e EXT_API_KEY=${SPLITIO_EXT_API_KEY} \
+-e API_KEY=${SPLITIO_API_KEY} \
+-p ${SPLITIO_PORT}:7548 \
+splitsoftware/callhome:1.0
+```
+
+#### Configs:
+  `SPLITIO_EXT_API_KEY` : Callhome will validate every request against Authorization header. This is not a Split API key but an arbitrary value
+  `SPLITIO_API_KEY` : Api-Key for you Split Environment
+  `SPLITIO_PORT` : TCP Port on host, where this service will be accessed.
+
+## Running the service with docker-compose
+The sample below is content of a `docker-compose.yml`
+```yaml
+version: '2.1'
+
+services:
+  webservice:
+    image: "splitsoftware/callhome:1.0"
+    environment:
+      - EXT_API_KEY=${SPLITIO_EXT_API_KEY}
+      - API_KEY=${SPLITIO_API_KEY}
+    ports:
+      - "${SPLITIO_PORT:-7548}:7548"
+```
+Just export env vars `SPLITIO_EXT_API_KEY`, `SPLITIO_API_KEY`, `SPLITIO_PORT` and run `docker-compose up`
+
+## Build Docker Image
+This command must be executed at root folder
+`docker build -t splitsoftware/callhome:1.0 .`
+
+## Push Docker Image
+Before pushing image you must be logged in docker cloud. So run this command:
+`docker login`
+And push the image:
+`docker push splitsoftware/callhome:1.0`
+
+Pushing `latest` image. If tag is not explicit on `docker pull` command, the tag will be set by Docker engine as `latest`. So it is important create an image with this tag and push it.
+
+```shell
+docker build -t splitsoftware/callhome:latest .
+docker push splitsoftware/callhome:latest
+```
