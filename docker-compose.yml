@@ -2,11 +2,9 @@ version: '2.1'
 
 services:
   webservice:
-    image: callhome-nodejs:9.2.1
-    build: .
-    volumes:
-      - .:/callhome-nodejs
-      - /callhome-nodejs/node_modules
-    command: bash -c "EXT_API_KEY=${SPLITIO_EXT_API_KEY} API_KEY=${SPLITIO_API_KEY} PORT=7548 BIND=${SPLITIO_PORT:-7548} npm start"
+    image: "splitsoftware/callhome:1.0"
+    environment:
+      - EXT_API_KEY=${SPLITIO_EXT_API_KEY}
+      - API_KEY=${SPLITIO_API_KEY}
     ports:
       - "${SPLITIO_PORT:-7548}:7548"
