@@ -57,6 +57,7 @@
 
       SPLITIO_EXT_API_KEY : Callhome will validate every request against Authorization header. This is not a Split API key but an arbitrary value <br>
       SPLITIO_API_KEY : Api-Key for you Split Environment <br>
+      SPLITIO_DEBUG : (Optional) Usable for enabling/disabling the logs of the SDK. By default they are off. <br>      
       SPLITIO_PORT : TCP Port on host, where this service will be accessed.
 
     The container will serve the above endpoints.
@@ -66,14 +67,14 @@
 ## Running the service in Docker container
 
 ### Command to build & run the docker container :
-*Pull the image:* `docker pull splitsoftware/callhome:1.0`
+*Pull the image:* `docker pull splitsoftware/callhome:1.1`
 *Run the container:*
 ```shell
 docker run -e EXT_API_KEY=${SPLITIO_EXT_API_KEY} \
 -e API_KEY=${SPLITIO_API_KEY} \
 -e SPLITIO_DEBUG='off' \ 
 -p ${SPLITIO_PORT}:7548 \
-splitsoftware/callhome:1.0
+splitsoftware/callhome:1.1
 ```
 **NOTE:** *SPLITIO_DEBUG is optional*
 
@@ -90,7 +91,7 @@ version: '2.1'
 
 services:
   webservice:
-    image: "splitsoftware/callhome:1.0"
+    image: "splitsoftware/callhome:1.1"
     environment:
       - EXT_API_KEY=${SPLITIO_EXT_API_KEY}
       - API_KEY=${SPLITIO_API_KEY}
@@ -98,17 +99,17 @@ services:
     ports:
       - "${SPLITIO_PORT:-7548}:7548"
 ```
-Just export env vars `SPLITIO_EXT_API_KEY`, `SPLITIO_API_KEY`, `SPLITIO_PORT` and run `docker-compose up`
+Just export env vars `SPLITIO_EXT_API_KEY`, `SPLITIO_API_KEY`, `SPLITIO_PORT` and optionally `SPLITIO_DEBUG`, then run `docker-compose up`
 
 ## Build Docker Image
 This command must be executed at root folder
-`docker build -t splitsoftware/callhome:1.0 .`
+`docker build -t splitsoftware/callhome:1.1 .`
 
 ## Push Docker Image
 Before pushing image you must be logged in docker cloud. So run this command:
 `docker login`
 And push the image:
-`docker push splitsoftware/callhome:1.0`
+`docker push splitsoftware/callhome:1.1`
 
 Pushing `latest` image. If tag is not explicit on `docker pull` command, the tag will be set by Docker engine as `latest`. So it is important create an image with this tag and push it.
 

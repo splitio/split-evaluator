@@ -2,7 +2,7 @@ version: '2.1'
 
 services:
   webservice:
-    image: "splitsoftware/callhome:1.0"
+    image: "splitsoftware/callhome:1.1"
     environment:
       - EXT_API_KEY=${SPLITIO_EXT_API_KEY}
       - API_KEY=${SPLITIO_API_KEY}
