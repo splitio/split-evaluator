@@ -4,10 +4,11 @@
 
 1. `nvm use`
 2. `npm install`
-3. `API_KEY=xxxxxxx PORT=4444 SPLITIO_DEBUG='off' npm start`
+3. `API_KEY=xxxxxxx PORT=4444 SPLITIO_DEBUG='on' npm start`
 
    API_KEY could be overriden quickly, but we recommend the usage of [node-config](https://github.com/lorenwest/node-config#quick-start),
    switch the environment variable NODE_ENV. Please read the details [here](https://github.com/lorenwest/node-config#quick-start).
+   For logging details see the [NodeJS SDK docs](https://docs.split.io/docs/nodejs-sdk-overview#section-logging).
 
 ## Services
 
