@@ -6,5 +6,6 @@ services:
     environment:
       - EXT_API_KEY=${SPLITIO_EXT_API_KEY}
       - API_KEY=${SPLITIO_API_KEY}
+      - SPLITIO_DEBUG=${SPLITIO_DEBUG} 
     ports:
       - "${SPLITIO_PORT:-7548}:7548"

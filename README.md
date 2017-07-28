@@ -4,7 +4,7 @@
 
 1. `nvm use`
 2. `npm install`
-3. `API_KEY=xxxxxxx PORT=4444 npm start`
+3. `API_KEY=xxxxxxx PORT=4444 SPLITIO_DEBUG='off' npm start`
 
    API_KEY could be overriden quickly, but we recommend the usage of [node-config](https://github.com/lorenwest/node-config#quick-start),
    switch the environment variable NODE_ENV. Please read the details [here](https://github.com/lorenwest/node-config#quick-start).
@@ -70,14 +70,17 @@
 ```shell
 docker run -e EXT_API_KEY=${SPLITIO_EXT_API_KEY} \
 -e API_KEY=${SPLITIO_API_KEY} \
+-e SPLITIO_DEBUG='off' \ 
 -p ${SPLITIO_PORT}:7548 \
 splitsoftware/callhome:1.0
 ```
+**NOTE:** *SPLITIO_DEBUG is optional*
 
 #### Configs:
-  `SPLITIO_EXT_API_KEY` : Callhome will validate every request against Authorization header. This is not a Split API key but an arbitrary value
-  `SPLITIO_API_KEY` : Api-Key for you Split Environment
-  `SPLITIO_PORT` : TCP Port on host, where this service will be accessed.
+`SPLITIO_EXT_API_KEY` : Callhome will validate every request against Authorization header. This is not a Split API key but an arbitrary value.  
+`SPLITIO_API_KEY` : Api-Key for you Split Environment.  
+`SPLITIO_DEBUG` : (Optional) Usable for enabling/disabling the logs of the SDK. By default they are off.  
+`SPLITIO_PORT` : TCP Port on host, where this service will be accessed. 
 
 ## Running the service with docker-compose
 The sample below is content of a `docker-compose.yml`
@@ -90,6 +93,7 @@ services:
     environment:
       - EXT_API_KEY=${SPLITIO_EXT_API_KEY}
       - API_KEY=${SPLITIO_API_KEY}
+      - SPLITIO_DEBUG=${SPLITIO_DEBUG}      
     ports:
       - "${SPLITIO_PORT:-7548}:7548"
 ```
