@@ -1,6 +1,6 @@
 {
   "name": "callhome-nodejs",
-  "version": "9.3.1",
+  "version": "9.3.4",
   "description": "Split SDK web services",
   "main": "server.js",
   "scripts": {
@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/splitio/testing-node-js#readme",
   "dependencies": {
-    "@splitsoftware/splitio": "9.3.1",
+    "@splitsoftware/splitio": "9.3.4",
     "config": "1.25.1",
     "express": "4.13.4",
     "lodash": "4.12.0"
