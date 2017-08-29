@@ -13,7 +13,7 @@ const api = require('./sdk');
 const client = api.client();
 const manager = api.manager();
 
-const port = process.env.PORT || 80;
+const port = process.env.SPLITIO_SERVER_PORT || 7548;
 const EXT_API_KEY = process.env.EXT_API_KEY;
 
 if (!EXT_API_KEY) {
