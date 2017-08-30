@@ -67,13 +67,17 @@
 ## Running the service in Docker container
 
 ### Command to build & run the docker container :
-*Pull the image:* `docker pull splitsoftware/callhome:1.2`
-*Run the container:*
+You can bind the exposed port on the container (7548) to any port on host you want.
+
+*Pull the image:* `docker pull splitsoftware/callhome:1.2`  
+
+*Run the container:*  
+
 ```shell
 docker run -e EXT_API_KEY=${SPLITIO_EXT_API_KEY} \
 -e API_KEY=${SPLITIO_API_KEY} \
 -e SPLITIO_DEBUG='off' \ 
--p ${SPLITIO_SERVER_PORT}:7548 \
+-p ${YOUR_HOST_PORT}:7548 \
 splitsoftware/callhome:1.2
 ```
 **NOTE:** *SPLITIO_DEBUG is optional*
