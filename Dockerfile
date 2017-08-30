@@ -12,5 +12,5 @@ RUN apk add nodejs
 RUN rm -rf /var/cache/apk/*
 RUN npm install
 
-ENV PORT=7548
+ENV SPLITIO_SERVER_PORT=7548
 ENTRYPOINT ["npm", "start"]
