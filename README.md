@@ -67,14 +67,14 @@
 ## Running the service in Docker container
 
 ### Command to build & run the docker container :
-*Pull the image:* `docker pull splitsoftware/callhome:1.1`
+*Pull the image:* `docker pull splitsoftware/callhome:1.2`
 *Run the container:*
 ```shell
 docker run -e EXT_API_KEY=${SPLITIO_EXT_API_KEY} \
 -e API_KEY=${SPLITIO_API_KEY} \
 -e SPLITIO_DEBUG='off' \ 
 -p ${SPLITIO_SERVER_PORT}:7548 \
-splitsoftware/callhome:1.1
+splitsoftware/callhome:1.2
 ```
 **NOTE:** *SPLITIO_DEBUG is optional*
 
@@ -87,11 +87,11 @@ splitsoftware/callhome:1.1
 ## Running the service with docker-compose
 The sample below is content of a `docker-compose.yml`
 ```yaml
-version: '2.1'
+version: '2.2'
 
 services:
   webservice:
-    image: "splitsoftware/callhome:1.1"
+    image: "splitsoftware/callhome:1.2"
     environment:
       - EXT_API_KEY=${SPLITIO_EXT_API_KEY}
       - API_KEY=${SPLITIO_API_KEY}
