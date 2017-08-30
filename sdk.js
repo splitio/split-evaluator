@@ -11,10 +11,10 @@ const merge = require('lodash/merge');
 const envSettings = config.get('sdk');
 let settings = envSettings;
 
-if (process.env.API_KEY) {
+if (process.env.SPLITIO_API_KEY) {
   settings = merge({}, settings, {
     core: {
-      authorizationKey: process.env.API_KEY
+      authorizationKey: process.env.SPLITIO_API_KEY
     }
   });
 } else {

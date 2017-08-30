@@ -14,7 +14,7 @@ const client = api.client();
 const manager = api.manager();
 
 const port = process.env.SPLITIO_SERVER_PORT || 7548;
-const EXT_API_KEY = process.env.EXT_API_KEY;
+const EXT_API_KEY = process.env.SPLITIO_EXT_API_KEY;
 
 if (!EXT_API_KEY) {
   throw new Error('External API Key cannot be empty or null.');
