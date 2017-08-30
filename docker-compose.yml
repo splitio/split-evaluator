@@ -8,4 +8,4 @@ services:
       - API_KEY=${SPLITIO_API_KEY}
       - SPLITIO_DEBUG=${SPLITIO_DEBUG} 
     ports:
-      - "${SPLITIO_PORT:-7548}:7548"
+      - "${SPLITIO_SERVER_PORT:-7548}:7548"

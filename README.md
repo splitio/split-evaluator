@@ -73,7 +73,7 @@
 docker run -e EXT_API_KEY=${SPLITIO_EXT_API_KEY} \
 -e API_KEY=${SPLITIO_API_KEY} \
 -e SPLITIO_DEBUG='off' \ 
--p ${SPLITIO_PORT}:7548 \
+-p ${SPLITIO_SERVER_PORT}:7548 \
 splitsoftware/callhome:1.1
 ```
 **NOTE:** *SPLITIO_DEBUG is optional*
