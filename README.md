@@ -51,20 +51,20 @@
 ## Running the service in Docker container
 
 ### Command to build & run the docker container :
-You can bind the exposed port on the container (7548) to any port on host you want.
+By default te server uses the port 7548, which is the one exposed by the container.
+You can use a different one by setting the `SPLITIO_SERVER_PORT` environment variable,
+but their exposure of that port to the host will depend on your settings.
+_You can just leave the default port and map it to whatever port you need_
 
 *Pull the image:* `docker pull splitsoftware/callhome:1.2`  
 
 *Run the container:*  
 
 ```shell
-docker run -e SPLITIO_EXT_API_KEY=${SPLITIO_EXT_API_KEY} \
--e SPLITIO_API_KEY=${SPLITIO_API_KEY} \
--e SPLITIO_DEBUG='off' \ 
--p ${YOUR_HOST_PORT}:7548 \
-splitsoftware/callhome:1.2
+docker run -e SPLITIO_API_KEY={YOUR_API_KEY} -e SPLITIO_DEBUG='off' -e SPLITIO_SERVER_PORT=7549 -p 4444:7549 splitsoftware/callhome:1.2
 ```
-**NOTE:** *SPLITIO_DEBUG is optional*
+
+**NOTE:** *SPLITIO_DEBUG & SPLITIO_SERVER_PORT are optionals*
 
 #### Configs:
 `SPLITIO_EXT_API_KEY` : Callhome will validate every request against Authorization header. This is not a Split API key but an arbitrary value.  
