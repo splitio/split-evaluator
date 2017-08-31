@@ -6,6 +6,7 @@ const app = express();
 const config = require('config');
 
 const reduce = require('lodash/reduce');
+const map = require('lodash/map');
 
 const thenable = require('@splitsoftware/splitio/lib/utils/promise/thenable');
 
@@ -106,10 +107,7 @@ app.get('/get-treatments', (req, res) => {
   const state = req.query;
   let keys = [];
   try {
-    keys = reduce(JSON.parse(state.keys), (acc, e) => {
-      acc.push(e);
-      return acc;
-    }, []);
+    keys = JSON.parse(state.keys);
   } catch (e) {
     res.status(500).send('There was an error parsing the provided keys.');
     return;
@@ -125,15 +123,13 @@ app.get('/get-treatments', (req, res) => {
   }
 
   const splitsPromise = Promise.resolve(manager.splits()).then(views => {
-    let filteredSplits = [];
-    keys.forEach(key => {
-      filteredSplits.push({
+    return map(keys, key => {
+      return {
         trafficType: key.trafficType,
         key: utils.parseKey(key.matchingKey, key.bucketingKey),
         splits: filterSplitsByTT(views, key.trafficType)
-      });
+      };
     });
-    return filteredSplits;
   });
 
   Promise.resolve(splitsPromise)
