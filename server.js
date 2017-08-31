@@ -5,6 +5,8 @@ const path = require('path');
 const app = express();
 const config = require('config');
 
+const reduce = require('lodash/reduce');
+
 const thenable = require('@splitsoftware/splitio/lib/utils/promise/thenable');
 
 const utils = require('./utils');
@@ -34,7 +36,7 @@ app.get('/describe/get-treatment', (req, res) => {
     GET
       /get-treatment
 
-    QUERY PARAMS
+   QUERY PARAMS
       key:
         This is the key used in the getTreatment call.
       bucketing-key:
@@ -45,7 +47,8 @@ app.get('/describe/get-treatment', (req, res) => {
         (Optional) This should be a json string of the attributes you want to include in the getTreatment call.
 
     EXAMPLE
-      curl 'http://localhost:4444/get-treatment?key=my-customer-key&split=my-experiment'
+      curl 'http://localhost:4444/get-treatment?key=my-customer-key&split-name=my-experiment
+      &attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization={SPLITIO_EXT_API_KEY}'
   `);
 
 });
@@ -71,47 +74,77 @@ app.get('/get-treatment', (req, res) => {
 });
 
 app.get('/describe/get-treatments', (req, res) => {
-
   res.type('text').send(`
     GET
       /get-treatments
 
     QUERY PARAMS
-      key:
-        This is the key used in the getTreatments call.
-      bucketing-key:
-        (Optional) This is the bucketing key used in the getTreatments call.
-      split-names:
-        List of comman-separated splits you want to include in the getTreatments call.
-      attributes:
-        (Optional) This should be a json string of the attributes you want to include in the getTreatments call.
+       keys:
+         This is the array of keys to be used in the getTreatments call. Each key should specify a "matchingKey" 
+         and a "trafficType". You can also specify a "bucketingKey".
+       attributes:
+         (Optional) This should be a json string of the attributes you want to include in the getTreatments call.
 
-    EXAMPLE
-      curl 'http://localhost:4444/get-treatments?key=my-customer-key&split-names=my-experiment,another-experiment'
+     EXAMPLE
+       curl 'http://localhost:4444/get-treatments?keys=\[\{"matchingKey":"my-first-key","trafficType":"account"\},
+       \{"matchingKey":"my-second-key","bucketingKey":"my-bucketing-key","trafficType":"user"\}\]
+       &attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization={SPLITIO_EXT_API_KEY}'
   `);
-
 });
+
+// Returns the list of split names of a given traffic type
+function filterSplitsByTT(splitViews, trafficType) {
+  return reduce(splitViews, (acc, view) => {
+    if (view.trafficType === trafficType) {
+      acc.push(view.name);
+    }
+    return acc;
+  }, []);
+}
 
 app.get('/get-treatments', (req, res) => {
   const state = req.query;
-  const key = utils.parseKey(state.key, state['bucketing-key']);
-
-  let splits;
-  let attributes;
-
-  if (state['split-names'] && state['split-names'].length > 0) {
-    splits = state['split-names'].split(',');
-  } else {
-    splits = Promise.resolve(manager.splits()).then(views => views.map(v => v.name));
+  let keys = [];
+  try {
+    keys = reduce(JSON.parse(state.keys), (acc, e) => {
+      acc.push(e);
+      return acc;
+    }, []);
+  } catch (e) {
+    res.status(500).send('There was an error parsing the provided keys.');
+    return;
   }
+
+  let attributes;
 
   try {
     attributes = JSON.parse(state['attributes']);
-  } catch (e) {}
+  } catch (e) {
+    res.status(500).send('There was an error parsing the provided attributes.');
+    return;
+  }
 
-  Promise.resolve(splits)
+  const splitsPromise = Promise.resolve(manager.splits()).then(views => {
+    let filteredSplits = [];
+    keys.forEach(key => {
+      filteredSplits.push({
+        trafficType: key.trafficType,
+        key: utils.parseKey(key.matchingKey, key.bucketingKey),
+        splits: filterSplitsByTT(views, key.trafficType)
+      });
+    });
+    return filteredSplits;
+  });
+
+  Promise.resolve(splitsPromise)
     // Call getTreatments
-    .then(names => client.getTreatments(key, names, attributes))
+    .then(splitsByTT => {
+      return reduce(splitsByTT, (acc, group) => {
+        // @TODO: Support thenables here when necessary.
+        const partial = client.getTreatments(group.key, group.splits, attributes);
+        return Object.assign(acc, partial);
+      }, {});
+    })
     // Send the response to the client
     .then(treatments => res.set('Cache-Control', config.get('cacheControl')).type('json').send(treatments))
     // 500 on error
