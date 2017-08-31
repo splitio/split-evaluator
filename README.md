@@ -1,6 +1,6 @@
 # CALLHOME NODEJS
 
-## Usage
+## Usage with NodeJS
 
 1. `nvm use`
 2. `npm install`

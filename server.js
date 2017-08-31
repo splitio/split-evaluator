@@ -20,11 +20,11 @@ const port = process.env.SPLITIO_SERVER_PORT || 7548;
 const EXT_API_KEY = process.env.SPLITIO_EXT_API_KEY;
 
 if (!EXT_API_KEY) {
-  throw new Error('External API Key cannot be empty or null.');
+  console[console.warn ? 'warn' : 'log']('External API key not provided. If you want a security filter use the EXT_API_KEY environment variable as explained on the README file.');
 }
 
 app.use((req, res, next) => {
-  if (req.headers.authorization == EXT_API_KEY) {
+  if (!EXT_API_KEY || req.headers.authorization == EXT_API_KEY) {
     next();
   } else {
     res.status(401).send('Unauthorized');
