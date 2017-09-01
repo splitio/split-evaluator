@@ -74,13 +74,13 @@ docker run -e SPLITIO_API_KEY={YOUR_API_KEY} -e SPLITIO_DEBUG='off' -e SPLITIO_S
 
 ## Build Docker Image
 This command must be executed at root folder
-`docker build -t splitsoftware/callhome:1.2 .`
+`docker build -t splitsoftware/callhome:1.2 . && docker build -t splitsoftware/callhome:latest .`
 
 ## Push Docker Image
 Before pushing image you must be logged in docker cloud. So run this command:
 `docker login`
 And push the image:
-`docker push splitsoftware/callhome:1.2`
+`docker push splitsoftware/callhome:1.2 && docker push splitsoftware/callhome:latest`
 
 Pushing `latest` image. If tag is not explicit on `docker pull` command, the tag will be set by Docker engine as `latest`. So it is important create an image with this tag and push it.
 
