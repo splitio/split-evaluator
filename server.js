@@ -146,9 +146,9 @@ app.get('/get-treatments', (req, res) => {
     })
     // Send the response to the client
     .then(treatments => {
-      console.log('Returning treatments.');        
-      return res.set('Cache-Control', config.get('cacheControl')).type('json').send(treatments))
-    }
+      console.log('Returning treatments.');
+      return res.set('Cache-Control', config.get('cacheControl')).type('json').send(treatments);
+    })
     // 500 on error
     .catch(() => res.sendStatus(500));
 });
