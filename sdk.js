@@ -18,6 +18,7 @@ if (process.env.SPLITIO_API_KEY) {
     }
   });
 } else {
+  console.log('No API Key was provided.');
   throw new Error('API Key cannot be empty or null.');
 }
 

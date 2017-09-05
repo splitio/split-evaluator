@@ -27,12 +27,12 @@ app.use((req, res, next) => {
   if (!EXT_API_KEY || req.headers.authorization == EXT_API_KEY) {
     next();
   } else {
+    console.log('Returning 401 Unauthorized.');
     res.status(401).send('Unauthorized');
   }
 });
 
 app.get('/describe/get-treatment', (req, res) => {
-
   res.type('text').send(`
     GET
       /get-treatment
@@ -55,6 +55,7 @@ app.get('/describe/get-treatment', (req, res) => {
 });
 
 app.get('/get-treatment', (req, res) => {
+  console.log('Getting a treatment.');  
   const state = req.query;
   const key = utils.parseKey(state.key, state['bucketing-key']);
   const split = state['split-name'];
@@ -65,6 +66,7 @@ app.get('/get-treatment', (req, res) => {
   } catch (e) {}
 
   function asyncResult(treatment) {
+    console.log('Returning the treatment.');
     res.set('Cache-Control', config.get('cacheControl')).send({ treatment });
   }
 
@@ -74,7 +76,7 @@ app.get('/get-treatment', (req, res) => {
   else asyncResult(eventuallyAvailableValue);
 });
 
-app.get('/describe/get-treatments', (req, res) => {
+app.get('/describe/get-treatments', (req, res) => {  
   res.type('text').send(`
     GET
       /get-treatments
@@ -104,6 +106,7 @@ function filterSplitsByTT(splitViews, trafficType) {
 }
 
 app.get('/get-treatments', (req, res) => {
+  console.log('Getting treatments.');    
   const state = req.query;
   let keys = [];
   try {
@@ -142,12 +145,16 @@ app.get('/get-treatments', (req, res) => {
       }, {});
     })
     // Send the response to the client
-    .then(treatments => res.set('Cache-Control', config.get('cacheControl')).type('json').send(treatments))
+    .then(treatments => {
+      console.log('Returning treatments.');        
+      return res.set('Cache-Control', config.get('cacheControl')).type('json').send(treatments))
+    }
     // 500 on error
     .catch(() => res.sendStatus(500));
 });
 
 app.get('/version', (req, res) => {
+  console.log('Getting version.');
   const parts = api.settings.version.split('-');
   const language = parts[0];
   const version = parts.slice(1).join('-');
@@ -166,6 +173,7 @@ app.get('/version', (req, res) => {
 
 //Route not found -- Set 404
 app.get('*', function (req, res) {
+  console.log('Wrong route.');
   res.json({
     'route': 'Sorry this page does not exist!'
   });
