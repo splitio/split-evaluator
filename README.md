@@ -28,7 +28,7 @@
         (Optional) This should be a json string of the attributes you want to include in the getTreatment call.
 
     EXAMPLE
-      curl 'http://localhost:4444/get-treatment?key=my-customer-key&split-name=my-experiment&attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization={SPLITIO_EXT_API_KEY}'
+      curl 'http://localhost:4444/get-treatment?key=my-customer-key&split-name=my-experiment&attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization: {SPLITIO_EXT_API_KEY}'
 
 
      GET
@@ -44,7 +44,7 @@
          (Optional) This should be a json string of the attributes you want to include in the getTreatments call.
 
      EXAMPLE
-       curl 'http://localhost:4444/get-treatments?keys=\[\{"matchingKey":"my-first-key","trafficType":"account"\},\{"matchingKey":"my-second-key","bucketingKey":"my-bucketing-key","trafficType":"user"\}\]&attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization={SPLITIO_EXT_API_KEY}'
+       curl 'http://localhost:4444/get-treatments?keys=\[\{"matchingKey":"my-first-key","trafficType":"account"\},\{"matchingKey":"my-second-key","bucketingKey":"my-bucketing-key","trafficType":"user"\}\]&attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization: {SPLITIO_EXT_API_KEY}'
 
 
 
