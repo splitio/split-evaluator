@@ -4,7 +4,7 @@
   "description": "Split SDK web services",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js > log.txt 2>&1"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
