@@ -62,7 +62,9 @@ app.get('/get-treatment', (req, res) => {
   let attributes = null;
 
   try {
-    attributes = JSON.parse(state['attributes']);  
+    if (state['attributes']) {
+      attributes = JSON.parse(state['attributes']);  
+    }
   } catch (e) {
     res.status(400).send('There was an error parsing the provided attributes. Check the format.');
     return;
@@ -117,6 +119,7 @@ app.get('/get-treatments', (req, res) => {
   const state = req.query;
   let keys = [];
   try {
+    // Keys are required.
     keys = JSON.parse(state.keys);
   } catch (e) {
     res.status(400).send('There was an error parsing the provided keys. Check that the format is correct.');
@@ -126,7 +129,9 @@ app.get('/get-treatments', (req, res) => {
   let attributes;
 
   try {
-    attributes = JSON.parse(state['attributes']);
+    if (state['attributes']) {
+      attributes = JSON.parse(state['attributes']);
+    }
   } catch (e) {
     res.status(400).send('There was an error parsing the provided attributes. Check the format.');
     return;
