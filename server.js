@@ -62,12 +62,19 @@ app.get('/get-treatment', (req, res) => {
   let attributes = null;
 
   try {
-    attributes = JSON.parse(state['attributes']);
-  } catch (e) {}
+    attributes = JSON.parse(state['attributes']);  
+  } catch (e) {
+    res.status(400).send('There was an error parsing the provided attributes. Check the format.');
+    return;
+  }
 
   function asyncResult(treatment) {
     console.log('Returning the treatment.');
-    res.set('Cache-Control', config.get('cacheControl')).send({ treatment });
+    res.set('Cache-Control', config.get('cacheControl'))
+      .send({ 
+        splitName: split,
+        treatment
+      });
   }
 
   const eventuallyAvailableValue = client.getTreatment(key, split, attributes);
@@ -112,7 +119,7 @@ app.get('/get-treatments', (req, res) => {
   try {
     keys = JSON.parse(state.keys);
   } catch (e) {
-    res.status(500).send('There was an error parsing the provided keys.');
+    res.status(400).send('There was an error parsing the provided keys. Check that the format is correct.');
     return;
   }
 
@@ -121,7 +128,7 @@ app.get('/get-treatments', (req, res) => {
   try {
     attributes = JSON.parse(state['attributes']);
   } catch (e) {
-    res.status(500).send('There was an error parsing the provided attributes.');
+    res.status(400).send('There was an error parsing the provided attributes. Check the format.');
     return;
   }
 
@@ -141,8 +148,17 @@ app.get('/get-treatments', (req, res) => {
       return reduce(splitsByTT, (acc, group) => {
         // @TODO: Support thenables here when necessary.
         const partial = client.getTreatments(group.key, group.splits, attributes);
-        return Object.assign(acc, partial);
-      }, {});
+
+        const results = reduce(partial, (acc, treatment, feature) => {
+          acc.push({
+            splitName: feature,
+            treatment
+          });
+          return acc;
+        }, [])
+
+        return acc.concat(results);
+      }, []);
     })
     // Send the response to the client
     .then(treatments => {
@@ -173,7 +189,7 @@ app.get('/version', (req, res) => {
 
 //Route not found -- Set 404
 app.get('*', function (req, res) {
-  console.log('Wrong route.');
+  console.log('Wrong endpoint called.');
   res.json({
     'route': 'Sorry this page does not exist!'
   });
