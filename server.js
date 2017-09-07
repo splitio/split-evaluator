@@ -176,19 +176,15 @@ app.get('/get-treatments', (req, res) => {
 
 app.get('/version', (req, res) => {
   console.log('Getting version.');
+  const version = utils.getVersion();
   const parts = api.settings.version.split('-');
-  const language = parts[0];
-  const version = parts.slice(1).join('-');
-  const ip = api.settings.runtime.ip;
-  const hostname = api.settings.runtime.hostname;
-  const nodejsVersion = process.version;
+  const sdkLanguage = parts[0];
+  const sdkVersion = parts.slice(1).join('-');
 
   res.send({
-    language,
     version,
-    ip,
-    hostname,
-    nodejsVersion
+    sdk: sdkLanguage,
+    sdkVersion
   });
 });
 

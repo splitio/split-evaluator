@@ -1,0 +1,41 @@
+## 1.2.0 (September 7, 2017)
+Note: We are using 1.2.0 to start in order to match the version of the 
+docker image on Docker Hub, which is currently 1.2. From now on we will have those
+versions in sync.
+
+* Updating SDK version to v9.3.4 which is the latest stable to the date.
+* Updated README.md. 
+* Added NEWS.txt, CHANGES.txt and LICENSE files. 
+* Removed docker-hub support.
+* Making SPLITIO_EXT_API_KEY header optional. If it is not set, it won't be required.
+* Adding some logs and errors for better debugging.
+* Modifying `/get-treatment` response to return the `splitName` field. 
+  ```{
+    "splitName": "my-experiment",
+    "treatment": "on"
+  }```
+* Modifying `/get-treatments` endpoint to receive an array of keys and return only feature flags for
+  the traffic types on which a key was provided.
+  Example curl: curl 'http://localhost:4444/get-treatments?keys=\[\{"matchingKey":"my-first-key","trafficType":"account"\},\{"matchingKey":"my-second-key","bucketingKey":"my-bucketing-key","trafficType":"user"\}\]' -H 'Authorization: {SPLITIO_EXT_API_KEY}'
+* Modifying `/get-treatments` response to be an array of the objects returned on get-treatment.
+  ```[
+    { "splitName": "my-experiment", "treatment":"on" },
+    { "splitName": "my-second-experiment", "treatment":"off" },
+    ...
+    { "splitName": "my-last-experiment", "treatment":"visa" }
+  ]```
+* Modified `/version` response.
+  ```{
+    version: {callhome_version},
+    sdk: {sdk_language},
+    sdkVersion: {sdk_version_number}
+  }```
+
+## 1.1.0 (July 28, 2017)
+
+* Adding Environment variables for debugging. 
+* Updating SDK version to v9.3.1.
+
+## 1.0.0 (May 28, 2017)
+
+* Initial public release.
