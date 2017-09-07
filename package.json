@@ -1,6 +1,6 @@
 {
   "name": "callhome-nodejs",
-  "version": "9.3.4",
+  "version": "1.2.0",
   "description": "Split SDK web services",
   "main": "server.js",
   "scripts": {
