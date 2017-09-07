@@ -28,24 +28,34 @@
         (Optional) This should be a json string of the attributes you want to include in the getTreatment call.
 
     EXAMPLE
-      curl 'http://localhost:4444/get-treatment?key=my-customer-key&split-name=my-experiment&attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization={SPLITIO_EXT_API_KEY}'
+      curl 'http://localhost:4444/get-treatment?key=my-customer-key&split-name=my-experiment&attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization: {SPLITIO_EXT_API_KEY}'
 
+    RESPONSE
+      {
+        "splitName": "my-experiment",
+        "treatment": "on"
+      }
 
-     GET
-       /get-treatments
+    GET
+      /get-treatments
 
-     QUERY PARAMS
-       keys:
-         This is the array of keys to be used in the getTreatments call. Each key should specify a `matchingKey` 
-         and a `trafficType`. You can also specify a `bucketingKey`.
-       bucketing-key:
-         (Optional) This is the bucketing key used in the getTreatments call.
-       attributes:
-         (Optional) This should be a json string of the attributes you want to include in the getTreatments call.
+    QUERY PARAMS
+      keys:
+        This is the array of keys to be used in the getTreatments call. Each key should specify a `matchingKey` 
+        and a `trafficType`. You can also specify a `bucketingKey`.
+      attributes:
+        (Optional) This should be a json string of the attributes you want to include in the getTreatments call.
 
-     EXAMPLE
-       curl 'http://localhost:4444/get-treatments?keys=\[\{"matchingKey":"my-first-key","trafficType":"account"\},\{"matchingKey":"my-second-key","bucketingKey":"my-bucketing-key","trafficType":"user"\}\]&attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization={SPLITIO_EXT_API_KEY}'
+    EXAMPLE
+      curl 'http://localhost:4444/get-treatments?keys=\[\{"matchingKey":"my-first-key","trafficType":"account"\},\{"matchingKey":"my-second-key","bucketingKey":"my-bucketing-key","trafficType":"user"\}\]&attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization: {SPLITIO_EXT_API_KEY}'
 
+    RESPONSE
+      [
+        { "splitName": "my-experiment", "treatment":"on" },
+        { "splitName": "my-second-experiment", "treatment":"off" },
+        ...
+        { "splitName": "my-last-experiment", "treatment":"visa" }
+      ]
 
 
 ## Running the service in Docker container

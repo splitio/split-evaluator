@@ -27,12 +27,12 @@ app.use((req, res, next) => {
   if (!EXT_API_KEY || req.headers.authorization == EXT_API_KEY) {
     next();
   } else {
+    console.log('Returning 401 Unauthorized.');
     res.status(401).send('Unauthorized');
   }
 });
 
 app.get('/describe/get-treatment', (req, res) => {
-
   res.type('text').send(`
     GET
       /get-treatment
@@ -55,17 +55,28 @@ app.get('/describe/get-treatment', (req, res) => {
 });
 
 app.get('/get-treatment', (req, res) => {
+  console.log('Getting a treatment.');  
   const state = req.query;
   const key = utils.parseKey(state.key, state['bucketing-key']);
   const split = state['split-name'];
   let attributes = null;
 
   try {
-    attributes = JSON.parse(state['attributes']);
-  } catch (e) {}
+    if (state['attributes']) {
+      attributes = JSON.parse(state['attributes']);  
+    }
+  } catch (e) {
+    res.status(400).send('There was an error parsing the provided attributes. Check the format.');
+    return;
+  }
 
   function asyncResult(treatment) {
-    res.set('Cache-Control', config.get('cacheControl')).send({ treatment });
+    console.log('Returning the treatment.');
+    res.set('Cache-Control', config.get('cacheControl'))
+      .send({ 
+        splitName: split,
+        treatment
+      });
   }
 
   const eventuallyAvailableValue = client.getTreatment(key, split, attributes);
@@ -74,7 +85,7 @@ app.get('/get-treatment', (req, res) => {
   else asyncResult(eventuallyAvailableValue);
 });
 
-app.get('/describe/get-treatments', (req, res) => {
+app.get('/describe/get-treatments', (req, res) => {  
   res.type('text').send(`
     GET
       /get-treatments
@@ -104,21 +115,25 @@ function filterSplitsByTT(splitViews, trafficType) {
 }
 
 app.get('/get-treatments', (req, res) => {
+  console.log('Getting treatments.');    
   const state = req.query;
   let keys = [];
   try {
+    // Keys are required.
     keys = JSON.parse(state.keys);
   } catch (e) {
-    res.status(500).send('There was an error parsing the provided keys.');
+    res.status(400).send('There was an error parsing the provided keys. Check that the format is correct.');
     return;
   }
 
   let attributes;
 
   try {
-    attributes = JSON.parse(state['attributes']);
+    if (state['attributes']) {
+      attributes = JSON.parse(state['attributes']);
+    }
   } catch (e) {
-    res.status(500).send('There was an error parsing the provided attributes.');
+    res.status(400).send('There was an error parsing the provided attributes. Check the format.');
     return;
   }
 
@@ -138,16 +153,29 @@ app.get('/get-treatments', (req, res) => {
       return reduce(splitsByTT, (acc, group) => {
         // @TODO: Support thenables here when necessary.
         const partial = client.getTreatments(group.key, group.splits, attributes);
-        return Object.assign(acc, partial);
-      }, {});
+
+        const results = reduce(partial, (acc, treatment, feature) => {
+          acc.push({
+            splitName: feature,
+            treatment
+          });
+          return acc;
+        }, [])
+
+        return acc.concat(results);
+      }, []);
     })
     // Send the response to the client
-    .then(treatments => res.set('Cache-Control', config.get('cacheControl')).type('json').send(treatments))
+    .then(treatments => {
+      console.log('Returning treatments.');
+      return res.set('Cache-Control', config.get('cacheControl')).type('json').send(treatments);
+    })
     // 500 on error
     .catch(() => res.sendStatus(500));
 });
 
 app.get('/version', (req, res) => {
+  console.log('Getting version.');
   const parts = api.settings.version.split('-');
   const language = parts[0];
   const version = parts.slice(1).join('-');
@@ -166,6 +194,7 @@ app.get('/version', (req, res) => {
 
 //Route not found -- Set 404
 app.get('*', function (req, res) {
+  console.log('Wrong endpoint called.');
   res.json({
     'route': 'Sorry this page does not exist!'
   });
