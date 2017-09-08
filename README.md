@@ -8,7 +8,7 @@
 
    SPLITIO_API_KEY could be overriden quickly, but we recommend the usage of [node-config](https://github.com/lorenwest/node-config#quick-start),
    switch the environment variable NODE_ENV. Please read the details [here](https://github.com/lorenwest/node-config#quick-start).  
-   SPLITIO_EXT_API_KEY could be any value you like, against which we will compare the received Authorization header.  
+   SPLITIO_EXT_API_KEY could be any value you like, against which we will compare the received Authorization header.
    SPLITIO_SERVER_PORT is the port number on which the server will run, default is 7548.  
    For logging details see the [NodeJS SDK docs](https://docs.split.io/docs/nodejs-sdk-overview#section-logging).  
 
@@ -56,6 +56,31 @@
         ...
         { "splitName": "my-last-experiment", "treatment":"visa" }
       ]
+
+    GET 
+      /version
+
+    EXAMPLE 
+      curl 'http//localhost:4444/version' -H 'Authorization: {SPLITIO_EXT_API_KEY}'
+      
+    RESPONSE
+      {
+        version: '1.0.2',
+        sdk: 'nodejs',
+        sdkVersion: '9.3.4'
+      }
+
+    GET 
+      /machine
+
+    EXAMPLE 
+      curl 'http//localhost:4444/machine' -H 'Authorization: {SPLITIO_EXT_API_KEY}'
+      
+    RESPONSE
+      {
+        ip: '10.0.0.125',
+        name: 'machine_name'
+      }
 
 
 ## Running the service in Docker container

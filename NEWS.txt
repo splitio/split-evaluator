@@ -1,3 +1,11 @@
+## 1.2.1 (September 8, 2017)
+
+* Added `/machine/` endpoint.
+  ```{
+    ip: {ip_address},
+    name: {machine_name}
+  }```
+
 ## 1.2.0 (September 7, 2017)
 Note: We are using 1.2.0 to start in order to match the version of the 
 docker image on Docker Hub, which is currently 1.2. From now on we will have those
