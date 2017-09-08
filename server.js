@@ -8,6 +8,9 @@ const config = require('config');
 const reduce = require('lodash/reduce');
 const map = require('lodash/map');
 
+const os = require('os');
+const ip = require('ip');
+
 const thenable = require('@splitsoftware/splitio/lib/utils/promise/thenable');
 
 const utils = require('./utils');
@@ -185,6 +188,23 @@ app.get('/version', (req, res) => {
     version,
     sdk: sdkLanguage,
     sdkVersion
+  });
+});
+
+app.get('/machine', (req, res) => {
+  console.log('Getting machine information.');
+  let address; let hostname;
+
+  try {
+    address = ip.address();
+    hostname = os.hostname();
+  } catch(e) {
+    address = hostname = 'unavailable';
+  }
+
+  res.send({
+    ip: address,
+    name: hostname
   });
 });
 
