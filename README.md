@@ -93,12 +93,12 @@ You can use a different one by setting the `SPLITIO_SERVER_PORT` environment var
 but their exposure of that port to the host will depend on your settings.
 _You can just leave the default port and map it to whatever port you need_
 
-*Pull the image:* `docker pull splitsoftware/split-evaluator:1.2.2`  
+*Pull the image:* `docker pull splitsoftware/split-evaluator:<VERSION>`  
 
 *Run the container:*  
 
 ```shell
-docker run -e SPLITIO_API_KEY={YOUR_API_KEY} -e SPLITIO_DEBUG='off' -e SPLITIO_SERVER_PORT=7549 -p 4444:7549 splitsoftware/split-evaluator:1.2.2
+docker run -e SPLITIO_API_KEY={YOUR_API_KEY} -e SPLITIO_DEBUG='off' -e SPLITIO_SERVER_PORT=7549 -p 4444:7549 splitsoftware/split-evaluator:<VERSION>
 ```
 
 **NOTE:** *SPLITIO_DEBUG & SPLITIO_SERVER_PORT are optionals*
@@ -111,13 +111,13 @@ docker run -e SPLITIO_API_KEY={YOUR_API_KEY} -e SPLITIO_DEBUG='off' -e SPLITIO_S
 
 ## Build Docker Image
 This command must be executed at root folder
-`docker build -t splitsoftware/split-evaluator:1.2.2 . && docker build -t splitsoftware/split-evaluator:latest .`
+`docker build -t splitsoftware/split-evaluator:<VERSION> . && docker build -t splitsoftware/split-evaluator:latest .`
 
 ## Push Docker Image
 Before pushing image you must be logged in docker cloud. So run this command:
 `docker login`
 And push the image:
-`docker push splitsoftware/split-evaluator:1.2.2 && docker push splitsoftware/split-evaluator:latest`
+`docker push splitsoftware/split-evaluator:<VERSION> && docker push splitsoftware/split-evaluator:latest`
 
 Pushing `latest` image. If tag is not explicit on `docker pull` command, the tag will be set by Docker engine as `latest`. So it is important create an image with this tag and push it.
 
