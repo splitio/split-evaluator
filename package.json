@@ -12,9 +12,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/splitio/testing-node-js/issues"
+    "url": "https://github.com/splitio/split-evaluator/issues"
   },
-  "homepage": "https://github.com/splitio/testing-node-js#readme",
+  "homepage": "https://github.com/splitio/split-evaluator#readme",
   "dependencies": {
     "@splitsoftware/splitio": "9.3.5",
     "config": "1.25.1",
