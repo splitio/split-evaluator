@@ -1,6 +1,6 @@
 FROM alpine:3.5
-RUN mkdir callhome-nodejs
-WORKDIR callhome-nodejs
+RUN mkdir split-evaluator
+WORKDIR split-evaluator
 EXPOSE 7548
 
 COPY . .
