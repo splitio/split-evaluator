@@ -23,10 +23,8 @@ const port = process.env.SPLITIO_SERVER_PORT || 7548;
 const EXT_API_KEY = process.env.SPLITIO_EXT_API_KEY;
 
 // Healthcheck used by kubernetes does not check api key
-app.get('/', (req, res) => {
-  res.send({
-    health: "OK"
-  });
+app.get('/admin/ping', (req, res) => {
+  res.send("pong");
 });
 
 if (!EXT_API_KEY) {
