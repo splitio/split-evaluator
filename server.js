@@ -22,6 +22,11 @@ const manager = api.manager();
 const port = process.env.SPLITIO_SERVER_PORT || 7548;
 const EXT_API_KEY = process.env.SPLITIO_EXT_API_KEY;
 
+// Healthcheck used by kubernetes does not check api key
+app.get('/admin/ping', (req, res) => {
+  res.send("pong");
+});
+
 if (!EXT_API_KEY) {
   console[console.warn ? 'warn' : 'log']('External API key not provided. If you want a security filter use the EXT_API_KEY environment variable as explained on the README file.');
 }
