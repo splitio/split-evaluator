@@ -1,3 +1,11 @@
+## 1.3.1 (October 12, 2017)
+
+* Updating SDK version to v9.3.6 which is the latest stable to the date.
+
+## 1.3.0 (September 26, 2017)
+
+* Rename to Split-Evaluator
+
 ## 1.2.2 (September 13, 2017)
 
 Note: On this version we will start adding the patch version to the docker image tag,
