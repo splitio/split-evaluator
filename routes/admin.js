@@ -25,15 +25,12 @@ router.get('/ping', (req, res) => {
  */
 router.get('/health', (req, res) => {
   console.log('Running health check.');
-  let status = 503;
-  let msg = 'Split evaluator engine has not finished to spin up. Try again in a few seconds.';
+  let status = 500;
+  let msg = 'Split evaluator engine is not evaluating traffic properly.';
 
   if (sdkModule.isReady()) {
     status = 200;
     msg = 'Split Evaluator working as expected.';
-  } else {
-    status = 500;
-    msg = 'Split evaluator engine is not evaluating traffic properly.';
   }
 
   console.log('Health check status: ' + status + ' - ' + msg);
