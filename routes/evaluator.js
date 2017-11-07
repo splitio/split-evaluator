@@ -3,18 +3,21 @@
  */
 const express = require('express');
 const router = express.Router();
-
+// Utils
 const thenable = require('@splitsoftware/splitio/lib/utils/promise/thenable');
 const reduce = require('lodash/reduce');
 const map = require('lodash/map');
 const config = require('config');
-
+// Own modules
 const utils = require('../utils');
 const sdkModule = require('../sdk');
-
+// Client and manager we will use
 const client = sdkModule.client;
 const manager = sdkModule.manager;
 
+/**
+ * get-treatment endpoint. Evaluates a given split.
+ */
 router.get('/get-treatment', (req, res) => {
   console.log('Getting a treatment.');  
   const state = req.query;
@@ -45,17 +48,10 @@ router.get('/get-treatment', (req, res) => {
   if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
   else asyncResult(eventuallyAvailableValue);
 });
-
-// Returns the list of split names of a given traffic type
-function filterSplitsByTT(splitViews, trafficType) {
-  return reduce(splitViews, (acc, view) => {
-    if (view.trafficType === trafficType) {
-      acc.push(view.name);
-    }
-    return acc;
-  }, []);
-}
-
+/**
+ * get-treatments endpoint. 
+ * Returns the evaluations for all treatments matching the traffic type of the provided keys.
+ */
 router.get('/get-treatments', (req, res) => {
   console.log('Getting treatments.');    
   const state = req.query;
@@ -115,6 +111,19 @@ router.get('/get-treatments', (req, res) => {
     // 500 on error
     .catch(() => res.sendStatus(500));
 });
+
+/**
+ * Utility function. Reduces a collection of split views to a list of names of the splits
+ * corresponding to the given traffic type.
+ */
+function filterSplitsByTT(splitViews, trafficType) {
+  return reduce(splitViews, (acc, view) => {
+    if (view.trafficType === trafficType) {
+      acc.push(view.name);
+    }
+    return acc;
+  }, []);
+}
 
 module.exports = router;
 

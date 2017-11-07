@@ -4,7 +4,9 @@
  */
 const express = require('express');
 const router = express.Router();
-
+/**
+ * Get treatment description
+ */
 router.get('/get-treatment', (req, res) => {
   res.type('text').send(`
     GET
@@ -25,7 +27,9 @@ router.get('/get-treatment', (req, res) => {
       &attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization={SPLITIO_EXT_API_KEY}'
   `);
 });
-
+/**
+ * Get treatments (bulk) description
+ */
 router.get('/get-treatments', (req, res) => {  
   res.type('text').send(`
     GET

@@ -12,14 +12,14 @@ const sdkModule = require('../sdk');
 const sdk = sdkModule.factory;
 
 /**
- * ping method, just answers.
+ * ping method, just that.
  */
 router.get('/ping', (req, res) => {
   console.log('pong');
   res.status(200).send('pong');
 });
 /**
- * health check method. Will respond according to SDK status. Three options:
+ * health check method. Will respond according to SDK status. Two options:
  *    200 - Everything is OK. Ready to evaluate.
  *    500 - Something is wrong or not ready yet. Not able to perform evaluations.
  */
