@@ -100,7 +100,8 @@ This services exposes a set of APIs to produce server side evaluation of flags b
       curl 'http//localhost:4444/admin/healthcheck' -H 'Authorization: {SPLITIO_EXT_API_KEY}'
       
     RESPONSE
-      200: 'Split Evaluator working as expected'
+      200: 'Split Evaluator working as expected.'
+      500: 'Split evaluator engine is not evaluating traffic properly.'
 
     GET 
       /admin/uptime
