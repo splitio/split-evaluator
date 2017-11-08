@@ -60,10 +60,10 @@ This services exposes a set of APIs to produce server side evaluation of flags b
       ]
 
     GET 
-      /version
+      /admin/version
 
     EXAMPLE 
-      curl 'http//localhost:4444/version' -H 'Authorization: {SPLITIO_EXT_API_KEY}'
+      curl 'http//localhost:4444/admin/version' -H 'Authorization: {SPLITIO_EXT_API_KEY}'
       
     RESPONSE
       {
@@ -73,16 +73,43 @@ This services exposes a set of APIs to produce server side evaluation of flags b
       }
 
     GET 
-      /machine
+      /admin/machine
 
     EXAMPLE 
-      curl 'http//localhost:4444/machine' -H 'Authorization: {SPLITIO_EXT_API_KEY}'
+      curl 'http//localhost:4444/admin/machine' -H 'Authorization: {SPLITIO_EXT_API_KEY}'
       
     RESPONSE
       {
         ip: '10.0.0.125',
         name: 'machine_name'
       }
+    
+    GET 
+      /admin/ping
+
+    EXAMPLE 
+      curl 'http//localhost:4444/admin/ping' -H 'Authorization: {SPLITIO_EXT_API_KEY}'
+      
+    RESPONSE
+      200: 'pong'
+    
+    GET 
+      /admin/healthcheck
+
+    EXAMPLE 
+      curl 'http//localhost:4444/admin/healthcheck' -H 'Authorization: {SPLITIO_EXT_API_KEY}'
+      
+    RESPONSE
+      200: 'Split Evaluator working as expected'
+
+    GET 
+      /admin/uptime
+
+    EXAMPLE 
+      curl 'http//localhost:4444/admin/uptime' -H 'Authorization: {SPLITIO_EXT_API_KEY}'
+      
+    RESPONSE
+      200: '0d 23h 5m 10s'
 
 
 ## Running the service in Docker container
