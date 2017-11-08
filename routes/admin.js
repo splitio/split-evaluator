@@ -23,7 +23,7 @@ router.get('/ping', (req, res) => {
  *    200 - Everything is OK. Ready to evaluate.
  *    500 - Something is wrong or not ready yet. Not able to perform evaluations.
  */
-router.get('/health', (req, res) => {
+router.get('/healthcheck', (req, res) => {
   console.log('Running health check.');
   let status = 500;
   let msg = 'Split evaluator engine is not evaluating traffic properly.';
