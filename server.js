@@ -3,6 +3,7 @@
 const express = require('express');
 const app = express();
 const config = require('config');
+const utils = require('./utils');
 // Used for BUR
 const client = require('./sdk').client;
 
@@ -47,6 +48,7 @@ if (config.get('blockUntilReady')) {
 
 function spinUpServer() {
   app.listen(PORT, '0.0.0.0', function () {
+    utils.uptime('init');
     console.log('Server is Up and Running at Port : ' + PORT);
   });
 }
