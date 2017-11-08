@@ -71,5 +71,13 @@ router.get('/machine', (req, res) => {
     name: hostname
   });
 });
+/**
+ * Returns the uptime of the server.
+ */
+router.get('/uptime', (req, res) => {
+  const uptime = utils.uptime();
+  console.log('Getting uptime: ' + uptime);
+  res.send('' + uptime);
+});
 
 module.exports = router;
