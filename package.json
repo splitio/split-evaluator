@@ -1,7 +1,7 @@
 {
   "name": "split-evaluator",
   "version": "1.4.0",
-  "description": "Split-Evaluator microservice",
+  "description": "Split-Evaluator microservices",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
