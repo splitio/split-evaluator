@@ -92,13 +92,12 @@ router.get('/get-treatments', (req, res) => {
         // @TODO: Support thenables here when necessary.
         const partial = client.getTreatments(group.key, group.splits, attributes);
 
-        const results = reduce(partial, (acc, treatment, feature) => {
-          acc.push({
+        const results = map(partial, (treatment, feature) => {
+          return {
             splitName: feature,
             treatment
-          });
-          return acc;
-        }, []);
+          };
+        });
 
         return acc.concat(results);
       }, []);
