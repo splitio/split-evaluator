@@ -1,4 +1,4 @@
-## 1.4.0 (November XX, 2017)
+## 1.4.0 (November 09, 2017)
 
 * Internal code reordering. Moving to a routers structure.
 * Moved `/machine` and `/version` to `/admin/machine` and `/admin/version`.
