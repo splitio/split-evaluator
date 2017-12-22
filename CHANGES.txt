@@ -1,3 +1,7 @@
+## 1.4.1 (December 22, 2017)
+
+* Updating SDK version to v9.3.7 which is the latest stable to the date.
+
 ## 1.4.0 (November 09, 2017)
 
 * Internal code reordering. Moving to a routers structure.
