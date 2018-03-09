@@ -2,3 +2,4 @@
 .DS_STORE
 node_modules
 log.txt
+npm-debug.log
