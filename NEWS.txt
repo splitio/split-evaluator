@@ -1,3 +1,12 @@
+## 1.4.3 (March 8, 2018)
+
+* Updating SDK version to v10.1.0 which is the latest stable to the date.
+
+## 1.4.2 (Jan 12, 2018)
+
+* Updating SDK version to v9.4.0 which is the latest stable to the date.
+* Using caret range for SDK version.
+
 ## 1.4.1 (December 22, 2017)
 
 * Updating SDK version to v9.3.7 which is the latest stable to the date.
@@ -34,17 +43,17 @@ so it will be 1.2.2 and of course, it will be in sync with callhome.
   }```
 
 ## 1.2.0 (September 7, 2017)
-Note: We are using 1.2.0 to start in order to match the version of the 
+Note: We are using 1.2.0 to start in order to match the version of the
 docker image on Docker Hub, which is currently 1.2. From now on we will have those
 versions in sync.
 
 * Updating SDK version to v9.3.4 which is the latest stable to the date.
-* Updated README.md. 
-* Added NEWS.txt, CHANGES.txt and LICENSE files. 
+* Updated README.md.
+* Added NEWS.txt, CHANGES.txt and LICENSE files.
 * Removed docker-hub support.
 * Making SPLITIO_EXT_API_KEY header optional. If it is not set, it won't be required.
 * Adding some logs and errors for better debugging.
-* Modifying `/get-treatment` response to return the `splitName` field. 
+* Modifying `/get-treatment` response to return the `splitName` field.
   ```{
     "splitName": "my-experiment",
     "treatment": "on"
@@ -68,7 +77,7 @@ versions in sync.
 
 ## 1.1.0 (July 28, 2017)
 
-* Adding Environment variables for debugging. 
+* Adding Environment variables for debugging.
 * Updating SDK version to v9.3.1.
 
 ## 1.0.0 (May 28, 2017)
