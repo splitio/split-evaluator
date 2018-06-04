@@ -1,3 +1,7 @@
+## 1.4.4 (June 4, 2018)
+
+* Updating SDK version to v10.3.1 which is the latest stable to the date.
+
 ## 1.4.3 (March 8, 2018)
 
 * Updating SDK version to v10.1.0 which is the latest stable to the date.
