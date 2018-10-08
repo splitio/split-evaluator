@@ -1,6 +1,6 @@
 {
   "name": "split-evaluator",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Split-Evaluator microservice",
   "main": "server.js",
   "scripts": {
@@ -16,10 +16,10 @@
   },
   "homepage": "https://github.com/splitio/split-evaluator#readme",
   "dependencies": {
-    "@splitsoftware/splitio": "10.3.3-canary.0",
+    "@splitsoftware/splitio": "~10.4.0",
     "config": "1.25.1",
-    "express": "4.13.4",
-    "lodash": "4.12.0"
+    "express": "^4.16.3",
+    "lodash": "^4.17.11"
   },
   "engines": {
     "node": "6.10.3",
