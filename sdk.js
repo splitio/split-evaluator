@@ -3,7 +3,7 @@
 //
 'use strict';
 
-const SplitFactory = require('@splitsoftware/splitio');
+const SplitFactory = require('@splitsoftware/splitio').SplitFactory;
 const config = require('config');
 const merge = require('lodash/merge');
 
@@ -32,9 +32,9 @@ if (process.env.SDK_URL) {
   });
 }
 
-//EVENTS URL can be set by env for debug 
+//EVENTS URL can be set by env for debug
 if (process.env.EVENTS_URL) {
-  console.log('Setting custom SDK Events url.');  
+  console.log('Setting custom SDK Events url.');
   settings = merge({}, settings, {
     urls: {
       events: process.env.EVENTS_URL
@@ -44,7 +44,7 @@ if (process.env.EVENTS_URL) {
 
 if (process.env.SPLITIO_SCHEDULER) {
   try {
-    console.log('Setting custom SDK scheduler timers.');  
+    console.log('Setting custom SDK scheduler timers.');
     settings = merge({}, settings, {
       scheduler: JSON.parse(process.env.SPLITIO_SCHEDULER)
     });
@@ -53,4 +53,22 @@ if (process.env.SPLITIO_SCHEDULER) {
   }
 }
 
-module.exports = SplitFactory(settings);
+let isClientReady = false;
+
+// Our SDK factory instance.
+const factory = SplitFactory(settings);
+// Our client.
+const client = factory.client();
+// Our manager.
+const manager = factory.manager();
+// Returns true if the client is ready.
+const isReady = () => isClientReady;
+
+client.on(client.Event.SDK_READY, () => isClientReady = true)
+
+module.exports = {
+  factory,
+  client,
+  manager,
+  isReady
+};
