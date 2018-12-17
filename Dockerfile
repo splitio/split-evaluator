@@ -9,7 +9,7 @@ RUN apk update && apk upgrade
 RUN apk add bash
 RUN apk add git
 RUN rm -rf /var/cache/apk/*
-RUN npm install
+RUN npm install npm@latest -g .
 
 ENV SPLITIO_SERVER_PORT=7549
 ENTRYPOINT [ "./docker-entrypoint.sh" ]
