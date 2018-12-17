@@ -1,15 +1,17 @@
-FROM node:9.11.2-alpine
+FROM alpine:3.5
 RUN mkdir split-evaluator
 WORKDIR split-evaluator
-EXPOSE 7549
+EXPOSE 7548
 
 COPY . .
 
 RUN apk update && apk upgrade
 RUN apk add bash
 RUN apk add git
+RUN apk add curl
+RUN apk add nodejs
 RUN rm -rf /var/cache/apk/*
-RUN npm install npm@latest -g .
+RUN npm install
 
-ENV SPLITIO_SERVER_PORT=7549
+ENV SPLITIO_SERVER_PORT=7548
 ENTRYPOINT [ "./docker-entrypoint.sh" ]
