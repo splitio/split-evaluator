@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM node:9.11.2-alpine
 RUN mkdir split-evaluator
 WORKDIR split-evaluator
 EXPOSE 7549
@@ -8,7 +8,6 @@ COPY . .
 RUN apk update && apk upgrade
 RUN apk add bash
 RUN apk add git
-RUN apk add nodejs
 RUN rm -rf /var/cache/apk/*
 RUN npm install
 
