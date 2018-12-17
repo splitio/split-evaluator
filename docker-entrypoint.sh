@@ -2,4 +2,4 @@
 
 set -e
 
-yarn start
+/env/bin/yarn start
