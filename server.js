@@ -8,7 +8,7 @@ const utils = require('./utils');
 const client = require('./sdk').client;
 
 const evaluatorRouter = require('./routes/evaluator');
-const adminRouter = require('./routes/admin');
+const adminRouter = require('./admin/admin.router');
 
 const PORT = process.env.SPLITIO_SERVER_PORT || 7548;
 const EXT_API_KEY = process.env.SPLITIO_EXT_API_KEY;
