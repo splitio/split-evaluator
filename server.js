@@ -7,7 +7,7 @@ const utils = require('./utils');
 // Used for BUR
 const client = require('./sdk').client;
 
-const evaluatorRouter = require('./routes/evaluator');
+const clientRouter = require('./client/client.router');
 const adminRouter = require('./admin/admin.router');
 
 const PORT = process.env.SPLITIO_SERVER_PORT || 7548;
@@ -26,7 +26,7 @@ app.use((req, res, next) => {
   }
 });
 // We mount our routers.
-app.use('/', evaluatorRouter);
+app.use('/', clientRouter);
 app.use('/admin', adminRouter);
 
 //Route not found -- Set 404
