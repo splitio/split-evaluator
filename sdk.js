@@ -64,7 +64,7 @@ const manager = factory.manager();
 // Returns true if the client is ready.
 const isReady = () => isClientReady;
 
-client.on(client.Event.SDK_READY, () => isClientReady = true)
+client.on(client.Event.SDK_READY, () => isClientReady = true);
 
 module.exports = {
   factory,

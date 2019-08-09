@@ -1,28 +1,35 @@
 {
   "name": "split-evaluator",
   "version": "1.4.5",
-  "description": "Split-Evaluator microservice",
+  "description": "Split-Evaluator",
+  "repository": "splitio/split-evaluator",
+  "homepage": "https://github.com/splitio/split-evaluator#readme",
+  "bugs": "https://github.com/splitio/split-evaluator/issues",
+  "license": "Apache-2.0",
+  "author": "Facundo Cabrera <facundo@split.io>",
+  "contributors": [
+    {
+      "name": "Nico Zelaya",
+      "email": "nicolas.zelaya@split.io",
+      "url": "https://github.com/NicoZelaya"
+    }
+  ],
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "lint": "eslint ."
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/splitio/testing-node-js.git"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/splitio/split-evaluator/issues"
-  },
-  "homepage": "https://github.com/splitio/split-evaluator#readme",
   "dependencies": {
-    "@splitsoftware/splitio": "~10.4.0",
+    "@splitsoftware/splitio": "~10.8.2",
     "config": "1.25.1",
-    "express": "^4.16.3",
-    "lodash": "^4.17.11"
+    "express": "^4.17.1",
+    "lodash": "^4.17.15"
   },
   "engines": {
-    "node": "6.10.3",
-    "npm": "3.10.10"
+    "node": "10.15.1",
+    "npm": "6.10.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0"
   }
 }

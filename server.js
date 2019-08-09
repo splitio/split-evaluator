@@ -8,7 +8,6 @@ const utils = require('./utils');
 const client = require('./sdk').client;
 
 const evaluatorRouter = require('./routes/evaluator');
-const describeRouter = require('./routes/describe');
 const adminRouter = require('./routes/admin');
 
 const PORT = process.env.SPLITIO_SERVER_PORT || 7548;
@@ -19,7 +18,7 @@ if (!EXT_API_KEY) {
 }
 // Auth middleware
 app.use((req, res, next) => {
-  if (!EXT_API_KEY || req.headers.authorization == EXT_API_KEY) {
+  if (!EXT_API_KEY || req.headers.authorization === EXT_API_KEY) {
     next();
   } else {
     console.log('Returning 401 Unauthorized.');
@@ -28,7 +27,6 @@ app.use((req, res, next) => {
 });
 // We mount our routers.
 app.use('/', evaluatorRouter);
-app.use('/describe', describeRouter);
 app.use('/admin', adminRouter);
 
 //Route not found -- Set 404
