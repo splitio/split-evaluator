@@ -1,11 +1,13 @@
-'use strict';
-
 const express = require('express');
 const app = express();
 const config = require('config');
 const utils = require('./utils');
+
 // Used for BUR
 const client = require('./sdk').client;
+
+// Middlewares
+const authorization = require('./middleware/authorization').authorization;
 
 const clientRouter = require('./client/client.router');
 const adminRouter = require('./admin/admin.router');
@@ -17,14 +19,7 @@ if (!EXT_API_KEY) {
   console[console.warn ? 'warn' : 'log']('External API key not provided. If you want a security filter use the EXT_API_KEY environment variable as explained on the README file.');
 }
 // Auth middleware
-app.use((req, res, next) => {
-  if (!EXT_API_KEY || req.headers.authorization === EXT_API_KEY) {
-    next();
-  } else {
-    console.log('Returning 401 Unauthorized.');
-    res.status(401).send('Unauthorized');
-  }
-});
+app.use(authorization);
 // We mount our routers.
 app.use('/', clientRouter);
 app.use('/admin', adminRouter);

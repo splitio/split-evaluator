@@ -1,5 +1,3 @@
-'use strict';
-
 const os = require('os');
 const ip = require('ip');
 

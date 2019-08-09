@@ -1,5 +1,3 @@
-'use strict';
-
 const packageJson = require('./package.json');
 
 /**

@@ -1,5 +1,3 @@
-'use strict';
-
 const reduce = require('lodash/reduce');
 
 /**

@@ -1,5 +1,3 @@
-'use strict';
-
 // Utils
 const thenable = require('@splitsoftware/splitio/lib/utils/promise/thenable');
 const reduce = require('lodash/reduce');
