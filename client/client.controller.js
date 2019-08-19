@@ -19,23 +19,11 @@ const manager = sdkModule.manager;
  * @param {*} res 
  */
 const getTreatment = (req, res) => {
-  console.log('Getting a treatment.');  
-  const state = req.query;
-  const key = utils.parseKey(state.key, state['bucketing-key']);
-  const split = state['split-name'];
-  let attributes = null;
-
-  try {
-    if (state['attributes']) {
-      attributes = JSON.parse(state['attributes']);  
-    }
-  } catch (e) {
-    res.status(400).send('There was an error parsing the provided attributes. Check the format.');
-    return;
-  }
+  const key = utils.parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
+  const split = req.splitio.splitName;
+  const attributes = req.splitio.attributes;
 
   function asyncResult(treatment) {
-    console.log('Returning the treatment.');
     res.set('Cache-Control', config.get('cacheControl'))
       .send({ 
         splitName: split,
