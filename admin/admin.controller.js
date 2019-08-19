@@ -1,7 +1,8 @@
 const os = require('os');
 const ip = require('ip');
 
-const utils = require('../utils');
+const common = require('./common');
+const utils = require('../utils/common/common');
 const sdkModule = require('../sdk');
 const sdk = sdkModule.factory;
 
@@ -43,7 +44,7 @@ const healthcheck = (req, res) => {
  */
 const version = (req, res) => {
   console.log('Getting version.');
-  const version = utils.getVersion();
+  const version = common.getVersion();
   const parts = sdk.settings.version.split('-');
   const sdkLanguage = parts[0];
   const sdkVersion = parts.slice(1).join('-');

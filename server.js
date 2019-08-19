@@ -1,5 +1,5 @@
 const config = require('config');
-const utils = require('./utils');
+const utils = require('./utils/common/common');
 
 const app = require('./app');
 

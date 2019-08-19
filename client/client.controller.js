@@ -5,7 +5,6 @@ const map = require('lodash/map');
 const config = require('config');
 
 // Own modules
-const utils = require('../utils');
 const common = require('./common');
 const sdkModule = require('../sdk');
 
@@ -19,7 +18,7 @@ const manager = sdkModule.manager;
  * @param {*} res 
  */
 const getTreatment = (req, res) => {
-  const key = utils.parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
+  const key = common.parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const split = req.splitio.splitName;
   const attributes = req.splitio.attributes;
 
@@ -69,7 +68,7 @@ const getTreatments = (req, res) => {
     return map(keys, key => {
       return {
         trafficType: key.trafficType,
-        key: utils.parseKey(key.matchingKey, key.bucketingKey),
+        key: common.parseKey(key.matchingKey, key.bucketingKey),
         splits: common.filterSplitsByTT(views, key.trafficType)
       };
     });

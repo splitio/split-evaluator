@@ -6,15 +6,24 @@ const reduce = require('lodash/reduce');
  * @param object splitViews 
  * @param string trafficType 
  */
-const filterSplitsByTT = (splitViews, trafficType) => {
-  return reduce(splitViews, (acc, view) => {
-    if (view.trafficType === trafficType) {
-      acc.push(view.name);
-    }
-    return acc;
-  }, []);
+const filterSplitsByTT = (splitViews, trafficType) => reduce(splitViews, (acc, view) => {
+  if (view.trafficType === trafficType) {
+    acc.push(view.name);
+  }
+  return acc;
+}, []);
+
+/**
+ * parseKey  Given a pair of values, make the processing to create the SplitKey value.
+ * @param string matchingKey 
+ * @param string bucketingKey 
+ */
+const parseKey = (matchingKey, bucketingKey) => !bucketingKey ? matchingKey : {
+  matchingKey,
+  bucketingKey
 };
 
 module.exports = {
   filterSplitsByTT,
+  parseKey,
 };
