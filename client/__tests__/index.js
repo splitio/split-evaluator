@@ -29,6 +29,93 @@ describe('get-treatment', () => {
     expect(response.body.errors).toEqual(expect.arrayContaining(expected));
   });
 
+  test('should be 400 if key is empty', async () => {
+    const expected = [
+      'you passed an empty string, key must be a non-empty string.'
+    ];
+    const response = await request(app)
+      .get('/get-treatment?key=&split-name=test')
+      .set('Authorization', 'test');
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+  });
+
+  test('should be 400 if key is empty trimmed', async () => {
+    const expected = [
+      'you passed an empty string, key must be a non-empty string.'
+    ];
+    const response = await request(app)
+      .get('/get-treatment?key=     &split-name=test')
+      .set('Authorization', 'test');
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+  });
+
+  test('should be 400 if key is too long', async () => {
+    const expected = [
+      'key too long, key must be 250 characters or less.'
+    ];
+    let key = '';
+    for (let i = 0; i <=250; i++) {
+      key += 'a';
+    }
+    const response = await request(app)
+      .get(`/get-treatment?key=${key}&split-name=test`)
+      .set('Authorization', 'test');
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+  });
+
+
+  test('should be 400 if bucketing-key is empty', async () => {
+    const expected = [
+      'you passed an empty string, bucketing-key must be a non-empty string.'
+    ];
+    const response = await request(app)
+      .get('/get-treatment?key=key&bucketing-key=&split-name=test')
+      .set('Authorization', 'test');
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+  });
+
+  test('should be 400 if bucketing-key is empty trimmed', async () => {
+    const expected = [
+      'you passed an empty string, bucketing-key must be a non-empty string.'
+    ];
+    const response = await request(app)
+      .get('/get-treatment?key=key&bucketing-key=    &split-name=test')
+      .set('Authorization', 'test');
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+  });
+
+  test('should be 400 if bucketing-key is too long', async () => {
+    const expected = [
+      'bucketing-key too long, bucketing-key must be 250 characters or less.'
+    ];
+    let key = '';
+    for (let i = 0; i <=250; i++) {
+      key += 'a';
+    }
+    const response = await request(app)
+      .get(`/get-treatment?key=key&bucketing-key=${key}&split-name=test`)
+      .set('Authorization', 'test');
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+  });
+
   test('should be 400 if split-name is not passed', async () => {
     const expected = [
       'you passed a null or undefined split-name, split-name must be a non-empty string.'
@@ -55,12 +142,26 @@ describe('get-treatment', () => {
     expect(response.body.errors).toEqual(expect.arrayContaining(expected));
   });
 
-  test('should be 400 if split-name is invalid', async () => {
+  test('should be 400 if split-name is empty trimmed', async () => {
     const expected = [
-      'you passed an invalid split-name, split-name must be a non-empty string.'
+      'you passed an empty split-name, split-name must be a non-empty string.'
     ];
     const response = await request(app)
-      .get('/get-treatment?key=test&split-name=[]')
+      .get('/get-treatment?key=test&split-name=    ')
+      .set('Authorization', 'test');
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+  });
+
+  test('should be 400 if there are errors in key and split-name', async () => {
+    const expected = [
+      'you passed an empty string, key must be a non-empty string.',
+      'you passed an empty split-name, split-name must be a non-empty string.'
+    ];
+    const response = await request(app)
+      .get('/get-treatment?key=&split-name=    ')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(400);
     expect(response.body).toHaveProperty('success', false);
@@ -94,6 +195,21 @@ describe('get-treatment', () => {
     expect(response.body.errors).toEqual(expect.arrayContaining(expected));
   });
 
+  test('should be 400 if there are multiple errors', async () => {
+    const expected = [
+      'you passed an empty string, key must be a non-empty string.',
+      'you passed an empty split-name, split-name must be a non-empty string.',
+      'attributes must be a plain object.'
+    ];
+    const response = await request(app)
+      .get('/get-treatment?key=     &split-name=&attributes="lalala"')
+      .set('Authorization', 'test');
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+  });
+
   test('should be 200 if is valid attributes', async () => {
     const response = await request(app)
       .get('/get-treatment?key=test&split-name=my-experiment&attributes={"test":"test"}')
@@ -110,5 +226,25 @@ describe('get-treatment', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('splitName', 'my-experiment');
     expect(response.body).toHaveProperty('treatment', 'on');
+  });
+
+  test('should be 400 if there are multiple errors in every input', async () => {
+    const expected = [
+      'you passed an empty string, key must be a non-empty string.',
+      'you passed an empty split-name, split-name must be a non-empty string.',
+      'attributes must be a plain object.',
+      'bucketing-key too long, bucketing-key must be 250 characters or less.'
+    ];
+    let key = '';
+    for (let i = 0; i <=250; i++) {
+      key += 'a';
+    }
+    const response = await request(app)
+      .get(`/get-treatment?bucketing-key=${key}&key=     &split-name=&attributes="lalala"`)
+      .set('Authorization', 'test');
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
   });
 });
