@@ -6,7 +6,7 @@ describe('key validator', () => {
   test('should return error on undefined', async () => {
     const expected = 'you passed a null or undefined key, key must be a non-empty string.';
 
-    const result = keyValidator.validateKeyValue(null, 'key');
+    const result = keyValidator(null, 'key');
 
     expect(result).toHaveProperty('valid', false);
     expect(result).toHaveProperty('error', expected);
@@ -16,7 +16,7 @@ describe('key validator', () => {
   test('should return error on empty', async () => {
     const expected = 'you passed an empty string, key must be a non-empty string.';
 
-    const result = keyValidator.validateKeyValue('', 'key');
+    const result = keyValidator('', 'key');
     
     expect(result).toHaveProperty('valid', false);
     expect(result).toHaveProperty('error', expected);
@@ -26,7 +26,7 @@ describe('key validator', () => {
   test('should return error on trim', async () => {
     const expected = 'you passed an empty string, key must be a non-empty string.';
 
-    const result = keyValidator.validateKeyValue('   ', 'key');
+    const result = keyValidator('   ', 'key');
     
     expect(result).toHaveProperty('valid', false);
     expect(result).toHaveProperty('error', expected);
@@ -40,7 +40,7 @@ describe('key validator', () => {
     }
     const expected = 'key too long, key must be 250 characters or less.';
 
-    const result = keyValidator.validateKeyValue(keyInput, 'key');
+    const result = keyValidator(keyInput, 'key');
     
     expect(result).toHaveProperty('valid', false);
     expect(result).toHaveProperty('error', expected);
@@ -48,7 +48,7 @@ describe('key validator', () => {
   });
 
   test('should be valid when ok', async () => {
-    const result = keyValidator.validateKeyValue('key', 'key');
+    const result = keyValidator('key', 'key');
     
     expect(result).toHaveProperty('valid', true);
     expect(result).toHaveProperty('value', 'key');
@@ -56,7 +56,7 @@ describe('key validator', () => {
   });
 
   test('should be valid when ok and should trim', async () => {
-    const result = keyValidator.validateKeyValue('   key ', 'key');
+    const result = keyValidator('   key ', 'key');
     
     expect(result).toHaveProperty('valid', true);
     expect(result).toHaveProperty('value', 'key');
@@ -68,7 +68,7 @@ describe('split validator', () => {
   test('should return error on undefined', async () => {
     const expected = 'you passed a null or undefined split-name, split-name must be a non-empty string.';
 
-    const result = splitValidator.validateSplit();
+    const result = splitValidator();
 
     expect(result).toHaveProperty('valid', false);
     expect(result).toHaveProperty('error', expected);
@@ -78,7 +78,7 @@ describe('split validator', () => {
   test('should return error on empty', async () => {
     const expected = 'you passed an empty split-name, split-name must be a non-empty string.';
 
-    const result = splitValidator.validateSplit('');
+    const result = splitValidator('');
     
     expect(result).toHaveProperty('valid', false);
     expect(result).toHaveProperty('error', expected);
@@ -88,7 +88,7 @@ describe('split validator', () => {
   test('should return error on trim', async () => {
     const expected = 'you passed an empty split-name, split-name must be a non-empty string.';
 
-    const result = splitValidator.validateSplit('  ');
+    const result = splitValidator('  ');
     
     expect(result).toHaveProperty('valid', false);
     expect(result).toHaveProperty('error', expected);
@@ -96,7 +96,7 @@ describe('split validator', () => {
   });
 
   test('should be valid when ok', async () => {
-    const result = splitValidator.validateSplit('my-split');
+    const result = splitValidator('my-split');
     
     expect(result).toHaveProperty('valid', true);
     expect(result).toHaveProperty('value', 'my-split');
@@ -104,7 +104,7 @@ describe('split validator', () => {
   });
 
   test('should be valid when ok and should trim', async () => {
-    const result = splitValidator.validateSplit(' my-split     ');
+    const result = splitValidator(' my-split     ');
     
     expect(result).toHaveProperty('valid', true);
     expect(result).toHaveProperty('value', 'my-split');
@@ -116,7 +116,7 @@ describe('attributes validator', () => {
   test('should return error on invalid attributes', async () => {
     const expected = 'attributes must be a plain object.';
 
-    const result = attributesValidator.validateAttributes('test');
+    const result = attributesValidator('test');
     
     expect(result).toHaveProperty('valid', false);
     expect(result).toHaveProperty('error', expected);
@@ -126,7 +126,7 @@ describe('attributes validator', () => {
   test('should return error on invalid attributes 2', async () => {
     const expected = 'attributes must be a plain object.';
 
-    const result = attributesValidator.validateAttributes('[]');
+    const result = attributesValidator('[]');
     
     expect(result).toHaveProperty('valid', false);
     expect(result).toHaveProperty('error', expected);
@@ -136,7 +136,7 @@ describe('attributes validator', () => {
   test('should return error on invalid attributes 3', async () => {
     const expected = 'attributes must be a plain object.';
 
-    const result = attributesValidator.validateAttributes('true');
+    const result = attributesValidator('true');
     
     expect(result).toHaveProperty('valid', false);
     expect(result).toHaveProperty('error', expected);
@@ -144,8 +144,7 @@ describe('attributes validator', () => {
   });
 
   test('should be valid when attributes is an object', async () => {
-    const result = attributesValidator.validateAttributes('{"my-attr1":true}');
-    
+    const result = attributesValidator('{"my-attr1":true}');
     expect(result).toHaveProperty('valid', true);
     expect(result).toHaveProperty('value', {
       'my-attr1': true,
@@ -154,7 +153,7 @@ describe('attributes validator', () => {
   });
 
   test('should be valid when attributes is empty object', async () => {
-    const result = attributesValidator.validateAttributes('{}');
+    const result = attributesValidator('{}');
     
     expect(result).toHaveProperty('valid', true);
     expect(result).toHaveProperty('value', {});
@@ -162,7 +161,7 @@ describe('attributes validator', () => {
   });
 
   test('should be valid when attributes is null', async () => {
-    const result = attributesValidator.validateAttributes();
+    const result = attributesValidator();
     
     expect(result).toHaveProperty('valid', true);
     expect(result).toHaveProperty('value', null);

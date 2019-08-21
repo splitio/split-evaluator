@@ -23,6 +23,4 @@ const validateSplit = (maybeSplit) => {
     };
 };
 
-module.exports = {
-  validateSplit,
-};
+module.exports = validateSplit;

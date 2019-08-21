@@ -1,4 +1,4 @@
-const lang = require('../lang/lang');
+const isObject = require('../lang/lang');
 
 const validateAttributes = (maybeAttributes) => {
   const error = {
@@ -14,7 +14,7 @@ const validateAttributes = (maybeAttributes) => {
   }
   try {
     const attributes = JSON.parse(maybeAttributes);
-    return (lang.isObject(attributes)) ? {
+    return (isObject(attributes)) ? {
       valid: true,
       value: attributes,
     } : error;
@@ -23,6 +23,4 @@ const validateAttributes = (maybeAttributes) => {
   }
 };
 
-module.exports = {
-  validateAttributes,
-};
+module.exports = validateAttributes;

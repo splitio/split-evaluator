@@ -14,10 +14,10 @@ const parseValidators = (validators) => {
 };
 
 const treatmentValidation = (req, res, next) => {
-  const matchingKeyValidation = keyValidator.validateKeyValue(req.query.key, 'key');
-  const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator.validateKeyValue(req.query['bucketing-key'], 'bucketing-key') : null;
-  const splitNameValidation = splitValidator.validateSplit(req.query['split-name']);
-  const attributesValidation = attributesValidator.validateAttributes(req.query.attributes);
+  const matchingKeyValidation = keyValidator(req.query.key, 'key');
+  const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
+  const splitNameValidation = splitValidator(req.query['split-name']);
+  const attributesValidation = attributesValidator(req.query.attributes);
 
   const errors = parseValidators([matchingKeyValidation, bucketingKeyValidation, splitNameValidation, attributesValidation]);
   if (errors.length) {

@@ -30,6 +30,4 @@ const validateKeyValue = (maybeKey, type) => {
   };
 };
 
-module.exports = {
-  validateKeyValue,
-};
+module.exports = validateKeyValue;

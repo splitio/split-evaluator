@@ -1,5 +1,11 @@
-// uptime timer initial time.
+const packageJson = require('../../package.json');
+
 let serverUpSince = null;
+
+/**
+ * Get the version.
+ */
+const getVersion = () => packageJson && packageJson.version;// uptime timer initial time.
 /**
  * 
  * @param {boolean} [init] - Wether we need to initialize the timer. If it's falsey, return the current uptime.
@@ -23,5 +29,6 @@ function toHHMMSS(ms) {
 }
 
 module.exports = {
+  getVersion,
   uptime,
 };
