@@ -7,7 +7,7 @@ const utils = require('./utils');
 const client = require('./sdk').client;
 
 // Middlewares
-const authorization = require('./middleware/authorization').authorization;
+const authorization = require('./middleware/authorization');
 
 const clientRouter = require('./client/client.router');
 const adminRouter = require('./admin/admin.router');
