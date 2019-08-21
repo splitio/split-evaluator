@@ -1,7 +1,6 @@
 //
 // SDK initialization and factory instanciation.
 //
-'use strict';
 
 const SplitFactory = require('@splitsoftware/splitio').SplitFactory;
 const config = require('config');
