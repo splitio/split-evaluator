@@ -24,9 +24,11 @@ const getTreatment = (req, res) => {
 
   function asyncResult(treatment) {
     res.set('Cache-Control', config.get('cacheControl'))
-      .send({ 
-        splitName: split,
-        treatment
+      .send({
+        evaluation: {
+          splitName: split,
+          treatment
+        }
       });
   }
 

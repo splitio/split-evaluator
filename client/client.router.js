@@ -19,13 +19,12 @@ const treatmentValidation = (req, res, next) => {
   const splitNameValidation = splitValidator(req.query['split-name']);
   const attributesValidation = attributesValidator(req.query.attributes);
 
-  const errors = parseValidators([matchingKeyValidation, bucketingKeyValidation, splitNameValidation, attributesValidation]);
-  if (errors.length) {
+  const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, splitNameValidation, attributesValidation]);
+  if (error.length) {
     return res
       .status(400)
       .send({
-        success: false,
-        errors,
+        error,
       });
   } else {
     req.splitio = {

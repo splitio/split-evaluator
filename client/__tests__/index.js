@@ -7,6 +7,7 @@ describe('get-treatment', () => {
     const response = await request(app)
       .get('/get-treatment?key=test&split-name=my-experiment');
     expect(response.statusCode).toBe(401);
+    expect(response.body.error).toBe('Unauthorized');
   });
 
   test('should be 401 if auth does not match', async () => {
@@ -14,6 +15,7 @@ describe('get-treatment', () => {
       .get('/get-treatment?key=test&split-name=my-experiment')
       .set('Authorization', 'invalid');
     expect(response.statusCode).toBe(401);
+    expect(response.body.error).toBe('Unauthorized');
   });
 
   test('should be 400 if key is not passed', async () => {
@@ -24,9 +26,8 @@ describe('get-treatment', () => {
       .get('/get-treatment?split-name=test')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toEqual(expect.arrayContaining(expected));
   });
 
   test('should be 400 if key is empty', async () => {
@@ -37,9 +38,8 @@ describe('get-treatment', () => {
       .get('/get-treatment?key=&split-name=test')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toEqual(expect.arrayContaining(expected));
   });
 
   test('should be 400 if key is empty trimmed', async () => {
@@ -50,9 +50,8 @@ describe('get-treatment', () => {
       .get('/get-treatment?key=     &split-name=test')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toEqual(expect.arrayContaining(expected));
   });
 
   test('should be 400 if key is too long', async () => {
@@ -67,9 +66,8 @@ describe('get-treatment', () => {
       .get(`/get-treatment?key=${key}&split-name=test`)
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toEqual(expect.arrayContaining(expected));
   });
 
 
@@ -81,9 +79,8 @@ describe('get-treatment', () => {
       .get('/get-treatment?key=key&bucketing-key=&split-name=test')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toEqual(expect.arrayContaining(expected));
   });
 
   test('should be 400 if bucketing-key is empty trimmed', async () => {
@@ -94,9 +91,8 @@ describe('get-treatment', () => {
       .get('/get-treatment?key=key&bucketing-key=    &split-name=test')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toEqual(expect.arrayContaining(expected));
   });
 
   test('should be 400 if bucketing-key is too long', async () => {
@@ -111,9 +107,8 @@ describe('get-treatment', () => {
       .get(`/get-treatment?key=key&bucketing-key=${key}&split-name=test`)
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toEqual(expect.arrayContaining(expected));
   });
 
   test('should be 400 if split-name is not passed', async () => {
@@ -124,9 +119,8 @@ describe('get-treatment', () => {
       .get('/get-treatment?key=test')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toEqual(expect.arrayContaining(expected));
   });
 
   test('should be 400 if split-name is empty', async () => {
@@ -137,9 +131,8 @@ describe('get-treatment', () => {
       .get('/get-treatment?key=test&split-name=')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toEqual(expect.arrayContaining(expected));
   });
 
   test('should be 400 if split-name is empty trimmed', async () => {
@@ -150,9 +143,8 @@ describe('get-treatment', () => {
       .get('/get-treatment?key=test&split-name=    ')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toEqual(expect.arrayContaining(expected));
   });
 
   test('should be 400 if there are errors in key and split-name', async () => {
@@ -164,9 +156,8 @@ describe('get-treatment', () => {
       .get('/get-treatment?key=&split-name=    ')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toEqual(expect.arrayContaining(expected));
   });
 
   test('should be 400 if attributes is invalid', async () => {
@@ -177,9 +168,8 @@ describe('get-treatment', () => {
       .get('/get-treatment?key=test&split-name=my-experiment&attributes=lalala')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toEqual(expect.arrayContaining(expected));
   });
 
   test('should be 400 if attributes is invalid', async () => {
@@ -190,9 +180,8 @@ describe('get-treatment', () => {
       .get('/get-treatment?key=test&split-name=my-experiment&attributes="lalala"')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toEqual(expect.arrayContaining(expected));
   });
 
   test('should be 400 if there are multiple errors', async () => {
@@ -205,27 +194,8 @@ describe('get-treatment', () => {
       .get('/get-treatment?key=     &split-name=&attributes="lalala"')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
-  });
-
-  test('should be 200 if is valid attributes', async () => {
-    const response = await request(app)
-      .get('/get-treatment?key=test&split-name=my-experiment&attributes={"test":"test"}')
-      .set('Authorization', 'test');
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('splitName', 'my-experiment');
-    expect(response.body).toHaveProperty('treatment', 'on');
-  });
-
-  test('should be 200 if auth is valid', async () => {
-    const response = await request(app)
-      .get('/get-treatment?key=test&split-name=my-experiment')
-      .set('Authorization', 'test');
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('splitName', 'my-experiment');
-    expect(response.body).toHaveProperty('treatment', 'on');
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toEqual(expect.arrayContaining(expected));
   });
 
   test('should be 400 if there are multiple errors in every input', async () => {
@@ -243,8 +213,27 @@ describe('get-treatment', () => {
       .get(`/get-treatment?bucketing-key=${key}&key=     &split-name=&attributes="lalala"`)
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors).toEqual(expect.arrayContaining(expected));
+    expect(response.body).toHaveProperty('error');
+    expect(response.body.error).toEqual(expect.arrayContaining(expected));
+  });
+
+  test('should be 200 if is valid attributes', async () => {
+    const response = await request(app)
+      .get('/get-treatment?key=test&split-name=my-experiment&attributes={"test":"test"}')
+      .set('Authorization', 'test');
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('evaluation');
+    expect(response.body.evaluation).toHaveProperty('treatment', 'on');
+    expect(response.body.evaluation).toHaveProperty('splitName', 'my-experiment');
+  });
+
+  test('should be 200 if auth is valid', async () => {
+    const response = await request(app)
+      .get('/get-treatment?key=test&split-name=my-experiment')
+      .set('Authorization', 'test');
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('evaluation');
+    expect(response.body.evaluation).toHaveProperty('treatment', 'on');
+    expect(response.body.evaluation).toHaveProperty('splitName', 'my-experiment');
   });
 });
