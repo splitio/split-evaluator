@@ -1,4 +1,4 @@
-const isObject = require('../lang/lang');
+const lang = require('../lang/lang');
 
 const validateAttributes = (maybeAttributes) => {
   const error = {
@@ -14,7 +14,7 @@ const validateAttributes = (maybeAttributes) => {
   }
   try {
     const attributes = JSON.parse(maybeAttributes);
-    return (isObject(attributes)) ? {
+    return (lang.isObject(attributes)) ? {
       valid: true,
       value: attributes,
     } : error;

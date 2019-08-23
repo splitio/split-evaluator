@@ -26,6 +26,7 @@
   },
   "main": "server.js",
   "scripts": {
+    "dev": "nodemon server.js",
     "start": "node server.js",
     "lint": "eslint .",
     "test": "NODE_ENV=test SPLITIO_API_KEY=localhost SPLITIO_EXT_API_KEY=test jest"
@@ -47,6 +48,7 @@
     "babel-jest": "^24.8.0",
     "eslint": "^6.1.0",
     "jest": "^24.8.0",
+    "nodemon": "^1.19.1",
     "superagent": "^5.1.0",
     "supertest": "^4.0.2"
   }
