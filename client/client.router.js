@@ -4,6 +4,10 @@ const keyValidator = require('../utils/inputValidation/key');
 const splitValidator = require('../utils/inputValidation/split');
 const splitsValidator = require('../utils/inputValidation/splits');
 const attributesValidator = require('../utils/inputValidation/attributes');
+const trafficTypeValidator = require('../utils/inputValidation/trafficType');
+const eventTypeValidator = require('../utils/inputValidation/eventType');
+const valueValidator = require('../utils/inputValidation/value');
+const propertiesValidator = require('../utils/inputValidation/properties');
 const clientController = require('./client.controller');
 
 const parseValidators = (validators) => {
@@ -66,9 +70,37 @@ const treatmentsValidation = (req, res, next) => {
   next();
 };
 
+const trackValidation = (req, res, next) => {
+  const keyValidation = keyValidator(req.query.key, 'key');
+  const trafficTypeValidation = trafficTypeValidator(req.query['traffic-type']);
+  const eventTypeValidation = eventTypeValidator(req.query['event-type']);
+  const valueValidation = valueValidator(req.query.value);
+  const propertiesValidation = propertiesValidator(req.query.properties);
+
+  const error = parseValidators([keyValidation, trafficTypeValidation, eventTypeValidation, valueValidation, propertiesValidation]);
+  if (error.length) {
+    return res
+      .status(400)
+      .send({
+        error,
+      });
+  } else {
+    req.splitio = {
+      key: keyValidation.value,
+      trafficType: trafficTypeValidation.value,
+      eventType: eventTypeValidation.value,
+      value: valueValidation.value,
+      properties: propertiesValidation.value,
+    };
+  }
+
+  next();
+};
+
 router.get('/get-treatment', treatmentValidation, clientController.getTreatment);
 router.get('/get-treatment-with-config', treatmentValidation, clientController.getTreatmentWithConfig);
 router.get('/get-treatments', treatmentsValidation, clientController.getTreatments);
 router.get('/get-treatments-with-config', treatmentsValidation, clientController.getTreatmentsWithConfig);
+router.get('/track', trackValidation, clientController.track);
 
 module.exports = router;

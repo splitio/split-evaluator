@@ -5,7 +5,7 @@
 * Added `.travis.yml` for running checks.
 * Generated `app.js` to run e2e tests.
 * Added `inputValidation` module.
-* Added `get-treatment-with-config`, `get-treatments` and `get-treatments-with-config` APIs.
+* Added `get-treatment-with-config`, `get-treatments` and `get-treatments-with-config` and `track` APIs.
 
 ## 1.4.5 (October 8, 2018)
 
