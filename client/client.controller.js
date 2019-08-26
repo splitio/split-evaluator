@@ -5,7 +5,7 @@ const map = require('lodash/map');
 const config = require('config');
 
 // Own modules
-const common = require('./common');
+const { parseKey, filterSplitsByTT } = require('./common');
 const sdkModule = require('../sdk');
 
 // Client and manager we will use
@@ -18,7 +18,7 @@ const manager = sdkModule.manager;
  * @param {*} res 
  */
 const getTreatment = (req, res) => {
-  const key = common.parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
+  const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const split = req.splitio.splitName;
   const attributes = req.splitio.attributes;
 
@@ -44,7 +44,7 @@ const getTreatment = (req, res) => {
  * @param {*} res 
  */
 const getTreatmentWithConfig = (req, res) => {
-  const key = common.parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
+  const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const split = req.splitio.splitName;
   const attributes = req.splitio.attributes;
 
@@ -71,7 +71,7 @@ const getTreatmentWithConfig = (req, res) => {
  * @param {*} res 
  */
 const getTreatments = (req, res) => {
-  const key = common.parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
+  const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const splits = req.splitio.splitNames;
   const attributes = req.splitio.attributes;
 
@@ -94,7 +94,7 @@ const getTreatments = (req, res) => {
  * @param {*} res 
  */
 const getTreatmentsWithConfig = (req, res) => {
-  const key = common.parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
+  const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const splits = req.splitio.splitNames;
   const attributes = req.splitio.attributes;
 
@@ -143,8 +143,8 @@ const getAllTreatments = (req, res) => {
     return map(keys, key => {
       return {
         trafficType: key.trafficType,
-        key: common.parseKey(key.matchingKey, key.bucketingKey),
-        splits: common.filterSplitsByTT(views, key.trafficType)
+        key: parseKey(key.matchingKey, key.bucketingKey),
+        splits: filterSplitsByTT(views, key.trafficType)
       };
     });
   });
