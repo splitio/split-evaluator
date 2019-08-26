@@ -28,7 +28,7 @@
   "scripts": {
     "start": "node server.js",
     "lint": "eslint .",
-    "test": "NODE_ENV=test SPLITIO_API_KEY=localhost SPLITIO_EXT_API_KEY=test jest"
+    "test": "NODE_ENV=test jest"
   },
   "dependencies": {
     "@splitsoftware/splitio": "~10.8.2",

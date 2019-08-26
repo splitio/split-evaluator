@@ -1,3 +1,5 @@
+process.env.SPLITIO_EXT_API_KEY = 'test';
+process.env.SPLITIO_API_KEY = 'localhost';
 
 const request = require('supertest');
 const app = require('../../app');
