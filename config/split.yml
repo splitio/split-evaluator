@@ -1,0 +1,18 @@
+- my-experiment:
+    treatment: "on"
+    keys: "test"
+    config: "{\"desc\" : \"this applies only to ON treatment\"}"
+- other-experiment-3:
+    treatment: "off"
+- my-experiment:
+    treatment: "off"
+    keys: "only_test"
+    config: "{\"desc\" : \"this applies only to OFF and only for only_test. The rest will receive ON\"}"
+- other-experiment-3:
+    treatment: "on"
+    keys: "test_whitelist"
+- other-experiment:
+    treatment: "on"
+    keys: ["test2","test3"]
+- other-experiment-2:
+    treatment: "on"  

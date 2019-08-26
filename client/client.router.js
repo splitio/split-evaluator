@@ -40,6 +40,7 @@ const treatmentValidation = (req, res, next) => {
 };
 
 router.get('/get-treatment', treatmentValidation, clientController.getTreatment);
+router.get('/get-treatment-with-config', treatmentValidation, clientController.getTreatmentWithConfig);
 router.get('/get-treatments', clientController.getTreatments);
 
 module.exports = router;
