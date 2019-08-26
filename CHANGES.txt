@@ -1,3 +1,11 @@
+## 2.0.0 (, 2019)
+
+* Added linter.
+* Added jest as unit test framework.
+* Added `.travis.yml` for running checks.
+* Generated `app.js` to run e2e tests.
+* Added `inputValidation` module.
+
 ## 1.4.5 (October 8, 2018)
 
 * Updating SDK version to v10.4.0 which is the latest stable to the date. Adding tilde.

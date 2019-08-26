@@ -19,22 +19,35 @@
       "url": "https://github.com/mmelograno"
     }
   ],
+  "jest": {
+    "testPathIgnorePatterns": [
+      "config"
+    ]
+  },
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "NODE_ENV=test jest"
   },
   "dependencies": {
     "@splitsoftware/splitio": "~10.8.2",
     "config": "1.25.1",
     "express": "^4.17.1",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "morgan": "^1.9.1"
   },
   "engines": {
     "node": "10.15.1",
     "npm": "6.10.1"
   },
   "devDependencies": {
-    "eslint": "^6.1.0"
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "babel-jest": "^24.8.0",
+    "eslint": "^6.1.0",
+    "jest": "^24.8.0",
+    "superagent": "^5.1.0",
+    "supertest": "^4.0.2"
   }
 }

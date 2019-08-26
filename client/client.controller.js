@@ -5,7 +5,6 @@ const map = require('lodash/map');
 const config = require('config');
 
 // Own modules
-const utils = require('../utils');
 const common = require('./common');
 const sdkModule = require('../sdk');
 
@@ -19,27 +18,17 @@ const manager = sdkModule.manager;
  * @param {*} res 
  */
 const getTreatment = (req, res) => {
-  console.log('Getting a treatment.');  
-  const state = req.query;
-  const key = utils.parseKey(state.key, state['bucketing-key']);
-  const split = state['split-name'];
-  let attributes = null;
-
-  try {
-    if (state['attributes']) {
-      attributes = JSON.parse(state['attributes']);  
-    }
-  } catch (e) {
-    res.status(400).send('There was an error parsing the provided attributes. Check the format.');
-    return;
-  }
+  const key = common.parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
+  const split = req.splitio.splitName;
+  const attributes = req.splitio.attributes;
 
   function asyncResult(treatment) {
-    console.log('Returning the treatment.');
     res.set('Cache-Control', config.get('cacheControl'))
-      .send({ 
-        splitName: split,
-        treatment
+      .send({
+        evaluation: {
+          splitName: split,
+          treatment
+        }
       });
   }
 
@@ -81,7 +70,7 @@ const getTreatments = (req, res) => {
     return map(keys, key => {
       return {
         trafficType: key.trafficType,
-        key: utils.parseKey(key.matchingKey, key.bucketingKey),
+        key: common.parseKey(key.matchingKey, key.bucketingKey),
         splits: common.filterSplitsByTT(views, key.trafficType)
       };
     });

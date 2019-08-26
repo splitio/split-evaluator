@@ -1,7 +1,7 @@
 const os = require('os');
 const ip = require('ip');
 
-const utils = require('../utils');
+const utils = require('../utils/utils');
 const sdkModule = require('../sdk');
 const sdk = sdkModule.factory;
 
