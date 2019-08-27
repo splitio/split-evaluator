@@ -5,7 +5,7 @@ const map = require('lodash/map');
 const config = require('config');
 
 // Own modules
-const common = require('./common');
+const { parseKey, filterSplitsByTT } = require('./common');
 const sdkModule = require('../sdk');
 
 // Client and manager we will use
@@ -18,7 +18,7 @@ const manager = sdkModule.manager;
  * @param {*} res 
  */
 const getTreatment = (req, res) => {
-  const key = common.parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
+  const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const split = req.splitio.splitName;
   const attributes = req.splitio.attributes;
 
@@ -44,7 +44,7 @@ const getTreatment = (req, res) => {
  * @param {*} res 
  */
 const getTreatmentWithConfig = (req, res) => {
-  const key = common.parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
+  const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const split = req.splitio.splitName;
   const attributes = req.splitio.attributes;
 
@@ -66,11 +66,57 @@ const getTreatmentWithConfig = (req, res) => {
 };
 
 /**
- * getTreatments  returns the evaluations for all treatments matching the traffic type of the provided keys.
+ * getTreatments evaluates an array of split-names
  * @param {*} req 
  * @param {*} res 
  */
 const getTreatments = (req, res) => {
+  const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
+  const splits = req.splitio.splitNames;
+  const attributes = req.splitio.attributes;
+
+  function asyncResult(treatments) {
+    res.set('Cache-Control', config.get('cacheControl'))
+      .send({
+        evaluation: treatments,
+      });
+  }
+
+  const eventuallyAvailableValue = client.getTreatments(key, splits, attributes);
+
+  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
+  else asyncResult(eventuallyAvailableValue);
+};
+
+/**
+ * getTreatmentsWithConfig evaluates an array of split-names and returns configs also
+ * @param {*} req 
+ * @param {*} res 
+ */
+const getTreatmentsWithConfig = (req, res) => {
+  const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
+  const splits = req.splitio.splitNames;
+  const attributes = req.splitio.attributes;
+
+  function asyncResult(treatments) {
+    res.set('Cache-Control', config.get('cacheControl'))
+      .send({
+        evaluation: treatments,
+      });
+  }
+
+  const eventuallyAvailableValue = client.getTreatmentsWithConfig(key, splits, attributes);
+
+  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
+  else asyncResult(eventuallyAvailableValue);
+};
+
+/**
+ * getAllTreatments  returns the evaluations for all treatments matching the traffic type of the provided keys.
+ * @param {*} req 
+ * @param {*} res 
+ */
+const getAllTreatments = (req, res) => {
   console.log('Getting treatments.');    
   const state = req.query;
   let keys = [];
@@ -97,8 +143,8 @@ const getTreatments = (req, res) => {
     return map(keys, key => {
       return {
         trafficType: key.trafficType,
-        key: common.parseKey(key.matchingKey, key.bucketingKey),
-        splits: common.filterSplitsByTT(views, key.trafficType)
+        key: parseKey(key.matchingKey, key.bucketingKey),
+        splits: filterSplitsByTT(views, key.trafficType)
       };
     });
   });
@@ -131,6 +177,8 @@ const getTreatments = (req, res) => {
 
 module.exports = {
   getTreatment,
-  getTreatmentWithConfig,
   getTreatments,
+  getTreatmentWithConfig,
+  getTreatmentsWithConfig,
+  getAllTreatments,
 };
