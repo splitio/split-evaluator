@@ -1,8 +1,5 @@
 // Utils
 const thenable = require('@splitsoftware/splitio/lib/utils/promise/thenable');
-const reduce = require('lodash/reduce');
-const map = require('lodash/map');
-const config = require('config');
 
 // Own modules
 const { parseKey, filterSplitsByTT } = require('./common');
@@ -23,13 +20,12 @@ const getTreatment = (req, res) => {
   const attributes = req.splitio.attributes;
 
   function asyncResult(treatment) {
-    res.set('Cache-Control', config.get('cacheControl'))
-      .send({
-        evaluation: {
-          splitName: split,
-          treatment
-        }
-      });
+    res.send({
+      evaluation: {
+        splitName: split,
+        treatment
+      }
+    });
   }
 
   const eventuallyAvailableValue = client.getTreatment(key, split, attributes);
@@ -49,14 +45,13 @@ const getTreatmentWithConfig = (req, res) => {
   const attributes = req.splitio.attributes;
 
   function asyncResult(evaluationResult) {
-    res.set('Cache-Control', config.get('cacheControl'))
-      .send({
-        evaluation: {
-          splitName: split,
-          treatment: evaluationResult.treatment,
-          config: evaluationResult.config
-        }
-      });
+    res.send({
+      evaluation: {
+        splitName: split,
+        treatment: evaluationResult.treatment,
+        config: evaluationResult.config
+      }
+    });
   }
 
   const eventuallyAvailableValue = client.getTreatmentWithConfig(key, split, attributes);
@@ -76,10 +71,9 @@ const getTreatments = (req, res) => {
   const attributes = req.splitio.attributes;
 
   function asyncResult(treatments) {
-    res.set('Cache-Control', config.get('cacheControl'))
-      .send({
-        evaluation: treatments,
-      });
+    res.send({
+      evaluation: treatments,
+    });
   }
 
   const eventuallyAvailableValue = client.getTreatments(key, splits, attributes);
@@ -99,10 +93,9 @@ const getTreatmentsWithConfig = (req, res) => {
   const attributes = req.splitio.attributes;
 
   function asyncResult(treatments) {
-    res.set('Cache-Control', config.get('cacheControl'))
-      .send({
-        evaluation: treatments,
-      });
+    res.send({
+      evaluation: treatments,
+    });
   }
 
   const eventuallyAvailableValue = client.getTreatmentsWithConfig(key, splits, attributes);
@@ -139,63 +132,27 @@ const track = (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const getAllTreatments = (req, res) => {
-  console.log('Getting treatments.');    
-  const state = req.query;
-  let keys = [];
-  try {
-    // Keys are required.
-    keys = JSON.parse(state.keys);
-  } catch (e) {
-    res.status(400).send('There was an error parsing the provided keys. Check that the format is correct.');
-    return;
-  }
+const getAllTreatments = async (req, res) => {
+  const keys = req.splitio.keys;
+  const attributes = req.splitio.attributes;
 
-  let attributes;
-
-  try {
-    if (state['attributes']) {
-      attributes = JSON.parse(state['attributes']);
-    }
-  } catch (e) {
-    res.status(400).send('There was an error parsing the provided attributes. Check the format.');
-    return;
-  }
-
-  const splitsPromise = Promise.resolve(manager.splits()).then(views => {
-    return map(keys, key => {
-      return {
-        trafficType: key.trafficType,
-        key: parseKey(key.matchingKey, key.bucketingKey),
-        splits: filterSplitsByTT(views, key.trafficType)
-      };
-    });
-  });
-
-  Promise.resolve(splitsPromise)
-    // Call getTreatments
-    .then(splitsByTT => {
-      return reduce(splitsByTT, (acc, group) => {
-        // @TODO: Support thenables here when necessary.
-        const partial = client.getTreatments(group.key, group.splits, attributes);
-
-        const results = map(partial, (treatment, feature) => {
-          return {
-            splitName: feature,
-            treatment
-          };
-        });
-
-        return acc.concat(results);
-      }, []);
-    })
-    // Send the response to the client
-    .then(treatments => {
-      console.log('Returning treatments.');
-      return res.set('Cache-Control', config.get('cacheControl')).type('json').send(treatments);
-    })
-    // 500 on error
-    .catch(() => res.sendStatus(500));
+  // Grabs Splits from Manager
+  const splitViews = await manager.splits();
+  // Builds promise array with all the splits for each (tt, key)
+  const promises = await Promise.all(keys.map(key => client.getTreatments(
+    parseKey(key.matchingKey, key.bucketingKey),
+    filterSplitsByTT(splitViews, key.trafficType),
+    attributes)
+  ));
+  // Creates a view with the result
+  const treatments = promises.reduce((acc, evaluation) => {
+    const partial = Object.keys(evaluation).map(splitName => ({
+      splitName,
+      treatment: evaluation[splitName]
+    }));
+    return acc.concat(partial);
+  }, []);
+  res.send(treatments);
 };
 
 module.exports = {

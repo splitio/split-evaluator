@@ -1,5 +1,5 @@
 const keyValidator = require('../key');
-
+const { getLongKey } = require('../../testWrapper/index');
 
 describe('key validator', () => {
   test('should return error on undefined', async () => {
@@ -33,10 +33,7 @@ describe('key validator', () => {
   });
 
   test('should return error when key is too long', async () => {
-    let keyInput = '';
-    for (let i = 0; i <= 250; i++) {
-      keyInput += 'a';
-    }
+    let keyInput = getLongKey();
     const expected = 'key too long, key must be 250 characters or less.';
 
     const result = keyValidator(keyInput, 'key');
