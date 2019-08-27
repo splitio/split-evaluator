@@ -1,4 +1,4 @@
-const { isObject, uniq } = require('../lang');
+const { isObject } = require('../lang');
 
 describe('lang', () => {
   test('isObject', async () => {
@@ -9,12 +9,5 @@ describe('lang', () => {
     expect(isObject(() => true)).toBe(false);
     expect(isObject(JSON.parse('{"test": 1}'))).toBe(true);
     expect(isObject({})).toBe(true);
-  });
-
-  test('uniq', async () => {
-    expect(uniq([])).toEqual([]);
-    expect(uniq(['test'])).toEqual(['test']);
-    expect(uniq(['test', 'test'])).toEqual(['test']);
-    expect(uniq(['test', 'test2', 'test'])).toEqual(['test', 'test2']);
   });
 });
