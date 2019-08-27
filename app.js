@@ -6,6 +6,7 @@ const app = express();
 const authorization = require('./middleware/authorization');
 
 const clientRouter = require('./client/client.router');
+const managerRouter = require('./manager/manager.router');
 const adminRouter = require('./admin/admin.router');
 
 const EXT_API_KEY = process.env.SPLITIO_EXT_API_KEY;
@@ -19,6 +20,7 @@ app.use(morgan('tiny'));
 app.use(authorization);
 // We mount our routers.
 app.use('/', clientRouter);
+app.use('/', managerRouter);
 app.use('/admin', adminRouter);
 app.get('/favicon.ico', (req, res) => res.status(204));
 
