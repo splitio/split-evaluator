@@ -43,6 +43,24 @@ describe('key validator', () => {
     expect(result).not.toHaveProperty('value');
   });
 
+  test('should return error when key is invalid', async () => {
+    const expected = 'you passed an invalid key, key must be a non-empty string.';
+
+    const result = keyValidator(true, 'key');
+
+    expect(result).toHaveProperty('valid', false);
+    expect(result).toHaveProperty('error', expected);
+    expect(result).not.toHaveProperty('value');
+  });
+
+  test('should be valid when is Number', async () => {
+    const result = keyValidator(12345, 'key');
+
+    expect(result).toHaveProperty('valid', true);
+    expect(result).toHaveProperty('value', '12345');
+    expect(result).not.toHaveProperty('error');
+  });
+
   test('should be valid when ok', async () => {
     const result = keyValidator('key', 'key');
 

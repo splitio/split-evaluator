@@ -56,7 +56,7 @@ describe('split', () => {
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('name', 'my-experiment');
-    expect(response.body).toHaveProperty('trafficType', null);
+    expect(response.body).toHaveProperty('trafficType', 'localhost');
     expect(response.body).toHaveProperty('killed', false);
     expect(response.body).toHaveProperty('changeNumber', 0);
     expect(response.body).toHaveProperty('treatments');
@@ -64,7 +64,7 @@ describe('split', () => {
     expect(response.body).toHaveProperty('configs');
     expect(response.body.configs).toEqual({
       on: '{"desc" : "this applies only to ON treatment"}',
-      off: '{"desc" : "this applies only to OFF and only for only_test. The rest will receive ON"}'
+      off: '{"desc" : "this applies only to OFF and only for only_test. The rest will receive ON"}',
     });
   });
 });

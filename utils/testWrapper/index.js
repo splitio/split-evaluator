@@ -42,6 +42,12 @@ const expectOkMultipleResults = (response, code, expectedTreatment, expectedLeng
   });
 };
 
+const expectOkAllTreatments = (response, code, expectedTreatments, expectedLength) => {
+  expect(response.statusCode).toBe(code);
+  expect(response.body.length).toEqual(expectedLength);
+  expect(response.body).toEqual(expect.arrayContaining(expectedTreatments));
+};
+
 const getLongKey = () => {
   let key = '';
   for (let i = 0; i <=250; i++) {
@@ -54,6 +60,7 @@ module.exports = {
   expectError,
   expectErrorContaining,
   expectOk,
+  expectOkAllTreatments,
   expectOkMultipleResults,
   getLongKey,
 };

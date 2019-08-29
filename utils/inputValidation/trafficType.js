@@ -1,3 +1,5 @@
+const { isString } = require('../lang/lang');
+
 const CAPITAL_LETTERS_REGEX = /[A-Z]/;
 
 const validateTrafficType = (maybeTT) => {
@@ -8,20 +10,27 @@ const validateTrafficType = (maybeTT) => {
     };
   }
 
-  if (maybeTT.length === 0) {
+  if (isString(maybeTT)) {
+    if (maybeTT.length === 0) {
+      return {
+        valid: false,
+        error: 'you passed an empty traffic-type, traffic-type must be a non-empty string.',
+      };
+    }
+  
+    if (CAPITAL_LETTERS_REGEX.test(maybeTT)) {
+      maybeTT = maybeTT.toLowerCase();
+    }
+  
     return {
-      valid: false,
-      error: 'you passed an empty traffic-type, traffic-type must be a non-empty string.',
+      valid: true,
+      value: maybeTT,
     };
   }
 
-  if (CAPITAL_LETTERS_REGEX.test(maybeTT)) {
-    maybeTT = maybeTT.toLowerCase();
-  }
-
   return {
-    valid: true,
-    value: maybeTT,
+    valid: false,
+    error: 'you passed an invalid traffic-type, traffic-type must be a non-empty string.',
   };
 };
 

@@ -27,10 +27,6 @@ const validateKeys = (maybeKeys) => {
       const matchingKeyValidation = keyValidator(key.matchingKey, 'matchingKey');
       const bucketingKeyValidation = key.bucketingKey !== undefined ? keyValidator(key.bucketingKey, 'bucketingKey') : { valid: true, value: null };
 
-      console.log('trafficTypeValidation', trafficTypeValidation);
-      console.log('matchingKeyValidation', matchingKeyValidation);
-      console.log('bucketingKeyValidation', bucketingKeyValidation);
-      
       if (!trafficTypeValidation.valid || !matchingKeyValidation.valid || !bucketingKeyValidation.valid) return true;
 
       validKeys.push({
@@ -40,9 +36,10 @@ const validateKeys = (maybeKeys) => {
       });
     });
 
-    console.log('isInvalid', isInvalid);
-
-    return isInvalid ? error : {
+    return isInvalid ? {
+      valid: false,
+      error: 'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.',
+    } : {
       valid: true,
       value: validKeys,
     };

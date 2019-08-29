@@ -20,7 +20,14 @@
       "new-cap" : 0,
       "no-mixed-requires": 0,
       "camelcase": [2, {"properties": "never"}],
-      "no-use-before-define": [2, "nofunc"]
+      "no-use-before-define": [2, "nofunc"],
+      "comma-dangle": ["error", {
+        "arrays": "never",
+        "objects": "always-multiline",
+        "imports": "never",
+        "exports": "never",
+        "functions": "never"
+      }]
     },
   
     "parserOptions": {

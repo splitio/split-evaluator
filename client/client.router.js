@@ -118,5 +118,6 @@ router.get('/get-treatments', treatmentsValidation, clientController.getTreatmen
 router.get('/get-treatments-with-config', treatmentsValidation, clientController.getTreatmentsWithConfig);
 router.get('/track', trackValidation, clientController.track);
 router.get('/get-all-treatments', allTreatmentValidation, clientController.getAllTreatments);
+router.get('/get-all-treatments-with-config', allTreatmentValidation, clientController.getAllTreatmentsWithConfig);
 
 module.exports = router;
