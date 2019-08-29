@@ -1,6 +1,3 @@
-// Utils
-const thenable = require('@splitsoftware/splitio/lib/utils/promise/thenable');
-
 // Own modules
 const { parseKey, filterSplitsByTT } = require('./common');
 const sdkModule = require('../sdk');
@@ -14,24 +11,23 @@ const manager = sdkModule.manager;
  * @param {*} req 
  * @param {*} res 
  */
-const getTreatment = (req, res) => {
+const getTreatment = async (req, res) => {
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const split = req.splitio.splitName;
   const attributes = req.splitio.attributes;
 
-  function asyncResult(treatment) {
+  try {
+    const evaluationResult = await client.getTreatment(key, split, attributes);
+
     res.send({
       evaluation: {
         splitName: split,
-        treatment,
+        treatment: evaluationResult,
       },
     });
+  } catch (error) {
+    res.status(500);
   }
-
-  const eventuallyAvailableValue = client.getTreatment(key, split, attributes);
-
-  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
-  else asyncResult(eventuallyAvailableValue);
 };
 
 /**
@@ -39,12 +35,14 @@ const getTreatment = (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const getTreatmentWithConfig = (req, res) => {
+const getTreatmentWithConfig = async (req, res) => {
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const split = req.splitio.splitName;
   const attributes = req.splitio.attributes;
 
-  function asyncResult(evaluationResult) {
+  try {
+    const evaluationResult = await client.getTreatmentWithConfig(key, split, attributes);
+
     res.send({
       evaluation: {
         splitName: split,
@@ -52,12 +50,9 @@ const getTreatmentWithConfig = (req, res) => {
         config: evaluationResult.config,
       },
     });
+  } catch (error) {
+    res.status(500);
   }
-
-  const eventuallyAvailableValue = client.getTreatmentWithConfig(key, split, attributes);
-
-  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
-  else asyncResult(eventuallyAvailableValue);
 };
 
 /**
@@ -65,21 +60,20 @@ const getTreatmentWithConfig = (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const getTreatments = (req, res) => {
+const getTreatments = async (req, res) => {
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const splits = req.splitio.splitNames;
   const attributes = req.splitio.attributes;
 
-  function asyncResult(treatments) {
+  try {
+    const evaluationResults = await client.getTreatments(key, splits, attributes);
+
     res.send({
-      evaluation: treatments,
+      evaluation: evaluationResults,
     });
+  } catch (error) {
+    res.status(500);
   }
-
-  const eventuallyAvailableValue = client.getTreatments(key, splits, attributes);
-
-  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
-  else asyncResult(eventuallyAvailableValue);
 };
 
 /**
@@ -87,21 +81,20 @@ const getTreatments = (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const getTreatmentsWithConfig = (req, res) => {
+const getTreatmentsWithConfig = async (req, res) => {
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const splits = req.splitio.splitNames;
   const attributes = req.splitio.attributes;
 
-  function asyncResult(treatments) {
+  try {
+    const evaluationResults = await client.getTreatmentsWithConfig(key, splits, attributes);
+
     res.send({
-      evaluation: treatments,
+      evaluation: evaluationResults,
     });
+  } catch (error) {
+    res.status(500);
   }
-
-  const eventuallyAvailableValue = client.getTreatmentsWithConfig(key, splits, attributes);
-
-  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
-  else asyncResult(eventuallyAvailableValue);
 };
 
 /**
@@ -109,22 +102,19 @@ const getTreatmentsWithConfig = (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const track = (req, res) => {
+const track = async (req, res) => {
   const key = req.splitio.key;
   const trafficType = req.splitio.trafficType;
   const eventType = req.splitio.eventType;
   const value = req.splitio.value;
   const properties = req.splitio.properties;
 
-  function asyncResult(track) {
-    const status = track ? 200 : 400;
-    res.status(status).send('OK');
+  try {
+    const track = await client.track(key, trafficType, eventType, value, properties);
+    return track ? res.status(200).send('OK') : res.status(400);
+  } catch (error) {
+    res.status(500);
   }
-
-  const eventuallyAvailableValue = client.track(key, trafficType, eventType, value, properties);
-
-  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
-  else asyncResult(eventuallyAvailableValue);
 };
 
 /**
@@ -170,7 +160,7 @@ const getAllTreatmentsWithConfig = async (req, res) => {
     const treatments = await allTreatments(keys, attributes);
     res.send(treatments);
   } catch (error) {
-    res.send(500);
+    res.status(500);
   }
 };
 
@@ -190,7 +180,7 @@ const getAllTreatments = async (req, res) => {
       treatment: evaluation.treatment,
     })));
   } catch (error) {
-    res.send(500);
+    res.status(500);
   }
 };
 
