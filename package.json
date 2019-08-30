@@ -32,7 +32,7 @@
     "test": "NODE_ENV=test jest"
   },
   "dependencies": {
-    "@splitsoftware/splitio": "~10.8.3-canary.2",
+    "@splitsoftware/splitio": "^10.8.3-canary.2",
     "config": "1.25.1",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
