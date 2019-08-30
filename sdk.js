@@ -5,6 +5,7 @@
 const SplitFactory = require('@splitsoftware/splitio').SplitFactory;
 const config = require('config');
 const merge = require('lodash/merge');
+const logImpression = require('./listener/impressionListener');
 
 // Support for API KEY override
 const envSettings = config.get('sdk');
@@ -51,6 +52,12 @@ if (process.env.SPLITIO_SCHEDULER) {
     console.log('There was an error parsing the custom scheduler');
   }
 }
+
+settings = merge({}, settings, {
+  impressionListener: {
+    logImpression: logImpression,
+  },
+});
 
 let isClientReady = false;
 
