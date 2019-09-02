@@ -1,26 +1,30 @@
-const Impressions = new Map();
+const config = require('config');
+const IMPRESSIONS_PER_POST = config.get('impressionsPerPost') ? config.get('impressionsPerPost') : 500;
+const { addImpression, getSize } = require('./impressionQueue');
+const context = require('./context');
 
+/**
+ * logImpression  impresion listener handler
+ * @param {Object} impressionData 
+ */
 const logImpression = (impressionData) => {
   const impression = impressionData.impression;
-  const keyImpressions = {
+  const impressionToAdd = {
+    feature: impression.feature,
     keyName: impression.keyName,
     treatment: impression.treatment,
     time: impression.time,
     changeNumber: impression.changeNumber,
     label: impression.label,
   };
-  if (!Impressions.has(impression.feature)) {
-    Impressions.set(impression.feature, [keyImpressions]);
-  } else {
-    const currentImpressions = Impressions.get(impression.feature);
-    Impressions.set(impression.feature, currentImpressions.concat(keyImpressions));
-  }
 
-  console.log('Impressions.size()', Impressions.size);
-  Impressions.forEach((value, key) => {
-    console.log('FEATURE:', key);
-    console.log('KEY IMPRESSIONS:', value);
-  });
+  // Add Impression to queue
+  addImpression(impressionToAdd);
+
+  // Flush only if is greater than equal MAX impression per post
+  if (getSize() >= IMPRESSIONS_PER_POST) {
+    context.flushAndResetTime();
+  }
 };
 
 module.exports = logImpression;
