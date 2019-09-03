@@ -1,8 +1,10 @@
 const request = require('request-promise-native');
 const repeat = require('./repeat');
+const config = require('config');
+const IMPRESSION_SEND_RATE = config.get('impressionsSendRate') ? config.get('impressionsSendRate') : 30000;
 const { getImpressionsToPost } = require('./impressionQueue');
 
-const url = process.env.SPLITIO_IMPRESSION_LISTENER || 'http://localhost:3000/impressions';
+const url = process.env.SPLITIO_IMPRESSION_LISTENER;
 
 /**
  * postImpressions  posts impressions to provided endpoint
@@ -18,8 +20,8 @@ const postImpressions = (impressions) => {
     json: true
   };
   return impressions.length > 0 ? request(options)
-    .then(response => console.log(response))
-    .catch(error => console.log(error)) : Promise.resolve();
+    .then(() => Promise.resolve())
+    .catch(error => console.log(error && error.message)) : Promise.resolve();
 };
 
 /**
@@ -32,7 +34,7 @@ const ImpressionSender = () => {
   const startImpressionsSender = () => {
     stopImpressionSender = repeat(
       schedulePublisher => postImpressions(getImpressionsToPost()).then(() => schedulePublisher()),
-      20000
+      IMPRESSION_SEND_RATE
     );
   };
 

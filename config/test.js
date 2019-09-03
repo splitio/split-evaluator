@@ -10,5 +10,6 @@ module.exports = {
   },
   // Block the ExpressJS server till the SDK is ready.
   blockUntilReady: true,
-  impressionsPerPost: 10,
+  impressionsPerPost: 5,
+  impressionsSendRate: 1000,
 };

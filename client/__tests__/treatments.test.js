@@ -203,7 +203,7 @@ describe('get-treatments', () => {
   // Testing Multiple Experiments Regarding YAML
   test('should be 200 with multiple evaluation', async () => {
     // Checking multiple experiments regarding yml passed
-    let response = await request(app)
+    const response = await request(app)
       .get('/get-treatments?key=test&split-names=my-experiment,other-experiment-3,my-experiment,nonexistant-experiment')
       .set('Authorization', 'test');
     expectOkMultipleResults(response, 200, {

@@ -12,5 +12,6 @@ module.exports = {
   blockUntilReady: true,
   // Impression Listener Webhook
   impressionListenerEnabled: true,
-  impressionsPerPost: 100,
+  impressionsPerPost: 500,
+  impressionsSendRate: 15000,
 };
