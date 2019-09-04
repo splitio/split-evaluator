@@ -1,3 +1,5 @@
+const logger = require('../../config/winston');
+
 const TRIMMABLE_SPACES_REGEX = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/;
 
 const validateSplit = (maybeSplit) => {
@@ -9,7 +11,7 @@ const validateSplit = (maybeSplit) => {
   }
 
   if (TRIMMABLE_SPACES_REGEX.test(maybeSplit)) {
-    console.log(`split-name "${maybeSplit}" has extra whitespace, trimming.`);
+    logger.warn(`split-name "${maybeSplit}" has extra whitespace, trimming.`);
     maybeSplit = maybeSplit.trim();
   }
 

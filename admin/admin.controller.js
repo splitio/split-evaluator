@@ -1,5 +1,6 @@
 const os = require('os');
 const ip = require('ip');
+const logger = require('../config/winston');
 
 const utils = require('../utils/utils');
 const sdkModule = require('../sdk');
@@ -11,7 +12,6 @@ const sdk = sdkModule.factory;
  * @param {*} res 
  */
 const ping = (req, res) => {
-  console.log('pong');
   res.status(200).send('pong');
 };
 
@@ -23,7 +23,6 @@ const ping = (req, res) => {
  * @param {*} res 
  */
 const healthcheck = (req, res) => {
-  console.log('Running health check.');
   let status = 500;
   let msg = 'Split evaluator engine is not evaluating traffic properly.';
 
@@ -32,7 +31,7 @@ const healthcheck = (req, res) => {
     msg = 'Split Evaluator working as expected.';
   }
 
-  console.log('Health check status: ' + status + ' - ' + msg);
+  logger.info(`Health check status: ${status} - ${msg}`);
   res.status(status).send(msg);
 };
 
@@ -42,7 +41,6 @@ const healthcheck = (req, res) => {
  * @param {*} res 
  */
 const version = (req, res) => {
-  console.log('Getting version.');
   const version = utils.getVersion();
   const parts = sdk.settings.version.split('-');
   const sdkLanguage = parts[0];
@@ -61,7 +59,6 @@ const version = (req, res) => {
  * @param {*} res 
  */
 const machine = (req, res) => {
-  console.log('Getting machine information.');
   let address; let hostname;
 
   try {
@@ -84,7 +81,6 @@ const machine = (req, res) => {
  */
 const uptime = (req, res) => {
   const uptime = utils.uptime();
-  console.log('Getting uptime: ' + uptime);
   res.send('' + uptime);
 };
 

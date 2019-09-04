@@ -1,3 +1,5 @@
+const logger = require('../config/winston');
+
 // Own modules
 const sdkModule = require('../sdk');
 
@@ -16,6 +18,7 @@ const split = async (req, res) => {
     const splits = await manager.split(splitName);
     res.send(splits);
   } catch (error) {
+    logger.error(error);
     res.status(500);
   }
 };
@@ -32,6 +35,7 @@ const splits = async (req, res) => {
       splits,
     });
   } catch (error) {
+    logger.error(error);
     res.status(500);
   }
 };
@@ -48,6 +52,7 @@ const splitNames = async (req, res) => {
       splits: splitNames,
     });
   } catch (error) {
+    logger.error(error);
     res.status(500);
   }
 };

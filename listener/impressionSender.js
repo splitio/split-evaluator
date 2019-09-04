@@ -1,4 +1,5 @@
 const request = require('request-promise-native');
+const logger = require('../config/winston');
 const repeat = require('./repeat');
 const config = require('config');
 const IMPRESSION_SEND_RATE = config.get('impressionsSendRate') ? config.get('impressionsSendRate') : 30000;
@@ -21,7 +22,9 @@ const postImpressions = (impressions) => {
   };
   return impressions.length > 0 ? request(options)
     .then(() => Promise.resolve())
-    .catch(error => console.log(error && error.message)) : Promise.resolve();
+    .catch(error => {
+      logger.error(error);
+    }) : Promise.resolve();
 };
 
 /**
@@ -49,6 +52,7 @@ const ImpressionSender = () => {
     },
   
     flushAndResetTime() {
+      logger.debug('Resetting timer for sender task');
       postImpressions(getImpressionsToPost());
       stopImpressionSender.reset();
     },

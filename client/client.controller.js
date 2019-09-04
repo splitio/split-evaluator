@@ -1,3 +1,5 @@
+const logger = require('../config/winston');
+
 // Own modules
 const { parseKey, filterSplitsByTT } = require('./common');
 const sdkModule = require('../sdk');
@@ -26,6 +28,7 @@ const getTreatment = async (req, res) => {
       },
     });
   } catch (error) {
+    logger.error(error);
     res.status(500);
   }
 };
@@ -51,6 +54,7 @@ const getTreatmentWithConfig = async (req, res) => {
       },
     });
   } catch (error) {
+    logger.error(error);
     res.status(500);
   }
 };
@@ -72,6 +76,7 @@ const getTreatments = async (req, res) => {
       evaluation: evaluationResults,
     });
   } catch (error) {
+    logger.error(error);
     res.status(500);
   }
 };
@@ -93,6 +98,7 @@ const getTreatmentsWithConfig = async (req, res) => {
       evaluation: evaluationResults,
     });
   } catch (error) {
+    logger.error(error);
     res.status(500);
   }
 };
@@ -113,6 +119,7 @@ const track = async (req, res) => {
     const track = await client.track(key, trafficType, eventType, value, properties);
     return track ? res.status(200).send('OK') : res.status(400);
   } catch (error) {
+    logger.error(error);
     res.status(500);
   }
 };
@@ -160,6 +167,7 @@ const getAllTreatmentsWithConfig = async (req, res) => {
     const treatments = await allTreatments(keys, attributes);
     res.send(treatments);
   } catch (error) {
+    logger.error(error);
     res.status(500);
   }
 };
@@ -180,6 +188,7 @@ const getAllTreatments = async (req, res) => {
       treatment: evaluation.treatment,
     })));
   } catch (error) {
+    logger.error(error);    
     res.status(500);
   }
 };

@@ -1,4 +1,5 @@
 const config = require('config');
+const logger = require('./config/winston');
 const utils = require('./utils/utils');
 
 const app = require('./app');
@@ -18,6 +19,6 @@ if (config.get('blockUntilReady')) {
 function spinUpServer() {
   app.listen(PORT, '0.0.0.0', function () {
     utils.uptime('init');
-    console.log('Server is Up and Running at Port : ' + PORT);
+    logger.info(`Server is Up and Running at Port: ${PORT}`);
   });
 }

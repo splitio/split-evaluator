@@ -1,3 +1,4 @@
+const logger = require('../../config/winston');
 const { isString } = require('../lang/lang');
 
 const CAPITAL_LETTERS_REGEX = /[A-Z]/;
@@ -19,6 +20,7 @@ const validateTrafficType = (maybeTT) => {
     }
   
     if (CAPITAL_LETTERS_REGEX.test(maybeTT)) {
+      logger.warn('traffic_type_name should be all lowercase - converting string to lowercase.');
       maybeTT = maybeTT.toLowerCase();
     }
   

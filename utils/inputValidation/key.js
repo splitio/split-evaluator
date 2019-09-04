@@ -1,3 +1,4 @@
+const logger = require('../../config/winston');
 const { isString, isFinite } = require('../lang/lang');
 
 const KEY_MAX_LENGTH = 250;
@@ -33,6 +34,7 @@ const validateKeyValue = (maybeKey, type) => {
     };
   } else {
     if (isFinite(maybeKey)) {
+      logger.warn(`${type} "${maybeKey}" is not of type string, converting.`);
       return {
         valid: true,
         value: maybeKey.toString(),

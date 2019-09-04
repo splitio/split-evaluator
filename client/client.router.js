@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const logger = require('../config/winston');
 const keyValidator = require('../utils/inputValidation/key');
 const splitValidator = require('../utils/inputValidation/split');
 const splitsValidator = require('../utils/inputValidation/splits');
@@ -20,6 +21,7 @@ const treatmentValidation = (req, res, next) => {
 
   const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, splitNameValidation, attributesValidation]);
   if (error.length) {
+    logger.error(error);
     return res
       .status(400)
       .send({
@@ -46,6 +48,7 @@ const treatmentsValidation = (req, res, next) => {
 
   const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, splitNamesValidation, attributesValidation]);
   if (error.length) {
+    logger.error(error);
     return res
       .status(400)
       .send({
@@ -73,6 +76,7 @@ const trackValidation = (req, res, next) => {
 
   const error = parseValidators([keyValidation, trafficTypeValidation, eventTypeValidation, valueValidation, propertiesValidation]);
   if (error.length) {
+    logger.error(error);
     return res
       .status(400)
       .send({
@@ -97,6 +101,7 @@ const allTreatmentValidation = (req, res, next) => {
 
   const error = parseValidators([keysValidation, attributesValidation]);
   if (error.length) {
+    logger.error(error);
     return res
       .status(400)
       .send({

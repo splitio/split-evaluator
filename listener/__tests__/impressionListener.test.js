@@ -71,7 +71,7 @@ describe('impression-listener', () => {
       'other-experiment-2': { treatment: 'on' },
       'other-experiment': { treatment: 'control' },
     }, 4);
-    await new Promise(done => setTimeout(done, 1000));
+    await new Promise(done => setTimeout(done, 200));
     // Matches all the impressions in hte body of the IL Post Impressions
     matcherIlRequest(body, 4, [
       { split: 'my-experiment', length: 2 },
@@ -89,7 +89,7 @@ describe('impression-listener', () => {
       .set('Authorization', 'test');
     expectOk(response, 200, 'on', 'my-experiment');
 
-    await new Promise(done => setTimeout(done, 1000));
+    await new Promise(done => setTimeout(done, 400));
     // Matches the impression in hte body of the IL Post Impressions
     matcherIlRequest(body, 1, [{ split: 'my-experiment', length: 1 }]);
     body = '';
