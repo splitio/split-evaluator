@@ -12,6 +12,12 @@ const keysValidator = require('../utils/inputValidation/keys');
 const clientController = require('./client.controller');
 const { parseValidators } = require('../utils/utils');
 
+/**
+ * treatmentValidation  performs input validation for treatment call.
+ * @param {object} req 
+ * @param {object} res 
+ * @param {function} next 
+ */
 const treatmentValidation = (req, res, next) => {
   const matchingKeyValidation = keyValidator(req.query.key, 'key');
   const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
@@ -38,6 +44,12 @@ const treatmentValidation = (req, res, next) => {
   next();
 };
 
+/**
+ * treatmentsValidation performs input validation for treatments call.
+ * @param {object} req 
+ * @param {object} res 
+ * @param {function} next 
+ */
 const treatmentsValidation = (req, res, next) => {
   const matchingKeyValidation = keyValidator(req.query.key, 'key');
   const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
@@ -64,6 +76,12 @@ const treatmentsValidation = (req, res, next) => {
   next();
 };
 
+/**
+ * trackValidation  performs input validation for event tracking calls.
+ * @param {object} req 
+ * @param {object} res 
+ * @param {function} next 
+ */
 const trackValidation = (req, res, next) => {
   const keyValidation = keyValidator(req.query.key, 'key');
   const trafficTypeValidation = trafficTypeValidator(req.query['traffic-type']);
@@ -91,6 +109,12 @@ const trackValidation = (req, res, next) => {
   next();
 };
 
+/**
+ * allTreatmentValidation performs input validation for all treatments call.
+ * @param {object} req 
+ * @param {object} res 
+ * @param {function} next 
+ */
 const allTreatmentValidation = (req, res, next) => {
   const keysValidation = keysValidator(req.query.keys);
   const attributesValidation = attributesValidator(req.query.attributes);

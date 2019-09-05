@@ -1,13 +1,20 @@
 const express = require('express');
 const morgan = require('morgan');
+const swaggerUI = require('swagger-ui-express');
+const YAML = require('js-yaml');
+const fs = require('fs');
 const app = express();
 
 // Middlewares
 const authorization = require('./middleware/authorization');
 
+// Routes
 const clientRouter = require('./client/client.router');
 const managerRouter = require('./manager/manager.router');
 const adminRouter = require('./admin/admin.router');
+
+// Utils
+const utils = require('./utils/utils');
 
 const EXT_API_KEY = process.env.SPLITIO_EXT_API_KEY;
 
@@ -16,6 +23,12 @@ if (!EXT_API_KEY) {
 }
 
 app.use(morgan('tiny'));
+
+const openApiDefinition = YAML.load(fs.readFileSync('./openapi/openapi.yaml').toString());
+openApiDefinition.info.version = utils.getVersion();
+openApiDefinition.servers = [{url: `http://localhost:${process.env.SPLITIO_SERVER_PORT || 7548}`}];
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(openApiDefinition));
+
 // Auth middleware
 app.use(authorization);
 // We mount our routers.

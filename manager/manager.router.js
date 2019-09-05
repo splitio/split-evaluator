@@ -4,6 +4,12 @@ const splitValidator = require('../utils/inputValidation/split');
 const managerController = require('./manager.controller');
 const { parseValidators } = require('../utils/utils');
 
+/**
+ * splitValidation  performs input validation for manager call
+ * @param {object} req 
+ * @param {object} res 
+ * @param {function} next 
+ */
 const splitValidation = (req, res, next) => {
   const splitNameValidation = splitValidator(req.query['split-name']);
 

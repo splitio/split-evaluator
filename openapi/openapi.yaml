@@ -1,0 +1,620 @@
+openapi: '3.0.2'
+info:
+  version: 
+  title: Split Evaluator
+  description: Using Split involves using one of our SDKs. The Split team builds and maintains these SDKs for some of the most popular language libraries and the SDKs are available under open source licenses. For languages where there is no native SDK support, Split offers the Split Evaluator, a small service capable of evaluating some or all available features for a given customer via a REST endpoint.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+
+components:
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      in: header
+      name: Authorization
+  parameters:
+    key:
+      in: query
+      name: key
+      required: true
+      schema:
+        type: string
+      description: Key provided to be evaluated.
+      example: customer-id
+    split-name:
+      in: query
+      name: split-name
+      required: true
+      schema:
+        type: string
+      description: The name of the split you want to include in the evaluation.
+      example: my-split
+    split-names:
+      in: query
+      name: split-names
+      required: true
+      schema:
+        type: string
+      description: The name of the splits you want to include in the evaluation.
+      example: SPLIT_NAME1,SPLIT_NAME2,SPLIT_NAME3
+    bucketing-key:
+      in: query
+      name: bucketing-key
+      schema:
+        type: string
+      description: The bucketing key used in the evaluation.
+    attributes:
+      in: query
+      name: attributes
+      schema:
+        type: string
+      description:  A JSON string of the attributes to include in the evaluation.
+      example: "{\"my-attr1\": \"test\"}"
+    keys:
+      in: query
+      name: keys
+      schema:
+        type: string
+      description: keys used to perform the evaluation It is a JSON string array that must include at least one 'matchingKey' and 'trafficType'.
+      required: true
+      example: "{\"matchingKey\": \"customer-id\", \"trafficType\": \"user\", \"bucketingKey\": \"my-bucketing-key\"}"
+    event-type:
+      in: query
+      name: event-type
+      required: true
+      schema:
+        type: string
+      description: The event type that this event should correspond to.
+      example: my-event-type
+    traffic-type:
+      in: query
+      name: traffic-type
+      required: true
+      schema:
+        type: string
+      description: The traffic type that this event should correspond to.
+      example: my-traffic-type
+    value:
+      in: query
+      name: value
+      schema:
+        type: number
+      description:  The value to be used in creating the metric. This field can be sent in as null or 0 if you intend to purely use the count function when creating a metric.
+      example: 1
+    properties:
+      in: query
+      name: properties
+      schema:
+        type: string
+      description:  A JSON string that will be a map of key value pairs that can be used to filter your metrics.
+      example: "{\"prop1\": 1}"
+  schemas:
+    InputValidation:
+      type: object
+      properties:
+        error:
+          type: array
+          items:
+            type: string
+          example: ["you passed a null or undefined split-name, split-name must be a non-empty string."]
+    Unauthorized:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Unauthorized
+    Split:
+      type: object
+      properties:
+        name:
+          type: string
+        trafficType:
+          type: string
+        killed:
+          type: boolean
+        changeNumber:
+          type: number
+        treatments:
+          type: array
+          items:
+            type: string
+        configs:
+          type: object
+      example:
+        name: my-split
+        trafficType: my-traffic-type
+        killed: false
+        changeNumber: 123456789
+        treatments: ["on","off"]
+        config:
+          on: "{\"color\": \"blue\"}"
+          off: "{\"color\": \"black\"}"
+    Splits:
+      type: array
+      items:
+        $ref: '#/components/schemas/Split'
+
+security:
+  - Authorization: [] 
+
+paths:
+  /get-treatment:
+    get:
+      tags:
+        - client
+      summary: performs single evaluation
+      description: Calls getTreatment method from the SDK.
+      parameters:
+        - $ref: '#/components/parameters/key'
+        - $ref: '#/components/parameters/split-name'
+        - $ref: '#/components/parameters/bucketing-key'
+        - $ref: '#/components/parameters/attributes'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  evaluation:
+                    type: object
+                    properties:
+                      splitName:
+                        type: string
+                      treatment:
+                        type: string
+                    example:
+                      splitName: my-split
+                      treatment: on
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+  /get-treatment-with-config:
+    get:
+      tags:
+        - client
+      summary: performs single evaluation and attachs config
+      description: Calls getTreatmentWithConfig method from the SDK.
+      parameters:
+        - $ref: '#/components/parameters/key'
+        - $ref: '#/components/parameters/split-name'
+        - $ref: '#/components/parameters/bucketing-key'
+        - $ref: '#/components/parameters/attributes'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  evaluation:
+                    type: object
+                    properties:
+                      splitName:
+                        type: string
+                      treatment:
+                        type: string
+                      config:
+                        type: string
+                example:
+                  splitName: my-split
+                  treatment: on
+                  config: "{\"color\": \"blue\" }"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+  /get-treatments:
+    get:
+      tags:
+        - client
+      summary: performs multiple evaluation at once
+      description: Calls getTreatments method from the SDK.
+      parameters:
+        - $ref: '#/components/parameters/key'
+        - $ref: '#/components/parameters/split-names'
+        - $ref: '#/components/parameters/bucketing-key'
+        - $ref: '#/components/parameters/attributes'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  evaluation:
+                    type: object
+                example:
+                  evaluation:
+                    'my-split': on
+                    'my-split2': off
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+  /get-treatments-with-config:
+    get:
+      tags:
+        - client
+      summary: performs multiple evaluation at once and attachs config
+      description: Calls getTreatmentsWithConfig method from the SDK.
+      parameters:
+        - $ref: '#/components/parameters/key'
+        - $ref: '#/components/parameters/split-names'
+        - $ref: '#/components/parameters/bucketing-key'
+        - $ref: '#/components/parameters/attributes'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  evaluation:
+                    type: object
+                example:
+                  evaluation:
+                    'my-split':
+                      treatment: on
+                      config: null
+                    'my-split2':
+                      treatment: off
+                      config: "{\"color\": \"blue\" }"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+  /get-all-treatments:
+    get:
+      tags:
+        - client
+      summary:  matches splits for passed trafficType and evaluates with passed key
+      description: Calls getTreatments method from the SDK once it have all the splitNames for the keys provided.
+      parameters:
+        - $ref: '#/components/parameters/keys'
+        - $ref: '#/components/parameters/attributes'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  type: object
+                  properties:
+                    splitName:
+                      type: string
+                    treatment:
+                      type: string
+                  example:
+                    splitName: my-split
+                    treatment: on
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+  /get-all-treatments-with-config:
+    get:
+      tags:
+        - client
+      summary:  matches splits for passed trafficType and evaluates with passed key and attaches configs
+      description: Calls getTreatments method from the SDK once it have all the splitNames for the keys provided.
+      parameters:
+        - $ref: '#/components/parameters/keys'
+        - $ref: '#/components/parameters/attributes'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  type: object
+                  properties:
+                    splitName:
+                      type: string
+                    treatment:
+                      type: string
+                  example:
+                    splitName: my-split
+                    treatment: on
+                    config: "{\"color\": \"blue\" }"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+  /track:
+    get:
+      tags:
+        - client
+      summary: records any actions that your customers perform.
+      description: Calls track method from the SDK.
+      parameters:
+        - $ref: '#/components/parameters/key'
+        - $ref: '#/components/parameters/traffic-type'
+        - $ref: '#/components/parameters/event-type'
+        - $ref: '#/components/parameters/value'
+        - $ref: '#/components/parameters/properties'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+
+  /split:
+    get:
+      tags:
+        - manager
+      summary: returns the properties of a particular split if it is available.
+      description: Calls split method from the SDK.
+      parameters:
+        - $ref: '#/components/parameters/split-name'
+      responses:
+        '200':
+          description: Split's properties
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Split'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+  /splits:
+    get:
+      tags:
+        - manager
+      summary: returns the properties of all the available splits
+      description: Calls splits method from the SDK.
+      responses:
+        '200':
+          description: Splits properties
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Splits'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+  /names:
+    get:
+      tags:
+        - manager
+      summary: returns the names of all the available splits
+      description: Calls names method from the SDK.
+      responses:
+        '200':
+          description: Splits properties
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example: ["my-split", "my-split2"]
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+
+  /admin/ping:
+    get:
+      tags:
+        - admin
+      summary: pings server
+      description: Pings server.
+      responses:
+        '200':
+          description: Splits properties
+          content:
+            application/json:
+              schema:
+                type: string
+                example: pong
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+  /admin/healthcheck:
+    get:
+      tags:
+        - admin
+      summary: returns stats
+      description: returns stats.
+      responses:
+        '200':
+          description: Splits properties
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Split Evaluator working as expected
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error || Split evaluator engine is not evaluating traffic properly
+  /admin/version:
+    get:
+      tags:
+        - admin
+      summary: current version of Split Evaluator and SDK
+      description: Returns current version of Split Evaluator and SDK.
+      responses:
+        '200':
+          description: Version
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+                  sdk:
+                    type: string
+                  sdkVersion:
+                    type: string
+                example:
+                  version: 2.0.0
+                  sdk: nodejs
+                  sdkVersion: 10.8.3
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+  /admin/machine:
+    get:
+      tags:
+        - admin
+      summary: instance data
+      description: Returns machine name and ip.
+      responses:
+        '200':
+          description: Machine data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                example:
+                  id: 192.168.0.1
+                  name: my-user-name
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+  /admin/uptime:
+    get:
+      tags:
+        - admin
+      summary: uptime
+      description: Time passed since started.
+      responses:
+        '200':
+          description: Uptime
+          content:
+            application/json:
+              schema:
+                type: string
+              example: 3d 4h 5m 6s
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+    
