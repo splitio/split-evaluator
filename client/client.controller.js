@@ -124,8 +124,8 @@ const track = (req, res) => {
   const properties = req.splitio.properties;
 
   function asyncResult(track) {
-    const status = track ? 200 : 400;
-    res.status(status).send('OK');
+    if (track) res.status(200).send('OK');
+    else res.status(400);
   }
 
   const eventuallyAvailableValue = client.track(key, trafficType, eventType, value, properties);
