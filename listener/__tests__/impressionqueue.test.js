@@ -1,3 +1,6 @@
+process.env.SPLITIO_EXT_API_KEY = 'test';
+process.env.SPLITIO_API_KEY = 'localhost';
+
 const { getSize, addImpression, getImpressionsToPost } = require('../impressionQueue');
 
 const impression1 = {
@@ -20,14 +23,15 @@ const impression2 = {
 
 describe('impression queue', () => {
   // Test behavior when impressions are added
-  test('test add/size', async () => {
+  test('test add/size', async (done) => {
     expect(getSize()).toEqual(0);
     addImpression(impression1);
     expect(getSize()).toEqual(1);
+    done();
   });
 
   // Test wrapper schema to send impressions, it should be wrapped by feature
-  test('test impressionToPost', async () => {
+  test('test impressionToPost', async (done) => {
     addImpression(impression1);
     addImpression(impression2);
     addImpression(impression1);
@@ -50,5 +54,6 @@ describe('impression queue', () => {
     const cloned2 = Object.assign({}, impression2);
     delete cloned2.feature;
     expect(result[1].keyImpressions).toEqual(expect.arrayContaining([cloned2]));
+    done();
   });
 });

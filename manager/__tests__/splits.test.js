@@ -7,20 +7,22 @@ const { expectError } = require('../../utils/testWrapper/index');
 
 describe('splits', () => {
   // Testing authorization
-  test('should be 401 if auth is not passed', async () => {
+  test('should be 401 if auth is not passed', async (done) => {
     const response = await request(app)
       .get('/splits');
     expectError(response, 401, 'Unauthorized');
+    done();
   });
 
-  test('should be 401 if auth does not match', async () => {
+  test('should be 401 if auth does not match', async (done) => {
     const response = await request(app)
       .get('/splits')
       .set('Authorization', 'invalid');
     expectError(response, 401, 'Unauthorized');
+    done();
   });
 
-  test('should be 200 and returns the splits added in YAML', async () => {
+  test('should be 200 and returns the splits added in YAML', async (done) => {
     const response = await request(app)
       .get('/splits')
       .set('Authorization', 'test');
@@ -28,5 +30,6 @@ describe('splits', () => {
     expect(response.body).toHaveProperty('splits');
     const keys = Object.keys(response.body.splits);
     expect(keys.length).toEqual(4);
+    done();
   });
 });

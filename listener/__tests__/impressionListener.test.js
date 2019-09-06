@@ -56,7 +56,7 @@ describe('impression-listener', () => {
     server.close(done);
   });
 
-  test('should have 5 impressions sent by max impressions to post', async () => {
+  test('should have 5 impressions sent by max impressions to post', async (done) => {
     // Generate the max size of impressions to be sent
     let response = await request(app)
       .get('/get-treatment?key=test&split-name=my-experiment')
@@ -71,7 +71,7 @@ describe('impression-listener', () => {
       'other-experiment-2': { treatment: 'on' },
       'other-experiment': { treatment: 'control' },
     }, 4);
-    await new Promise(done => setTimeout(done, 1000));
+    await new Promise(done => setTimeout(done, 400));
     // Matches all the impressions in hte body of the IL Post Impressions
     matcherIlRequest(body, 4, [
       { split: 'my-experiment', length: 2 },
@@ -80,18 +80,20 @@ describe('impression-listener', () => {
       { split: 'other-experiment-2', length: 1 }
     ]);
     body = '';
+    done();
   });
 
-  test('should have 1 impressions sent by time schedule', async () => {
+  test('should have 1 impressions sent by time schedule', async (done) => {
     // Generate one impression and just wait until is sent by scheduler (1 second for testing)
     const response = await request(app)
       .get('/get-treatment?key=test&split-name=my-experiment')
       .set('Authorization', 'test');
     expectOk(response, 200, 'on', 'my-experiment');
 
-    await new Promise(done => setTimeout(done, 1000));
+    await new Promise(done => setTimeout(done, 400));
     // Matches the impression in hte body of the IL Post Impressions
     matcherIlRequest(body, 1, [{ split: 'my-experiment', length: 1 }]);
     body = '';
+    done();
   });
 });  
