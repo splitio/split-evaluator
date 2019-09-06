@@ -7,20 +7,22 @@ const { expectError, expectErrorContaining } = require('../../utils/testWrapper/
 
 describe('split', () => {
   // Testing authorization
-  test('should be 401 if auth is not passed', async () => {
+  test('should be 401 if auth is not passed', async (done) => {
     const response = await request(app)
       .get('/split?split-name=split');
     expectError(response, 401, 'Unauthorized');
+    done();
   });
 
-  test('should be 401 if auth does not match', async () => {
+  test('should be 401 if auth does not match', async (done) => {
     const response = await request(app)
       .get('/split?split-name=split')
       .set('Authorization', 'invalid');
     expectError(response, 401, 'Unauthorized');
+    done();
   });
 
-  test('should be 400 if split-name is not passed', async () => {
+  test('should be 400 if split-name is not passed', async (done) => {
     const expected = [
       'you passed a null or undefined split-name, split-name must be a non-empty string.'
     ];
@@ -28,9 +30,10 @@ describe('split', () => {
       .get('/split')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
+    done();
   });
 
-  test('should be 400 if split-name is empty', async () => {
+  test('should be 400 if split-name is empty', async (done) => {
     const expected = [
       'you passed an empty split-name, split-name must be a non-empty string.'
     ];
@@ -38,9 +41,10 @@ describe('split', () => {
       .get('/split?split-name=')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
+    done();
   });
 
-  test('should be 400 if split-name is empty trimmed', async () => {
+  test('should be 400 if split-name is empty trimmed', async (done) => {
     const expected = [
       'you passed an empty split-name, split-name must be a non-empty string.'
     ];
@@ -48,15 +52,16 @@ describe('split', () => {
       .get('/split?split-name=     ')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
+    done();
   });
 
-  test('should be 200 and matches with passed split in YAML', async () => {
+  test('should be 200 and matches with passed split in YAML', async (done) => {
     const response = await request(app)
       .get('/split?split-name=my-experiment')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('name', 'my-experiment');
-    expect(response.body).toHaveProperty('trafficType', null);
+    expect(response.body).toHaveProperty('trafficType', 'localhost');
     expect(response.body).toHaveProperty('killed', false);
     expect(response.body).toHaveProperty('changeNumber', 0);
     expect(response.body).toHaveProperty('treatments');
@@ -66,5 +71,6 @@ describe('split', () => {
       on: '{"desc" : "this applies only to ON treatment"}',
       off: '{"desc" : "this applies only to OFF and only for only_test. The rest will receive ON"}'
     });
+    done();
   });
 });
