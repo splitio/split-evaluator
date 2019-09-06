@@ -7,20 +7,22 @@ const { expectError } = require('../../utils/testWrapper/index');
 
 describe('names', () => {
   // Testing authorization
-  test('should be 401 if auth is not passed', async () => {
+  test('should be 401 if auth is not passed', async (done) => {
     const response = await request(app)
       .get('/names');
     expectError(response, 401, 'Unauthorized');
+    done();
   });
 
-  test('should be 401 if auth does not match', async () => {
+  test('should be 401 if auth does not match', async (done) => {
     const response = await request(app)
       .get('/names')
       .set('Authorization', 'invalid');
     expectError(response, 401, 'Unauthorized');
+    done();
   });
 
-  test('should be 200 and retuns the splits defined in YAML', async () => {
+  test('should be 200 and retuns the splits defined in YAML', async (done) => {
     const response = await request(app)
       .get('/names')
       .set('Authorization', 'test');
@@ -29,5 +31,6 @@ describe('names', () => {
     expect(response.body.splits.length).toEqual(4);
     expect(response.body.splits)
       .toEqual(expect.arrayContaining(['my-experiment', 'other-experiment-3', 'other-experiment', 'other-experiment-2']));
+    done();
   });
 });
