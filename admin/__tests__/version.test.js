@@ -11,20 +11,22 @@ const { expectError } = require('../../utils/testWrapper/index');
 
 describe('version', () => {
   // Testing authorization
-  test('should be 401 if auth is not passed', async () => {
+  test('should be 401 if auth is not passed', async (done) => {
     const response = await request(app)
       .get('/admin/version');
     expectError(response, 401, 'Unauthorized');
+    done();
   });
 
-  test('should be 401 if auth does not match', async () => {
+  test('should be 401 if auth does not match', async (done) => {
     const response = await request(app)
       .get('/admin/version')
       .set('Authorization', 'invalid');
     expectError(response, 401, 'Unauthorized');
+    done();
   });
 
-  test('should be 200', async () => {
+  test('should be 200', async (done) => {
     const response = await request(app)
       .get('/admin/version')
       .set('Authorization', 'test');
@@ -36,5 +38,6 @@ describe('version', () => {
     expect(response.body).toHaveProperty('sdk', sdkLanguage);
     expect(response.body).toHaveProperty('sdkVersion', sdkVersion);
     expect(response.body).toHaveProperty('version', version);
+    done();
   });
 });
