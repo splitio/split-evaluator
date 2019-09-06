@@ -18,7 +18,7 @@ const validateEventType = (maybeEventType) => {
   if (!EVENT_TYPE_REGEX.test(maybeEventType)) {
     return {
       valid: false,
-      error: `you passed "${maybeEventType}", event-type must adhere to the regular expression /^[a-zA-Z0-9][-_.:a-zA-Z0-9]{0,79}$/g. This means an event_type must be alphanumeric, cannot be more than 80 characters long, and can only include a dash, underscore, period, or colon as separators of alphanumeric characters.`
+      error: `you passed "${maybeEventType}", event-type must adhere to the regular expression /^[a-zA-Z0-9][-_.:a-zA-Z0-9]{0,79}$/g. This means an event_type must be alphanumeric, cannot be more than 80 characters long, and can only include a dash, underscore, period, or colon as separators of alphanumeric characters.`,
     };
   }
 

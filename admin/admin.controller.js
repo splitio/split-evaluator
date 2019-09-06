@@ -51,7 +51,7 @@ const version = (req, res) => {
   res.send({
     version,
     sdk: sdkLanguage,
-    sdkVersion
+    sdkVersion,
   });
 };
 
@@ -73,7 +73,7 @@ const machine = (req, res) => {
 
   res.send({
     ip: address,
-    name: hostname
+    name: hostname,
   });
 };
 

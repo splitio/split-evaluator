@@ -15,8 +15,8 @@ let settings = envSettings;
 if (process.env.SPLITIO_API_KEY) {
   settings = merge({}, settings, {
     core: {
-      authorizationKey: process.env.SPLITIO_API_KEY
-    }
+      authorizationKey: process.env.SPLITIO_API_KEY,
+    },
   });
 } else {
   console.log('No API Key was provided.');
@@ -28,8 +28,8 @@ if (process.env.SDK_URL) {
   console.log('Setting custom SDK API url.');
   settings = merge({}, settings, {
     urls: {
-      sdk: process.env.SDK_URL
-    }
+      sdk: process.env.SDK_URL,
+    },
   });
 }
 
@@ -38,8 +38,8 @@ if (process.env.EVENTS_URL) {
   console.log('Setting custom SDK Events url.');
   settings = merge({}, settings, {
     urls: {
-      events: process.env.EVENTS_URL
-    }
+      events: process.env.EVENTS_URL,
+    },
   });
 }
 
@@ -47,7 +47,7 @@ if (process.env.SPLITIO_SCHEDULER) {
   try {
     console.log('Setting custom SDK scheduler timers.');
     settings = merge({}, settings, {
-      scheduler: JSON.parse(process.env.SPLITIO_SCHEDULER)
+      scheduler: JSON.parse(process.env.SPLITIO_SCHEDULER),
     });
   } catch(e) {
     console.log('There was an error parsing the custom scheduler');
@@ -80,5 +80,5 @@ module.exports = {
   factory,
   client,
   manager,
-  isReady
+  isReady,
 };

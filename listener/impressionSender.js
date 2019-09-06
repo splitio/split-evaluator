@@ -17,7 +17,7 @@ const postImpressions = (impressions) => {
     body: {
       impressions,
     },
-    json: true
+    json: true,
   };
   return impressions.length > 0 ? request(options)
     .then(() => Promise.resolve())

@@ -41,7 +41,7 @@ app.get('/favicon.ico', (req, res) => res.status(204));
 app.get('*', function (req, res) {
   console.log('Wrong endpoint called.');
   res.json({
-    'route': 'Sorry this page does not exist!'
+    'route': 'Sorry this page does not exist!',
   });
 });
 

@@ -13,7 +13,7 @@ const authorization = (req, res, next) => {
   } else {
     console.log('Returning 401 Unauthorized.');
     res.status(401).send({
-      error: 'Unauthorized'
+      error: 'Unauthorized',
     });
   }
 };

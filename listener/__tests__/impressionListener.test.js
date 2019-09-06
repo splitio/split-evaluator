@@ -77,7 +77,7 @@ describe('impression-listener', () => {
       { split: 'my-experiment', length: 2 },
       { split: 'other-experiment-3', length: 1 },
       { split: 'other-experiment', length: 1 },
-      { split: 'other-experiment-2', length: 1 },
+      { split: 'other-experiment-2', length: 1 }
     ]);
     body = '';
   });

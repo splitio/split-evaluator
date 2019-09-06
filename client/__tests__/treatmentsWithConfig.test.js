@@ -178,7 +178,7 @@ describe('get-treatments-with-config', () => {
       'my-experiment': {
         treatment: 'on',
         config: '{"desc" : "this applies only to ON treatment"}',
-      }
+      },
     }, 1);
   });
 
@@ -190,7 +190,7 @@ describe('get-treatments-with-config', () => {
       'my-experiment': {
         treatment: 'on',
         config: '{"desc" : "this applies only to ON treatment"}',
-      }
+      },
     }, 1);
   });
 

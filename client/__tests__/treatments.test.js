@@ -185,7 +185,7 @@ describe('get-treatments', () => {
     expectOkMultipleResults(response, 200, {
       'my-experiment': {
         treatment: 'on',
-      }
+      },
     }, 1);
   });
 
@@ -196,7 +196,7 @@ describe('get-treatments', () => {
     expectOkMultipleResults(response, 200, {
       'my-experiment': {
         treatment: 'on',
-      }
+      },
     }, 1);
   });
 
