@@ -9,14 +9,14 @@ describe('splits', () => {
   // Testing authorization
   test('should be 401 if auth is not passed', async (done) => {
     const response = await request(app)
-      .get('/splits');
+      .get('/manager/splits');
     expectError(response, 401, 'Unauthorized');
     done();
   });
 
   test('should be 401 if auth does not match', async (done) => {
     const response = await request(app)
-      .get('/splits')
+      .get('/manager/splits')
       .set('Authorization', 'invalid');
     expectError(response, 401, 'Unauthorized');
     done();
@@ -24,7 +24,7 @@ describe('splits', () => {
 
   test('should be 200 and returns the splits added in YAML', async (done) => {
     const response = await request(app)
-      .get('/splits')
+      .get('/manager/splits')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('splits');

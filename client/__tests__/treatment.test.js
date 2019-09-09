@@ -9,14 +9,14 @@ describe('get-treatment', () => {
   // Testing authorization
   test('should be 401 if auth is not passed', async (done) => {
     const response = await request(app)
-      .get('/get-treatment?key=test&split-name=my-experiment');
+      .get('/client/get-treatment?key=test&split-name=my-experiment');
     expectError(response, 401, 'Unauthorized');
     done();
   });
 
   test('should be 401 if auth does not match', async (done) => {
     const response = await request(app)
-      .get('/get-treatment?key=test&split-name=my-experiment')
+      .get('/client/get-treatment?key=test&split-name=my-experiment')
       .set('Authorization', 'invalid');
     expectError(response, 401, 'Unauthorized');
     done();
@@ -29,7 +29,7 @@ describe('get-treatment', () => {
       'you passed a null or undefined key, key must be a non-empty string.'
     ];
     const response = await request(app)
-      .get('/get-treatment?split-name=test')
+      .get('/client/get-treatment?split-name=test')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -40,7 +40,7 @@ describe('get-treatment', () => {
       'you passed an empty string, key must be a non-empty string.'
     ];
     const response = await request(app)
-      .get('/get-treatment?key=&split-name=test')
+      .get('/client/get-treatment?key=&split-name=test')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -51,7 +51,7 @@ describe('get-treatment', () => {
       'you passed an empty string, key must be a non-empty string.'
     ];
     const response = await request(app)
-      .get('/get-treatment?key=     &split-name=test')
+      .get('/client/get-treatment?key=     &split-name=test')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -63,7 +63,7 @@ describe('get-treatment', () => {
     ];
     const key = getLongKey();
     const response = await request(app)
-      .get(`/get-treatment?key=${key}&split-name=test`)
+      .get(`/client/get-treatment?key=${key}&split-name=test`)
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -74,7 +74,7 @@ describe('get-treatment', () => {
       'you passed an empty string, bucketing-key must be a non-empty string.'
     ];
     const response = await request(app)
-      .get('/get-treatment?key=key&bucketing-key=&split-name=test')
+      .get('/client/get-treatment?key=key&bucketing-key=&split-name=test')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -85,7 +85,7 @@ describe('get-treatment', () => {
       'you passed an empty string, bucketing-key must be a non-empty string.'
     ];
     const response = await request(app)
-      .get('/get-treatment?key=key&bucketing-key=    &split-name=test')
+      .get('/client/get-treatment?key=key&bucketing-key=    &split-name=test')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -97,7 +97,7 @@ describe('get-treatment', () => {
     ];
     const key = getLongKey();
     const response = await request(app)
-      .get(`/get-treatment?key=key&bucketing-key=${key}&split-name=test`)
+      .get(`/client/get-treatment?key=key&bucketing-key=${key}&split-name=test`)
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -108,7 +108,7 @@ describe('get-treatment', () => {
       'you passed a null or undefined split-name, split-name must be a non-empty string.'
     ];
     const response = await request(app)
-      .get('/get-treatment?key=test')
+      .get('/client/get-treatment?key=test')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -119,7 +119,7 @@ describe('get-treatment', () => {
       'you passed an empty split-name, split-name must be a non-empty string.'
     ];
     const response = await request(app)
-      .get('/get-treatment?key=test&split-name=')
+      .get('/client/get-treatment?key=test&split-name=')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -130,7 +130,7 @@ describe('get-treatment', () => {
       'you passed an empty split-name, split-name must be a non-empty string.'
     ];
     const response = await request(app)
-      .get('/get-treatment?key=test&split-name=    ')
+      .get('/client/get-treatment?key=test&split-name=    ')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -142,7 +142,7 @@ describe('get-treatment', () => {
       'you passed an empty split-name, split-name must be a non-empty string.'
     ];
     const response = await request(app)
-      .get('/get-treatment?key=&split-name=    ')
+      .get('/client/get-treatment?key=&split-name=    ')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -153,7 +153,7 @@ describe('get-treatment', () => {
       'attributes must be a plain object.'
     ];
     const response = await request(app)
-      .get('/get-treatment?key=test&split-name=my-experiment&attributes=lalala')
+      .get('/client/get-treatment?key=test&split-name=my-experiment&attributes=lalala')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -166,7 +166,7 @@ describe('get-treatment', () => {
       'attributes must be a plain object.'
     ];
     const response = await request(app)
-      .get('/get-treatment?key=     &split-name=&attributes="lalala"')
+      .get('/client/get-treatment?key=     &split-name=&attributes="lalala"')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -181,7 +181,7 @@ describe('get-treatment', () => {
     ];
     const key = getLongKey();
     const response = await request(app)
-      .get(`/get-treatment?bucketing-key=${key}&key=     &split-name=&attributes="lalala"`)
+      .get(`/client/get-treatment?bucketing-key=${key}&key=     &split-name=&attributes="lalala"`)
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -189,7 +189,7 @@ describe('get-treatment', () => {
 
   test('should be 200 if is valid attributes', async (done) => {
     const response = await request(app)
-      .get('/get-treatment?key=test&split-name=my-experiment&attributes={"test":"test"}')
+      .get('/client/get-treatment?key=test&split-name=my-experiment&attributes={"test":"test"}')
       .set('Authorization', 'test');
     expectOk(response, 200, 'on', 'my-experiment');
     done();
@@ -197,7 +197,7 @@ describe('get-treatment', () => {
 
   test('should be 200 if attributes is null', async (done) => {
     const response = await request(app)
-      .get('/get-treatment?key=test&split-name=my-experiment')
+      .get('/client/get-treatment?key=test&split-name=my-experiment')
       .set('Authorization', 'test');
     expectOk(response, 200, 'on', 'my-experiment');
     done();
@@ -208,22 +208,22 @@ describe('get-treatment', () => {
     // Checking multiple experiments regarding yml passed
     // With key=test
     let response = await request(app)
-      .get('/get-treatment?key=test&split-name=my-experiment')
+      .get('/client/get-treatment?key=test&split-name=my-experiment')
       .set('Authorization', 'test');
     expectOk(response, 200, 'on', 'my-experiment');
     // With key=only_test
     response = await request(app)
-      .get('/get-treatment?key=only_test&split-name=my-experiment')
+      .get('/client/get-treatment?key=only_test&split-name=my-experiment')
       .set('Authorization', 'test');
     expectOk(response, 200, 'off', 'my-experiment');
     // With another split
     response = await request(app)
-      .get('/get-treatment?key=test&split-name=other-experiment-3')
+      .get('/client/get-treatment?key=test&split-name=other-experiment-3')
       .set('Authorization', 'test');
     expectOk(response, 200, 'off', 'other-experiment-3');
     // With a non-existant split in yml
     response = await request(app)
-      .get('/get-treatment?key=only_test&split-name=nonexistant-experiment')
+      .get('/client/get-treatment?key=only_test&split-name=nonexistant-experiment')
       .set('Authorization', 'test');
     expectOk(response, 200, 'control', 'nonexistant-experiment');
     done();
