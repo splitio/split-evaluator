@@ -9,14 +9,7 @@ const eventTypeValidator = require('../utils/inputValidation/eventType');
 const valueValidator = require('../utils/inputValidation/value');
 const propertiesValidator = require('../utils/inputValidation/properties');
 const clientController = require('./client.controller');
-
-const parseValidators = (validators) => {
-  const errors = [];
-  validators.forEach(validator => {
-    if (validator && !validator.valid) errors.push(validator.error);
-  });
-  return errors;
-};
+const { parseValidators } = require('../utils/utils');
 
 const treatmentValidation = (req, res, next) => {
   const matchingKeyValidation = keyValidator(req.query.key, 'key');
