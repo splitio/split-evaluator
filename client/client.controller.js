@@ -112,6 +112,29 @@ const getTreatmentsWithConfig = (req, res) => {
 };
 
 /**
+ * track events tracking
+ * @param {*} req 
+ * @param {*} res 
+ */
+const track = (req, res) => {
+  const key = req.splitio.key;
+  const trafficType = req.splitio.trafficType;
+  const eventType = req.splitio.eventType;
+  const value = req.splitio.value;
+  const properties = req.splitio.properties;
+
+  function asyncResult(track) {
+    if (track) res.status(200).send('Successfully queued');
+    else res.status(400);
+  }
+
+  const eventuallyAvailableValue = client.track(key, trafficType, eventType, value, properties);
+
+  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
+  else asyncResult(eventuallyAvailableValue);
+};
+
+/**
  * getAllTreatments  returns the evaluations for all treatments matching the traffic type of the provided keys.
  * @param {*} req 
  * @param {*} res 
@@ -181,4 +204,5 @@ module.exports = {
   getTreatmentWithConfig,
   getTreatmentsWithConfig,
   getAllTreatments,
+  track,
 };
