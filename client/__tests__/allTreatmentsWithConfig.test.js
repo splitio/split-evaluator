@@ -9,14 +9,14 @@ describe('get-all-treatments-with-config', () => {
   // Testing authorization
   test('should be 401 if auth is not passed', async (done) => {
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"}]');
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"}]');
     expectError(response, 401, 'Unauthorized');
     done();
   });
 
   test('should be 401 if auth does not match', async (done) => {
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"}]')
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"}]')
       .set('Authorization', 'invalid');
     expectError(response, 401, 'Unauthorized');
     done();
@@ -29,7 +29,7 @@ describe('get-all-treatments-with-config', () => {
       'you passed null or undefined keys, keys must be a non-empty array.'
     ];
     const response = await request(app)
-      .get('/get-all-treatments-with-config')
+      .get('/client/get-all-treatments-with-config')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -40,7 +40,7 @@ describe('get-all-treatments-with-config', () => {
       'keys must be a valid format.'
     ];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys')
+      .get('/client/get-all-treatments-with-config?keys')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -51,7 +51,7 @@ describe('get-all-treatments-with-config', () => {
       'keys must be a valid format.'
     ];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys={}')
+      .get('/client/get-all-treatments-with-config?keys={}')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -62,7 +62,7 @@ describe('get-all-treatments-with-config', () => {
       'There should be at least one matchingKey-trafficType element.'
     ];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[]')
+      .get('/client/get-all-treatments-with-config?keys=[]')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -73,7 +73,7 @@ describe('get-all-treatments-with-config', () => {
       'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.'
     ];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[1, 2, 3, 4]')
+      .get('/client/get-all-treatments-with-config?keys=[1, 2, 3, 4]')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -84,7 +84,7 @@ describe('get-all-treatments-with-config', () => {
       'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.'
     ];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[{"matchingKey":"my-key"}]')
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"my-key"}]')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -95,7 +95,7 @@ describe('get-all-treatments-with-config', () => {
       'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.'
     ];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[{"matchingKey":"my-key", "trafficType":true}]')
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"my-key", "trafficType":true}]')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -106,7 +106,7 @@ describe('get-all-treatments-with-config', () => {
       'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.'
     ];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[{"matchingKey":"my-key", "trafficType":""}]')
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"my-key", "trafficType":""}]')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -117,7 +117,7 @@ describe('get-all-treatments-with-config', () => {
       'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.'
     ];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[{"trafficType":"my-tt"}]')
+      .get('/client/get-all-treatments-with-config?keys=[{"trafficType":"my-tt"}]')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -128,7 +128,7 @@ describe('get-all-treatments-with-config', () => {
       'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.'
     ];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[{"matchingKey":true,"trafficType":"my-tt"}]')
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":true,"trafficType":"my-tt"}]')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -139,7 +139,7 @@ describe('get-all-treatments-with-config', () => {
       'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.'
     ];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[{"matchingKey":"","trafficType":"my-tt"}]')
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"","trafficType":"my-tt"}]')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -150,7 +150,7 @@ describe('get-all-treatments-with-config', () => {
       'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.'
     ];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[{"matchingKey":"    ","trafficType":"my-tt"}]')
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"    ","trafficType":"my-tt"}]')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -162,7 +162,7 @@ describe('get-all-treatments-with-config', () => {
     ];
     const key = getLongKey();
     const response = await request(app)
-      .get(`/get-all-treatments-with-config?keys=[{"matchingKey":"${key}","trafficType":"my-tt"}]`)
+      .get(`/client/get-all-treatments-with-config?keys=[{"matchingKey":"${key}","trafficType":"my-tt"}]`)
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -173,7 +173,7 @@ describe('get-all-treatments-with-config', () => {
       'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.'
     ];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[{"matchingKey":"my-key", "trafficType":"my-tt", "bucketingKey":[]}]')
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"my-key", "trafficType":"my-tt", "bucketingKey":[]}]')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -184,7 +184,7 @@ describe('get-all-treatments-with-config', () => {
       'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.'
     ];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[{"matchingKey":"my=key","trafficType":"my-tt", "bucketingKey":""}]')
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"my=key","trafficType":"my-tt", "bucketingKey":""}]')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -195,7 +195,7 @@ describe('get-all-treatments-with-config', () => {
       'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.'
     ];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[{"matchingKey":"my-key","trafficType":"my-tt", "bucketingKey":"   "}]')
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"my-key","trafficType":"my-tt", "bucketingKey":"   "}]')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -207,7 +207,7 @@ describe('get-all-treatments-with-config', () => {
     ];
     const key = getLongKey();
     const response = await request(app)
-      .get(`/get-all-treatments-with-config?keys=[{"matchingKey":"my-key", "bucketingKey":"${key}","trafficType":"my-tt"}]`)
+      .get(`/client/get-all-treatments-with-config?keys=[{"matchingKey":"my-key", "bucketingKey":"${key}","trafficType":"my-tt"}]`)
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -218,7 +218,7 @@ describe('get-all-treatments-with-config', () => {
       'attributes must be a plain object.'
     ];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[{"matchingKey":12345,"trafficType":"localhost"}]&attributes=lalala')
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":12345,"trafficType":"localhost"}]&attributes=lalala')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -244,7 +244,7 @@ describe('get-all-treatments-with-config', () => {
       config: null,
     }];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[{"matchingKey":12345,"trafficType":"localhost"}]')
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":12345,"trafficType":"localhost"}]')
       .set('Authorization', 'test');
     expectOkAllTreatments(response, 200, expected, 4);
     done();
@@ -270,7 +270,7 @@ describe('get-all-treatments-with-config', () => {
       config: null,
     }];
     const response = await request(app)
-      .get('/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"}]')
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"}]')
       .set('Authorization', 'test');
     expectOkAllTreatments(response, 200, expected, 4);
     done();

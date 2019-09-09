@@ -111,7 +111,7 @@ const track = async (req, res) => {
 
   try {
     const track = await client.track(key, trafficType, eventType, value, properties);
-    return track ? res.status(200).send('OK') : res.status(400);
+    return track ? res.status(200).send('Successfully queued event') : res.status(400);
   } catch (error) {
     res.status(500);
   }
