@@ -207,4 +207,12 @@ describe('track', () => {
     expect(response.statusCode).toBe(200);
     done();
   });
+
+  test('should be 200 if value and and properties are valid', async (done) => {
+    const response = await request(app)
+      .get('/track?key=my-key&event-type=my-event&traffic-type=my-traffic&properties={"prop1":3}&value=3.0')
+      .set('Authorization', 'test');
+    expect(response.statusCode).toBe(200);
+    done();
+  });
 });
