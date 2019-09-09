@@ -124,7 +124,7 @@ const track = (req, res) => {
   const properties = req.splitio.properties;
 
   function asyncResult(track) {
-    if (track) res.status(200).send('OK');
+    if (track) res.status(200).send('Successfully queued');
     else res.status(400);
   }
 
