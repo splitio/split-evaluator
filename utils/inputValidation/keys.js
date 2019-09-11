@@ -22,6 +22,9 @@ const validateKeys = (maybeKeys) => {
     };
     const validKeys = [];
 
+    const trafficTypes = new Set;
+    let trafficTypeDuplicated = false;
+
     const isInvalid = keys.some(key => {
       const trafficTypeValidation = trafficTypeValidator(key.trafficType);
       const matchingKeyValidation = keyValidator(key.matchingKey, 'matchingKey');
@@ -29,6 +32,10 @@ const validateKeys = (maybeKeys) => {
 
       if (!trafficTypeValidation.valid || !matchingKeyValidation.valid || !bucketingKeyValidation.valid) return true;
 
+      if (trafficTypes.has(trafficTypeValidation.value)) {
+        trafficTypeDuplicated = true;
+      }
+      trafficTypes.add(trafficTypeValidation.value);
       validKeys.push({
         trafficType: trafficTypeValidation.value,
         matchingKey: matchingKeyValidation.value,
@@ -36,9 +43,16 @@ const validateKeys = (maybeKeys) => {
       });
     });
 
-    return isInvalid ? {
+    if (isInvalid) {
+      return {
+        valid: false,
+        error: 'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.',
+      };
+    }
+
+    return trafficTypeDuplicated ? {
       valid: false,
-      error: 'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.',
+      error: 'at least one trafficType is duplicated in keys object.',
     } : {
       valid: true,
       value: validKeys,

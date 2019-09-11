@@ -3,7 +3,7 @@ process.env.SPLITIO_API_KEY = 'localhost';
 
 const request = require('supertest');
 const app = require('../../app');
-const { expectError, expectErrorContaining, expectOkAllTreatments, getLongKey } = require('../../utils/testWrapper/index');
+const { expectError, expectErrorContaining, expectOkAllTreatments, getLongKey } = require('../../utils/testWrapper');
 
 describe('get-all-treatments-with-config', () => {
   // Testing authorization
@@ -219,6 +219,17 @@ describe('get-all-treatments-with-config', () => {
     ];
     const response = await request(app)
       .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":12345,"trafficType":"localhost"}]&attributes=lalala')
+      .set('Authorization', 'test');
+    expectErrorContaining(response, 400, expected);
+    done();
+  });
+
+  test('should be 400 if tt is duplicated', async (done) => {
+    const expected = [
+      'at least one trafficType is duplicated in keys object.'
+    ];
+    const response = await request(app)
+      .get('/client/get-all-treatments?keys=[{"matchingKey":"my-key","trafficType":"localhost"},{"matchingKey":"my-key-2","trafficType":"localhost2"},{"matchingKey":"my-key","trafficType":"localhost"}]')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();

@@ -3,7 +3,7 @@ process.env.SPLITIO_API_KEY = 'localhost';
 
 const request = require('supertest');
 const app = require('../../app');
-const { expectError, expectErrorContaining, getLongKey } = require('../../utils/testWrapper/index');
+const { expectError, expectErrorContaining, getLongKey } = require('../../utils/testWrapper');
 
 describe('track', () => {
   // Testing authorization
