@@ -226,53 +226,60 @@ describe('get-all-treatments-with-config', () => {
 
   // Testing number convertion for matchingKey
   test('should be 200 if matching key passes a number', async (done) => {
-    const expected = [{
-      splitName: 'my-experiment',
-      treatment: 'control',
-      config: null,
-    },{
-      splitName: 'other-experiment-3',
-      treatment: 'off',
-      config: null,
-    },{
-      splitName: 'other-experiment',
-      treatment: 'control',
-      config: null,
-    },{
-      splitName: 'other-experiment-2',
-      treatment: 'on',
-      config: null,
-    }];
+    const expected = {
+      localhost: {
+        'my-experiment': {
+          treatment: 'control',
+          config: null,
+        },
+        'other-experiment-3': {
+          treatment: 'off',
+          config: null,
+        },
+        'other-experiment': {
+          treatment: 'control',
+          config: null,
+        },
+        'other-experiment-2': {
+          treatment: 'on',
+          config: null,
+        }
+      }
+    };
     const response = await request(app)
       .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":12345,"trafficType":"localhost"}]')
       .set('Authorization', 'test');
-    expectOkAllTreatments(response, 200, expected, 4);
+    expectOkAllTreatments(response, 200, expected, 1);
     done();
   });
 
   // Testing YML evaluations
   test('should be 200 if keys is valid', async (done) => {
-    const expected = [{
-      splitName: 'my-experiment',
-      treatment: 'on',
-      config: '{"desc" : "this applies only to ON treatment"}',
-    },{
-      splitName: 'other-experiment-3',
-      treatment: 'off',
-      config: null,
-    },{
-      splitName: 'other-experiment',
-      treatment: 'control',
-      config: null,
-    },{
-      splitName: 'other-experiment-2',
-      treatment: 'on',
-      config: null,
-    }];
+    const expected = {
+      localhost: {
+        'my-experiment': {
+          treatment: 'on',
+          config: '{"desc" : "this applies only to ON treatment"}',
+        },
+        'other-experiment-3': {
+          treatment: 'off',
+          config: null,
+        },
+        'other-experiment': {
+          treatment: 'control',
+          config: null,
+        },
+        'other-experiment-2': {
+          treatment: 'on',
+          config: null,
+        }
+      },
+      account: {},
+    };
     const response = await request(app)
-      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"}]')
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"},{"matchingKey":"test","trafficType":"account"}]')
       .set('Authorization', 'test');
-    expectOkAllTreatments(response, 200, expected, 4);
+    expectOkAllTreatments(response, 200, expected, 2);
     done();
   });
 });

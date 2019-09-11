@@ -3,7 +3,7 @@ process.env.SPLITIO_API_KEY = 'localhost';
 
 const request = require('supertest');
 const app = require('../../app');
-const { expectError, expectErrorContaining, getLongKey } = require('../../utils/testWrapper/index');
+const { expectError, expectErrorContaining, expectOkAllTreatments, getLongKey } = require('../../utils/testWrapper/index');
 
 describe('get-all-treatments', () => {
   // Testing authorization
@@ -226,47 +226,52 @@ describe('get-all-treatments', () => {
 
   // Testing number convertion for matchingKey
   test('should be 200 if matching key passes a number', async (done) => {
-    const expected = [{
-      splitName: 'my-experiment',
-      treatment: 'control',
-    },{
-      splitName: 'other-experiment-3',
-      treatment: 'off',
-    },{
-      splitName: 'other-experiment',
-      treatment: 'control',
-    },{
-      splitName: 'other-experiment-2',
-      treatment: 'on',
-    }];
+    const expected = {
+      localhost: {
+        'my-experiment': {
+          treatment: 'control',
+        },
+        'other-experiment-3': {
+          treatment: 'off',
+        },
+        'other-experiment': {
+          treatment: 'control',
+        },
+        'other-experiment-2': {
+          treatment: 'on',
+        }
+      }
+    };
     const response = await request(app)
       .get('/client/get-all-treatments?keys=[{"matchingKey":12345,"trafficType":"localhost"}]')
       .set('Authorization', 'test');
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual(expect.arrayContaining(expected));
+    expectOkAllTreatments(response, 200, expected, 1);
     done();
   });
 
   // Testing YML evaluations
   test('should be 200 if keys is valid', async (done) => {
-    const expected = [{
-      splitName: 'my-experiment',
-      treatment: 'on',
-    },{
-      splitName: 'other-experiment-3',
-      treatment: 'off',
-    },{
-      splitName: 'other-experiment',
-      treatment: 'control',
-    },{
-      splitName: 'other-experiment-2',
-      treatment: 'on',
-    }];
+    const expected = {
+      localhost: {
+        'my-experiment': {
+          treatment: 'on',
+        },
+        'other-experiment-3': {
+          treatment: 'off',
+        },
+        'other-experiment': {
+          treatment: 'control',
+        },
+        'other-experiment-2': {
+          treatment: 'on',
+        }
+      },
+      account: {},
+    };
     const response = await request(app)
-      .get('/client/get-all-treatments?keys=[{"matchingKey":"test","trafficType":"localhost"}]')
+      .get('/client/get-all-treatments?keys=[{"matchingKey":"test","trafficType":"localhost"},{"matchingKey":"test","trafficType":"account"}]')
       .set('Authorization', 'test');
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual(expect.arrayContaining(expected));
+    expectOkAllTreatments(response, 200, expected, 2);
     done();
   });
 });

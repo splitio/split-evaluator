@@ -20,10 +20,8 @@ const getTreatment = async (req, res) => {
     const evaluationResult = await client.getTreatment(key, split, attributes);
 
     res.send({
-      evaluation: {
-        splitName: split,
-        treatment: evaluationResult,
-      },
+      splitName: split,
+      treatment: evaluationResult,
     });
   } catch (error) {
     res.status(500);
@@ -44,11 +42,9 @@ const getTreatmentWithConfig = async (req, res) => {
     const evaluationResult = await client.getTreatmentWithConfig(key, split, attributes);
 
     res.send({
-      evaluation: {
-        splitName: split,
-        treatment: evaluationResult.treatment,
-        config: evaluationResult.config,
-      },
+      splitName: split,
+      treatment: evaluationResult.treatment,
+      config: evaluationResult.config,
     });
   } catch (error) {
     res.status(500);
@@ -68,9 +64,14 @@ const getTreatments = async (req, res) => {
   try {
     const evaluationResults = await client.getTreatments(key, splits, attributes);
 
-    res.send({
-      evaluation: evaluationResults,
+    const result = {};
+    Object.keys(evaluationResults).forEach(split => {
+      result[split] = {
+        treatment: evaluationResults[split]
+      };
     });
+
+    res.send(result);
   } catch (error) {
     res.status(500);
   }
@@ -89,9 +90,7 @@ const getTreatmentsWithConfig = async (req, res) => {
   try {
     const evaluationResults = await client.getTreatmentsWithConfig(key, splits, attributes);
 
-    res.send({
-      evaluation: evaluationResults,
-    });
+    res.send(evaluationResults);
   } catch (error) {
     res.status(500);
   }
@@ -126,22 +125,21 @@ const allTreatments = async (keys, attributes) => {
   try {
     // Grabs Splits from Manager
     const splitViews = await manager.splits();
-    // Builds promise array with all the splits for each (tt, key)
-    const promises = await Promise.all(keys.map(key => client.getTreatmentsWithConfig(
-      parseKey(key.matchingKey, key.bucketingKey),
-      filterSplitsByTT(splitViews, key.trafficType),
-      attributes)
-    ));
-    // Creates a view with the result
-    const treatments = promises.reduce((acc, evaluation) => {
-      const partial = Object.keys(evaluation).map(splitName => ({
-        splitName,
-        treatment: evaluation[splitName].treatment,
-        config: evaluation[splitName].config,
-      }));
-      return acc.concat(partial);
-    }, []);
-    return treatments;
+
+    // Makes multiple evaluations for each (trafficType, key)
+    const evaluations = {};
+    for (let i=0; i< keys.length; i++) {
+      const key = keys[i];
+      const splitNames = filterSplitsByTT(splitViews, key.trafficType);
+      const evaluation = await client.getTreatmentsWithConfig(
+        parseKey(key.matchingKey, key.bucketingKey),
+        splitNames,
+        attributes);
+      // Saves result for each trafficType
+      evaluations[key.trafficType] = evaluation;
+    }
+
+    return evaluations;
   } catch (error) {
     throw Error('Error getting treatments');
   }
@@ -175,10 +173,18 @@ const getAllTreatments = async (req, res) => {
 
   try {
     const treatments = await allTreatments(keys, attributes);
-    res.send(treatments.map(evaluation => ({
-      splitName: evaluation.splitName,
-      treatment: evaluation.treatment,
-    })));
+    // Erases the config property for treatments
+    const trafficTypes = Object.keys(treatments);
+    trafficTypes.forEach(trafficType => {
+      const splitNames = Object.keys(treatments[trafficType]);
+      if (splitNames.length > 0) {
+        Object.keys(treatments[trafficType]).forEach(split => {
+          delete treatments[trafficType][split].config;
+        });
+      }
+    });
+
+    res.send(treatments);
   } catch (error) {
     res.status(500);
   }
