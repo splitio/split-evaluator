@@ -1,6 +1,6 @@
-const { isObject } = require('../lang');
+const { isObject } = require('../');
 
-test('isObject', async (done) => {
+test('isObject', done => {
   expect(isObject('test')).toBe(false);
   expect(isObject(true)).toBe(false);
   expect(isObject([])).toBe(false);

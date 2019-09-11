@@ -1,4 +1,4 @@
-const { isString } = require('../lang/lang');
+const { isString } = require('../lang');
 
 const CAPITAL_LETTERS_REGEX = /[A-Z]/;
 

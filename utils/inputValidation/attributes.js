@@ -1,4 +1,4 @@
-const { isObject } = require('../lang/lang');
+const { isObject } = require('../lang');
 
 const validateAttributes = (maybeAttributes) => {
   const error = {

@@ -1,4 +1,4 @@
-const { isString, isFinite } = require('../lang/lang');
+const { isString, isFinite } = require('../lang');
 
 const KEY_MAX_LENGTH = 250;
 

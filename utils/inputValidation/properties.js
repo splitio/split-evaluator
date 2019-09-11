@@ -1,4 +1,4 @@
-const lang = require('../lang/lang');
+const lang = require('../lang');
 
 const validateProperties = (maybeProperties) => {
   const error = {
