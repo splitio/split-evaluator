@@ -25,6 +25,7 @@ const getImpressionsToPost = () => {
   const groupedImpressions = new Map();
 
   splice.forEach(impression => {
+    // Builds the keyImpression object
     const keyImpressions = {
       keyName: impression.keyName,
       treatment: impression.treatment,
@@ -32,6 +33,7 @@ const getImpressionsToPost = () => {
       changeNumber: impression.changeNumber,
       label: impression.label,
     };
+    // Checks if already exists in order to add o create new impression bulks
     if (!groupedImpressions.has(impression.feature)) {
       groupedImpressions.set(impression.feature, [keyImpressions]);
     } else {
@@ -40,6 +42,18 @@ const getImpressionsToPost = () => {
     }
   });
   
+  // Builds the entire bulk
+  /*
+  {
+    "impressions": [{
+      "testName": "example-1",
+      "keyImpressions": [impression1, impression2, ...]
+    }, {
+      "testName": "example-1",
+      "keyImpressions": [impression1, impression2, ...]
+    }]
+  }
+  */
   groupedImpressions.forEach((value, key) => {
     const impressionToPost = {
       testName: key,

@@ -20,7 +20,7 @@ const impression2 = {
 
 describe('impression queue', () => {
   // Test behavior when impressions are added
-  test('test add/size', async (done) => {
+  test('test add/size', done => {
     expect(getSize()).toEqual(0);
     addImpression(impression1);
     expect(getSize()).toEqual(1);
@@ -28,7 +28,7 @@ describe('impression queue', () => {
   });
 
   // Test wrapper schema to send impressions, it should be wrapped by feature
-  test('test impressionToPost', async (done) => {
+  test('test impressionToPost', done => {
     addImpression(impression1);
     addImpression(impression2);
     addImpression(impression1);

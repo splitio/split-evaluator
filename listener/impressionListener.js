@@ -18,10 +18,10 @@ const logImpression = (impressionData) => {
     label: impression.label,
   };
 
-  // Add Impression to queue
+  // Adds Impression to queue
   addImpression(impressionToAdd);
 
-  // Flush only if is greater than equal MAX impression per post
+  // Flushes only if is greater than equal IMPRESSIONS_PER_POST
   if (getSize() >= IMPRESSIONS_PER_POST) {
     context.flushAndResetTime();
   }
