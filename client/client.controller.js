@@ -24,7 +24,7 @@ const getTreatment = async (req, res) => {
       treatment: evaluationResult,
     });
   } catch (error) {
-    res.status(500);
+    res.status(500).send({error});
   }
 };
 
@@ -47,7 +47,7 @@ const getTreatmentWithConfig = async (req, res) => {
       config: evaluationResult.config,
     });
   } catch (error) {
-    res.status(500);
+    res.status(500).send({error});
   }
 };
 
@@ -73,7 +73,7 @@ const getTreatments = async (req, res) => {
 
     res.send(result);
   } catch (error) {
-    res.status(500);
+    res.status(500).send({error});
   }
 };
 
@@ -92,7 +92,7 @@ const getTreatmentsWithConfig = async (req, res) => {
 
     res.send(evaluationResults);
   } catch (error) {
-    res.status(500);
+    res.status(500).send({error});
   }
 };
 
@@ -109,10 +109,10 @@ const track = async (req, res) => {
   const properties = req.splitio.properties;
 
   try {
-    const track = await client.track(key, trafficType, eventType, value, properties);
-    return track ? res.status(200).send('Successfully queued event') : res.status(400);
+    const tracked = await client.track(key, trafficType, eventType, value, properties);
+    return tracked ? res.status(200).send('Successfully queued event') : res.status(400);
   } catch (error) {
-    res.status(500);
+    res.status(500).send({error});
   }
 };
 
@@ -158,7 +158,7 @@ const getAllTreatmentsWithConfig = async (req, res) => {
     const treatments = await allTreatments(keys, attributes);
     res.send(treatments);
   } catch (error) {
-    res.status(500);
+    res.status(500).send({error});
   }
 };
 
@@ -186,7 +186,7 @@ const getAllTreatments = async (req, res) => {
 
     res.send(treatments);
   } catch (error) {
-    res.status(500);
+    res.status(500).send({error});
   }
 };
 
