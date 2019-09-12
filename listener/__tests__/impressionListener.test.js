@@ -52,18 +52,14 @@ describe('impression-listener', () => {
     server.listen(7546, done);
   });
 
-  afterAll(done => {
-    server.close(done);
-  });
-
   test('should have 5 impressions sent by max impressions to post', async (done) => {
-    // Generate the max size of impressions to be sent
+    // Generates the max size of impressions to be sent
     let response = await request(app)
-      .get('/get-treatment?key=test&split-name=my-experiment')
+      .get('/client/get-treatment?key=test&split-name=my-experiment')
       .set('Authorization', 'test');
     expectOk(response, 200, 'on', 'my-experiment');
     response = await request(app)
-      .get('/get-treatments?key=test&split-names=my-experiment,other-experiment-3,other-experiment-2,other-experiment')
+      .get('/client/get-treatments?key=test&split-names=my-experiment,other-experiment-3,other-experiment-2,other-experiment')
       .set('Authorization', 'test');
     expectOkMultipleResults(response, 200, {
       'my-experiment': { treatment: 'on' },
@@ -71,8 +67,8 @@ describe('impression-listener', () => {
       'other-experiment-2': { treatment: 'on' },
       'other-experiment': { treatment: 'control' },
     }, 4);
-    await new Promise(done => setTimeout(done, 400));
-    // Matches all the impressions in hte body of the IL Post Impressions
+    await new Promise(done => setTimeout(done, 500));
+    // Matches all the impressions in the body of the IL Post Impressions
     matcherIlRequest(body, 4, [
       { split: 'my-experiment', length: 2 },
       { split: 'other-experiment-3', length: 1 },
@@ -84,16 +80,20 @@ describe('impression-listener', () => {
   });
 
   test('should have 1 impressions sent by time schedule', async (done) => {
-    // Generate one impression and just wait until is sent by scheduler (1 second for testing)
+    // Generates one impression and just wait until is sent by scheduler (1 second for testing)
     const response = await request(app)
-      .get('/get-treatment?key=test&split-name=my-experiment')
+      .get('/client/get-treatment?key=test&split-name=my-experiment')
       .set('Authorization', 'test');
     expectOk(response, 200, 'on', 'my-experiment');
 
-    await new Promise(done => setTimeout(done, 400));
-    // Matches the impression in hte body of the IL Post Impressions
+    await new Promise(done => setTimeout(done, 500));
+    // Matches the impression in the body of the IL Post Impressions
     matcherIlRequest(body, 1, [{ split: 'my-experiment', length: 1 }]);
     body = '';
     done();
+  });
+
+  afterAll(done => {
+    server.close(done);
   });
 });  

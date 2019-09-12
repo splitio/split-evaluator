@@ -141,7 +141,7 @@ security:
   - Authorization: [] 
 
 paths:
-  /get-treatment:
+  /client/get-treatment:
     get:
       tags:
         - client
@@ -160,16 +160,13 @@ paths:
               schema: 
                 type: object
                 properties:
-                  evaluation:
-                    type: object
-                    properties:
-                      splitName:
-                        type: string
-                      treatment:
-                        type: string
-                    example:
-                      splitName: my-split
-                      treatment: on
+                  splitName:
+                    type: string
+                  treatment:
+                    type: string
+                example:
+                  splitName: my-split
+                  treatment: on
         '400':
           description: Bad request
           content:
@@ -184,7 +181,7 @@ paths:
                 $ref: '#/components/schemas/Unauthorized'
         '500':
           description: Internal server error
-  /get-treatment-with-config:
+  /client/get-treatment-with-config:
     get:
       tags:
         - client
@@ -203,15 +200,12 @@ paths:
               schema: 
                 type: object
                 properties:
-                  evaluation:
-                    type: object
-                    properties:
-                      splitName:
-                        type: string
-                      treatment:
-                        type: string
-                      config:
-                        type: string
+                  splitName:
+                    type: string
+                  treatment:
+                    type: string
+                  config:
+                    type: string
                 example:
                   splitName: my-split
                   treatment: on
@@ -230,7 +224,7 @@ paths:
                 $ref: '#/components/schemas/Unauthorized'
         '500':
           description: Internal server error
-  /get-treatments:
+  /client/get-treatments:
     get:
       tags:
         - client
@@ -248,13 +242,11 @@ paths:
             application/json:
               schema: 
                 type: object
-                properties:
-                  evaluation:
-                    type: object
                 example:
-                  evaluation:
-                    'my-split': on
-                    'my-split2': off
+                  'my-split':
+                    treatment: on
+                  'my-split2':
+                    treatment: off
         '400':
           description: Bad request
           content:
@@ -269,7 +261,7 @@ paths:
                 $ref: '#/components/schemas/Unauthorized'
         '500':
           description: Internal server error
-  /get-treatments-with-config:
+  /client/get-treatments-with-config:
     get:
       tags:
         - client
@@ -287,15 +279,111 @@ paths:
             application/json:
               schema: 
                 type: object
-                properties:
-                  evaluation:
-                    type: object
                 example:
-                  evaluation:
+                  'my-split':
+                    treatment: on
+                    config: null
+                  'my-split2':
+                    treatment: off
+                    config: "{\"color\": \"blue\" }"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+  /client/get-all-treatments:
+    get:
+      tags:
+        - client
+      summary:  matches splits for passed trafficType and evaluates with passed key
+      description: Calls getTreatments method from the SDK once it have all the splitNames for the keys provided.
+      parameters:
+        - $ref: '#/components/parameters/keys'
+        - $ref: '#/components/parameters/attributes'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema: 
+                type: object
+                items:
+                  type: object
+                  properties:
+                    splitName:
+                      type: string
+                    treatment:
+                      type: string
+                example:
+                  user:
                     'my-split':
                       treatment: on
+                    'my-split-2':
+                      treatment: off
+                  account:
+                    'my-split-3':
+                      treatment: on
+                    'my-split-4':
+                      treatment: off
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+  /client/get-all-treatments-with-config:
+    get:
+      tags:
+        - client
+      summary:  matches splits for passed trafficType and evaluates with passed key and attaches configs
+      description: Calls getTreatments method from the SDK once it have all the splitNames for the keys provided.
+      parameters:
+        - $ref: '#/components/parameters/keys'
+        - $ref: '#/components/parameters/attributes'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema: 
+                type: object
+                items:
+                  type: object
+                  properties:
+                    splitName:
+                      type: string
+                    treatment:
+                      type: string
+                example:
+                  user:
+                    'my-split':
+                      treatment: on
+                      config: "{\"color\": \"yellow\" }"
+                    'my-split-2':
+                      treatment: off
+                      config: "{\"color\": \"red\" }"
+                  account:
+                    'my-split-3':
+                      treatment: on
                       config: null
-                    'my-split2':
+                    'my-split-4':
                       treatment: off
                       config: "{\"color\": \"blue\" }"
         '400':
@@ -312,88 +400,7 @@ paths:
                 $ref: '#/components/schemas/Unauthorized'
         '500':
           description: Internal server error
-  /get-all-treatments:
-    get:
-      tags:
-        - client
-      summary:  matches splits for passed trafficType and evaluates with passed key
-      description: Calls getTreatments method from the SDK once it have all the splitNames for the keys provided.
-      parameters:
-        - $ref: '#/components/parameters/keys'
-        - $ref: '#/components/parameters/attributes'
-      responses:
-        '200':
-          description: Evaluation result
-          content:
-            application/json:
-              schema: 
-                type: array
-                items:
-                  type: object
-                  properties:
-                    splitName:
-                      type: string
-                    treatment:
-                      type: string
-                  example:
-                    splitName: my-split
-                    treatment: on
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InputValidation'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Unauthorized'
-        '500':
-          description: Internal server error
-  /get-all-treatments-with-config:
-    get:
-      tags:
-        - client
-      summary:  matches splits for passed trafficType and evaluates with passed key and attaches configs
-      description: Calls getTreatments method from the SDK once it have all the splitNames for the keys provided.
-      parameters:
-        - $ref: '#/components/parameters/keys'
-        - $ref: '#/components/parameters/attributes'
-      responses:
-        '200':
-          description: Evaluation result
-          content:
-            application/json:
-              schema: 
-                type: array
-                items:
-                  type: object
-                  properties:
-                    splitName:
-                      type: string
-                    treatment:
-                      type: string
-                  example:
-                    splitName: my-split
-                    treatment: on
-                    config: "{\"color\": \"blue\" }"
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InputValidation'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Unauthorized'
-        '500':
-          description: Internal server error
-  /track:
+  /client/track:
     get:
       tags:
         - client
@@ -423,7 +430,7 @@ paths:
         '500':
           description: Internal server error
 
-  /split:
+  /manager/split:
     get:
       tags:
         - manager
@@ -452,7 +459,7 @@ paths:
                 $ref: '#/components/schemas/Unauthorized'
         '500':
           description: Internal server error
-  /splits:
+  /manager/splits:
     get:
       tags:
         - manager
@@ -473,7 +480,7 @@ paths:
                 $ref: '#/components/schemas/Unauthorized'
         '500':
           description: Internal server error
-  /names:
+  /manager/names:
     get:
       tags:
         - manager

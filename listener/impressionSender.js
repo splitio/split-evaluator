@@ -1,9 +1,9 @@
 const request = require('request-promise-native');
-const repeat = require('./repeat');
 const config = require('config');
-const IMPRESSION_SEND_RATE = config.get('impressionsSendRate') ? config.get('impressionsSendRate') : 30000;
+const repeat = require('./repeat');
 const { getImpressionsToPost } = require('./impressionQueue');
 
+const IMPRESSION_SEND_RATE = config.get('impressionsSendRate') ? config.get('impressionsSendRate') : 30000;
 const url = process.env.SPLITIO_IMPRESSION_LISTENER;
 
 /**
@@ -31,6 +31,7 @@ const ImpressionSender = () => {
   let stopImpressionSenderTimeout = false;
   let stopImpressionSender = false;
 
+  // Starts task to send impressions
   const startImpressionsSender = () => {
     stopImpressionSender = repeat(
       schedulePublisher => postImpressions(getImpressionsToPost()).then(() => schedulePublisher()),
@@ -43,11 +44,13 @@ const ImpressionSender = () => {
       startImpressionsSender();
     },
 
+    // In case we need to stop the process
     stop() {
       stopImpressionSenderTimeout && clearTimeout(stopImpressionSenderTimeout);
       stopImpressionSender && stopImpressionSender();
     },
   
+    // This will be used every time that the max amount of impressions is reached
     flushAndResetTime() {
       postImpressions(getImpressionsToPost());
       stopImpressionSender.reset();

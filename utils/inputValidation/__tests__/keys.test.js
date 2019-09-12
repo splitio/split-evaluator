@@ -1,8 +1,8 @@
 const keysValidator = require('../keys');
-const { getLongKey } = require('../../testWrapper/index');
+const { getLongKey } = require('../../testWrapper');
 
 describe('keys validator', () => {
-  test('should return error on null keys', async (done) => {
+  test('should return error on null keys', done => {
     const expected = 'you passed null or undefined keys, keys must be a non-empty array.';
 
     const result = keysValidator(null);
@@ -13,7 +13,7 @@ describe('keys validator', () => {
     done();
   });
 
-  test('should return error on invalid keys', async (done) => {
+  test('should return error on invalid keys', done => {
     const expected = 'keys must be a valid format.';
 
     const result = keysValidator('test');
@@ -24,7 +24,7 @@ describe('keys validator', () => {
     done();
   });
 
-  test('should return error on invalid keys 2', async (done) => {
+  test('should return error on invalid keys 2', done => {
     const expected = 'keys must be a valid format.';
 
     const result = keysValidator('{}');
@@ -35,8 +35,8 @@ describe('keys validator', () => {
     done();
   });
 
-  test('should return error when keys is an empty array', async (done) => {
-    const expected = 'There should be at least one matchingKey-trafficType element.';
+  test('should return error when keys is an empty array', done => {
+    const expected = 'there should be at least one matchingKey-trafficType element.';
 
     const result = keysValidator('[]');
 
@@ -46,7 +46,7 @@ describe('keys validator', () => {
     done();
   });
 
-  test('should return error when keys is an invalid array', async (done) => {
+  test('should return error when keys is an invalid array', done => {
     const expected = 'keys must be a valid format.';
 
     const result = keysValidator('["test":true]');
@@ -57,7 +57,7 @@ describe('keys validator', () => {
     done();
   });
 
-  test('should return error when keys are missing trafficType', async (done) => {
+  test('should return error when keys are missing trafficType', done => {
     const expected = 'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.';
 
     const result = keysValidator('[{"matchingKey":"my-key"},{"matchingKey":"my-other-key"}]');
@@ -68,7 +68,7 @@ describe('keys validator', () => {
     done();
   });
 
-  test('should return error when keys are missing matchingKey', async (done) => {
+  test('should return error when keys are missing matchingKey', done => {
     const expected = 'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.';
 
     const result = keysValidator('[{"trafficType":"traffic-key"}]');
@@ -79,7 +79,7 @@ describe('keys validator', () => {
     done();
   });
 
-  test('should return error when matchingKey is wrong', async (done) => {
+  test('should return error when matchingKey is wrong', done => {
     const expected = 'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.';
 
     const key = getLongKey();
@@ -91,7 +91,7 @@ describe('keys validator', () => {
     done();
   });
 
-  test('should return error when matchingKey is not string', async (done) => {
+  test('should return error when matchingKey is not string', done => {
     const expected = 'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.';
 
     const result = keysValidator('[{"matchingKey": [], "trafficType":"my-tt", "bucketingKey":"my-bk"}]');
@@ -102,7 +102,7 @@ describe('keys validator', () => {
     done();
   });
 
-  test('should return error when bucketingKey is wrong', async (done) => {
+  test('should return error when bucketingKey is wrong', done => {
     const expected = 'keys is array but there are errors inside of it. keys must be an array with at least one element that contain a valid matchingKey and trafficType. It can also includes bucketingKey.';
 
     const result = keysValidator('[{"matchingKey":"my-key", "trafficType":"my-tt", "bucketingKey":" "}]');
@@ -113,7 +113,18 @@ describe('keys validator', () => {
     done();
   });
 
-  test('should be valid when keys is ok', async (done) => {
+  test('should return error when tt is duplicated', done => {
+    const expected = 'at least one trafficType is duplicated in keys object.';
+
+    const result = keysValidator('[{"matchingKey":"my-key", "trafficType":"my-tt"},{"matchingKey":"my-key-2", "trafficType":"my-tt-2"},{"matchingKey":"my-key", "trafficType":"my-tt"}]');
+
+    expect(result).toHaveProperty('valid', false);
+    expect(result).toHaveProperty('error', expected);
+    expect(result).not.toHaveProperty('value');
+    done();
+  });
+
+  test('should be valid when keys is ok', done => {
     const result = keysValidator('[{"matchingKey":"my-key", "trafficType":"my-tt"},{"matchingKey":"my-other-key", "trafficType":"my-tt2"}]');
 
     expect(result).toHaveProperty('valid', true);
@@ -126,7 +137,7 @@ describe('keys validator', () => {
     done();
   });
 
-  test('should be valid when matchingKey is number', async (done) => {
+  test('should be valid when matchingKey is number', done => {
     const result = keysValidator('[{"matchingKey":12345, "trafficType":"my-tt"},{"matchingKey":"my-other-key", "trafficType":"my-tt2"}]');
 
     expect(result).toHaveProperty('valid', true);
