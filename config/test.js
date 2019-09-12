@@ -10,6 +10,4 @@ module.exports = {
   },
   // Block the ExpressJS server till the SDK is ready.
   blockUntilReady: true,
-  // Default cache control header to be used in the answers.
-  cacheControl: 'public, max-age=60, s-maxage=60'
 };

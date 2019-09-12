@@ -3,7 +3,7 @@ process.env.SPLITIO_API_KEY = 'localhost';
 
 const request = require('supertest');
 const app = require('../../app');
-const { expectError, expectErrorContaining } = require('../../utils/testWrapper/index');
+const { expectError, expectErrorContaining } = require('../../utils/testWrapper');
 
 describe('split', () => {
   // Testing authorization
@@ -69,7 +69,7 @@ describe('split', () => {
     expect(response.body).toHaveProperty('configs');
     expect(response.body.configs).toEqual({
       on: '{"desc" : "this applies only to ON treatment"}',
-      off: '{"desc" : "this applies only to OFF and only for only_test. The rest will receive ON"}'
+      off: '{"desc" : "this applies only to OFF and only for only_test. The rest will receive ON"}',
     });
     done();
   });

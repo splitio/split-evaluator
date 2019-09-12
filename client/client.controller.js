@@ -1,9 +1,3 @@
-// Utils
-const thenable = require('@splitsoftware/splitio/lib/utils/promise/thenable');
-const reduce = require('lodash/reduce');
-const map = require('lodash/map');
-const config = require('config');
-
 // Own modules
 const { parseKey, filterSplitsByTT } = require('./common');
 const sdkModule = require('../sdk');
@@ -17,25 +11,21 @@ const manager = sdkModule.manager;
  * @param {*} req 
  * @param {*} res 
  */
-const getTreatment = (req, res) => {
+const getTreatment = async (req, res) => {
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const split = req.splitio.splitName;
   const attributes = req.splitio.attributes;
 
-  function asyncResult(treatment) {
-    res.set('Cache-Control', config.get('cacheControl'))
-      .send({
-        evaluation: {
-          splitName: split,
-          treatment
-        }
-      });
+  try {
+    const evaluationResult = await client.getTreatment(key, split, attributes);
+
+    res.send({
+      splitName: split,
+      treatment: evaluationResult,
+    });
+  } catch (error) {
+    res.status(500).send({error});
   }
-
-  const eventuallyAvailableValue = client.getTreatment(key, split, attributes);
-
-  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
-  else asyncResult(eventuallyAvailableValue);
 };
 
 /**
@@ -43,26 +33,22 @@ const getTreatment = (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const getTreatmentWithConfig = (req, res) => {
+const getTreatmentWithConfig = async (req, res) => {
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const split = req.splitio.splitName;
   const attributes = req.splitio.attributes;
 
-  function asyncResult(evaluationResult) {
-    res.set('Cache-Control', config.get('cacheControl'))
-      .send({
-        evaluation: {
-          splitName: split,
-          treatment: evaluationResult.treatment,
-          config: evaluationResult.config
-        }
-      });
+  try {
+    const evaluationResult = await client.getTreatmentWithConfig(key, split, attributes);
+
+    res.send({
+      splitName: split,
+      treatment: evaluationResult.treatment,
+      config: evaluationResult.config,
+    });
+  } catch (error) {
+    res.status(500).send({error});
   }
-
-  const eventuallyAvailableValue = client.getTreatmentWithConfig(key, split, attributes);
-
-  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
-  else asyncResult(eventuallyAvailableValue);
 };
 
 /**
@@ -70,22 +56,25 @@ const getTreatmentWithConfig = (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const getTreatments = (req, res) => {
+const getTreatments = async (req, res) => {
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const splits = req.splitio.splitNames;
   const attributes = req.splitio.attributes;
 
-  function asyncResult(treatments) {
-    res.set('Cache-Control', config.get('cacheControl'))
-      .send({
-        evaluation: treatments,
-      });
+  try {
+    const evaluationResults = await client.getTreatments(key, splits, attributes);
+
+    const result = {};
+    Object.keys(evaluationResults).forEach(split => {
+      result[split] = {
+        treatment: evaluationResults[split]
+      };
+    });
+
+    res.send(result);
+  } catch (error) {
+    res.status(500).send({error});
   }
-
-  const eventuallyAvailableValue = client.getTreatments(key, splits, attributes);
-
-  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
-  else asyncResult(eventuallyAvailableValue);
 };
 
 /**
@@ -93,22 +82,18 @@ const getTreatments = (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const getTreatmentsWithConfig = (req, res) => {
+const getTreatmentsWithConfig = async (req, res) => {
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const splits = req.splitio.splitNames;
   const attributes = req.splitio.attributes;
 
-  function asyncResult(treatments) {
-    res.set('Cache-Control', config.get('cacheControl'))
-      .send({
-        evaluation: treatments,
-      });
+  try {
+    const evaluationResults = await client.getTreatmentsWithConfig(key, splits, attributes);
+
+    res.send(evaluationResults);
+  } catch (error) {
+    res.status(500).send({error});
   }
-
-  const eventuallyAvailableValue = client.getTreatmentsWithConfig(key, splits, attributes);
-
-  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
-  else asyncResult(eventuallyAvailableValue);
 };
 
 /**
@@ -116,86 +101,93 @@ const getTreatmentsWithConfig = (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const track = (req, res) => {
+const track = async (req, res) => {
   const key = req.splitio.key;
   const trafficType = req.splitio.trafficType;
   const eventType = req.splitio.eventType;
   const value = req.splitio.value;
   const properties = req.splitio.properties;
 
-  function asyncResult(track) {
-    if (track) res.status(200).send('Successfully queued');
-    else res.status(400);
+  try {
+    const tracked = await client.track(key, trafficType, eventType, value, properties);
+    return tracked ? res.status(200).send('Successfully queued event') : res.status(400);
+  } catch (error) {
+    res.status(500).send({error});
   }
-
-  const eventuallyAvailableValue = client.track(key, trafficType, eventType, value, properties);
-
-  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
-  else asyncResult(eventuallyAvailableValue);
 };
 
 /**
- * getAllTreatments  returns the evaluations for all treatments matching the traffic type of the provided keys.
+ * allTreatments  matches splits for passed trafficType and evaluates with passed key
+ * @param {Object} keys 
+ * @param {Object} attributes 
+ */
+const allTreatments = async (keys, attributes) => {
+  try {
+    // Grabs Splits from Manager
+    const splitViews = await manager.splits();
+
+    // Makes multiple evaluations for each (trafficType, key)
+    const evaluations = {};
+    for (let i=0; i< keys.length; i++) {
+      const key = keys[i];
+      const splitNames = filterSplitsByTT(splitViews, key.trafficType);
+      const evaluation = await client.getTreatmentsWithConfig(
+        parseKey(key.matchingKey, key.bucketingKey),
+        splitNames,
+        attributes);
+      // Saves result for each trafficType
+      evaluations[key.trafficType] = evaluation;
+    }
+
+    return evaluations;
+  } catch (error) {
+    throw Error('Error getting treatments');
+  }
+};
+
+/**
+ * getAllTreatmentsWithConfig  returns the allTreatments evaluations with configs
  * @param {*} req 
  * @param {*} res 
  */
-const getAllTreatments = (req, res) => {
-  console.log('Getting treatments.');    
-  const state = req.query;
-  let keys = [];
-  try {
-    // Keys are required.
-    keys = JSON.parse(state.keys);
-  } catch (e) {
-    res.status(400).send('There was an error parsing the provided keys. Check that the format is correct.');
-    return;
-  }
-
-  let attributes;
+const getAllTreatmentsWithConfig = async (req, res) => {
+  const keys = req.splitio.keys;
+  const attributes = req.splitio.attributes;
 
   try {
-    if (state['attributes']) {
-      attributes = JSON.parse(state['attributes']);
-    }
-  } catch (e) {
-    res.status(400).send('There was an error parsing the provided attributes. Check the format.');
-    return;
+    const treatments = await allTreatments(keys, attributes);
+    res.send(treatments);
+  } catch (error) {
+    res.status(500).send({error});
   }
+};
 
-  const splitsPromise = Promise.resolve(manager.splits()).then(views => {
-    return map(keys, key => {
-      return {
-        trafficType: key.trafficType,
-        key: parseKey(key.matchingKey, key.bucketingKey),
-        splits: filterSplitsByTT(views, key.trafficType)
-      };
-    });
-  });
+/**
+ * getAllTreatments  returns the allTreatments evaluations
+ * @param {*} req 
+ * @param {*} res 
+ */
+const getAllTreatments = async (req, res) => {
+  const keys = req.splitio.keys;
+  const attributes = req.splitio.attributes;
 
-  Promise.resolve(splitsPromise)
-    // Call getTreatments
-    .then(splitsByTT => {
-      return reduce(splitsByTT, (acc, group) => {
-        // @TODO: Support thenables here when necessary.
-        const partial = client.getTreatments(group.key, group.splits, attributes);
-
-        const results = map(partial, (treatment, feature) => {
-          return {
-            splitName: feature,
-            treatment
-          };
+  try {
+    const treatments = await allTreatments(keys, attributes);
+    // Erases the config property for treatments
+    const trafficTypes = Object.keys(treatments);
+    trafficTypes.forEach(trafficType => {
+      const splitNames = Object.keys(treatments[trafficType]);
+      if (splitNames.length > 0) {
+        Object.keys(treatments[trafficType]).forEach(split => {
+          delete treatments[trafficType][split].config;
         });
+      }
+    });
 
-        return acc.concat(results);
-      }, []);
-    })
-    // Send the response to the client
-    .then(treatments => {
-      console.log('Returning treatments.');
-      return res.set('Cache-Control', config.get('cacheControl')).type('json').send(treatments);
-    })
-    // 500 on error
-    .catch(() => res.sendStatus(500));
+    res.send(treatments);
+  } catch (error) {
+    res.status(500).send({error});
+  }
 };
 
 module.exports = {
@@ -204,5 +196,6 @@ module.exports = {
   getTreatmentWithConfig,
   getTreatmentsWithConfig,
   getAllTreatments,
+  getAllTreatmentsWithConfig,
   track,
 };

@@ -8,6 +8,7 @@ const trafficTypeValidator = require('../utils/inputValidation/trafficType');
 const eventTypeValidator = require('../utils/inputValidation/eventType');
 const valueValidator = require('../utils/inputValidation/value');
 const propertiesValidator = require('../utils/inputValidation/properties');
+const keysValidator = require('../utils/inputValidation/keys');
 const clientController = require('./client.controller');
 const { parseValidators } = require('../utils/utils');
 
@@ -90,10 +91,33 @@ const trackValidation = (req, res, next) => {
   next();
 };
 
+const allTreatmentValidation = (req, res, next) => {
+  const keysValidation = keysValidator(req.query.keys);
+  const attributesValidation = attributesValidator(req.query.attributes);
+
+  const error = parseValidators([keysValidation, attributesValidation]);
+  if (error.length) {
+    return res
+      .status(400)
+      .send({
+        error,
+      });
+  } else {
+    req.splitio = {
+      keys: keysValidation.value,
+      attributes: attributesValidation.value,
+    };
+  }
+
+  next();
+};
+
 router.get('/get-treatment', treatmentValidation, clientController.getTreatment);
 router.get('/get-treatment-with-config', treatmentValidation, clientController.getTreatmentWithConfig);
 router.get('/get-treatments', treatmentsValidation, clientController.getTreatments);
 router.get('/get-treatments-with-config', treatmentsValidation, clientController.getTreatmentsWithConfig);
 router.get('/track', trackValidation, clientController.track);
+router.get('/get-all-treatments', allTreatmentValidation, clientController.getAllTreatments);
+router.get('/get-all-treatments-with-config', allTreatmentValidation, clientController.getAllTreatmentsWithConfig);
 
 module.exports = router;

@@ -1,6 +1,3 @@
-// Utils
-const thenable = require('@splitsoftware/splitio/lib/utils/promise/thenable');
-
 // Own modules
 const sdkModule = require('../sdk');
 
@@ -12,17 +9,15 @@ const manager = sdkModule.manager;
  * @param {*} req 
  * @param {*} res 
  */
-const split = (req, res) => {
+const split = async (req, res) => {
   const splitName = req.splitio.splitName;
-
-  function asyncResult(split) {
-    res.send(split);
+  
+  try {
+    const splits = await manager.split(splitName);
+    res.send(splits);
+  } catch (error) {
+    res.status(500).send({error});
   }
-
-  const eventuallyAvailableValue = manager.split(splitName);
-
-  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
-  else asyncResult(eventuallyAvailableValue);
 };
 
 /**
@@ -30,17 +25,15 @@ const split = (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const splits = (req, res) => {
-  function asyncResult(splits) {
+const splits = async (req, res) => {
+  try {
+    const splits = await manager.splits();
     res.send({
-      splits
+      splits,
     });
+  } catch (error) {
+    res.status(500).send({error});
   }
-
-  const eventuallyAvailableValue = manager.splits();
-
-  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
-  else asyncResult(eventuallyAvailableValue);
 };
 
 /**
@@ -48,17 +41,15 @@ const splits = (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const splitNames = (req, res) => {
-  function asyncResult(splitNames) {
+const splitNames = async (req, res) => {
+  try {
+    const splitNames = await manager.names();
     res.send({
-      splits: splitNames
+      splits: splitNames,
     });
+  } catch (error) {
+    res.status(500).send({error});
   }
-
-  const eventuallyAvailableValue = manager.names();
-
-  if (thenable(eventuallyAvailableValue)) eventuallyAvailableValue.then(asyncResult);
-  else asyncResult(eventuallyAvailableValue);
 };
 
 module.exports = {

@@ -12,34 +12,38 @@ const expectErrorContaining = (response, code, message) => {
 
 const expectOk = (response, code, treatmentResult, split, config) => {
   expect(response.statusCode).toBe(code);
-  expect(response.body).toHaveProperty('evaluation');
-  expect(response.body.evaluation).toHaveProperty('treatment', treatmentResult);
-  expect(response.body.evaluation).toHaveProperty('splitName', split);
+  expect(response.body).toHaveProperty('treatment', treatmentResult);
+  expect(response.body).toHaveProperty('splitName', split);
   // eslint-disable-next-line eqeqeq
   if (config != undefined) {
-    expect(response.body.evaluation).toHaveProperty('config', config);
+    expect(response.body).toHaveProperty('config', config);
   }
 };
 
 const expectOkMultipleResults = (response, code, expectedTreatment, expectedLength) => {
   expect(response.statusCode).toBe(code);
-  expect(response.body).toHaveProperty('evaluation');
   // Check length
-  const splitNames = Object.keys(response.body.evaluation);
+  const splitNames = Object.keys(response.body);
   expect(splitNames.length).toEqual(expectedLength);
   // Iterate over splits
   const splits = Object.keys(expectedTreatment);
   splits.forEach(split => {
-    if (response.body.evaluation[split].treatment) {
-      expect(response.body.evaluation[split].treatment).toEqual(expectedTreatment[split].treatment);
+    if (response.body[split].treatment) {
+      expect(response.body[split].treatment).toEqual(expectedTreatment[split].treatment);
     } else {
-      expect(response.body.evaluation[split]).toEqual(expectedTreatment[split].treatment);
+      expect(response.body[split]).toEqual(expectedTreatment[split].treatment);
     }
     // eslint-disable-next-line no-prototype-builtins
     if (expectedTreatment[split].hasOwnProperty('config')) {
-      expect(response.body.evaluation[split].config).toEqual(expectedTreatment[split].config);
+      expect(response.body[split].config).toEqual(expectedTreatment[split].config);
     }
   });
+};
+
+const expectOkAllTreatments = (response, code, expectedTreatments, expectedLength) => {
+  expect(response.statusCode).toBe(code);
+  expect(Object.keys(response.body).length).toEqual(expectedLength);
+  expect(response.body).toEqual(expectedTreatments);
 };
 
 const getLongKey = () => {
@@ -54,6 +58,7 @@ module.exports = {
   expectError,
   expectErrorContaining,
   expectOk,
+  expectOkAllTreatments,
   expectOkMultipleResults,
   getLongKey,
 };
