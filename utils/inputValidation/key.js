@@ -13,35 +13,33 @@ const validateKeyValue = (maybeKey, type) => {
   if (isString(maybeKey)) {
     // It's a string, start by trimming the value.
     maybeKey = maybeKey.trim();
-
-    // It's aaaaaall good.
-    if (maybeKey.length > 0 && maybeKey.length <= KEY_MAX_LENGTH) return {
-      valid: true,
-      value: maybeKey,
-    };
-
-    if (maybeKey.length === 0) {
-      return {
-        valid: false,
-        error: `you passed an empty string, ${type} must be a non-empty string.`,
-      };
-    }
-
-    return {
-      valid: false,
-      error: `${type} too long, ${type} must be 250 characters or less.`,
-    };
   } else {
     if (isFinite(maybeKey)) {
+      maybeKey = maybeKey.toString();
+    } else {
       return {
-        valid: true,
-        value: maybeKey.toString(),
+        valid: false,
+        error: 'you passed an invalid key, key must be a non-empty string.',
       };
     }
   }
+
+  // It's aaaaaall good.
+  if (maybeKey.length > 0 && maybeKey.length <= KEY_MAX_LENGTH) return {
+    valid: true,
+    value: maybeKey,
+  };
+
+  if (maybeKey.length === 0) {
+    return {
+      valid: false,
+      error: `you passed an empty string, ${type} must be a non-empty string.`,
+    };
+  }
+
   return {
     valid: false,
-    error: 'you passed an invalid key, key must be a non-empty string.',
+    error: `${type} too long, ${type} must be 250 characters or less.`,
   };
 };
 
