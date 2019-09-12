@@ -1,5 +1,5 @@
 const keyValidator = require('../key');
-const { getLongKey } = require('../../testWrapper/index');
+const { getLongKey } = require('../../testWrapper');
 
 describe('key validator', () => {
   test('should return error on undefined', async (done) => {

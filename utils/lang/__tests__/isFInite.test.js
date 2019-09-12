@@ -1,6 +1,6 @@
-const { isFinite } = require('../lang');
+const { isFinite } = require('..');
 
-test('isFinite', async (done) => {
+test('isFinite', done => {
   expect(isFinite('test')).toBe(false);
   expect(isFinite(true)).toBe(false);
   expect(isFinite([])).toBe(false);

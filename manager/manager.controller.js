@@ -16,7 +16,7 @@ const split = async (req, res) => {
     const splits = await manager.split(splitName);
     res.send(splits);
   } catch (error) {
-    res.status(500);
+    res.status(500).send({error});
   }
 };
 
@@ -32,7 +32,7 @@ const splits = async (req, res) => {
       splits,
     });
   } catch (error) {
-    res.status(500);
+    res.status(500).send({error});
   }
 };
 
@@ -48,7 +48,7 @@ const splitNames = async (req, res) => {
       splits: splitNames,
     });
   } catch (error) {
-    res.status(500);
+    res.status(500).send({error});
   }
 };
 

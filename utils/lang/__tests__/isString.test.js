@@ -1,6 +1,6 @@
-const { isString } = require('../lang');
+const { isString } = require('../');
 
-test('isString', async (done) => {
+test('isString', done => {
   expect(isString(true)).toBe(false);
   expect(isString([])).toBe(false);
   expect(isString(() => true)).toBe(false);

@@ -19,8 +19,8 @@ app.use(morgan('tiny'));
 // Auth middleware
 app.use(authorization);
 // We mount our routers.
-app.use('/', clientRouter);
-app.use('/', managerRouter);
+app.use('/client', clientRouter);
+app.use('/manager', managerRouter);
 app.use('/admin', adminRouter);
 app.get('/favicon.ico', (req, res) => res.status(204));
 
