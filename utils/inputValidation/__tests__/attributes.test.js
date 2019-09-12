@@ -1,7 +1,7 @@
 const attributesValidator = require('../attributes');
 
 describe('attributes validator', () => {
-  test('should return error on invalid attributes', async (done) => {
+  test('should return error on invalid attributes', done => {
     const expected = 'attributes must be a plain object.';
 
     const result = attributesValidator('test');
@@ -12,7 +12,7 @@ describe('attributes validator', () => {
     done();
   });
 
-  test('should return error on invalid attributes 2', async (done) => {
+  test('should return error on invalid attributes 2', done => {
     const expected = 'attributes must be a plain object.';
 
     const result = attributesValidator('[]');
@@ -23,7 +23,7 @@ describe('attributes validator', () => {
     done();
   });
 
-  test('should return error on invalid attributes 3', async (done) => {
+  test('should return error on invalid attributes 3', done => {
     const expected = 'attributes must be a plain object.';
 
     const result = attributesValidator('true');
@@ -34,7 +34,7 @@ describe('attributes validator', () => {
     done();
   });
 
-  test('should be valid when attributes is an object', async (done) => {
+  test('should be valid when attributes is an object', done => {
     const result = attributesValidator('{"my-attr1":true}');
     expect(result).toHaveProperty('valid', true);
     expect(result).toHaveProperty('value', {
@@ -44,7 +44,7 @@ describe('attributes validator', () => {
     done();
   });
 
-  test('should be valid when attributes is empty object', async (done) => {
+  test('should be valid when attributes is empty object', done => {
     const result = attributesValidator('{}');
 
     expect(result).toHaveProperty('valid', true);
@@ -53,7 +53,7 @@ describe('attributes validator', () => {
     done();
   });
 
-  test('should be valid when attributes is null', async (done) => {
+  test('should be valid when attributes is null', done => {
     const result = attributesValidator();
 
     expect(result).toHaveProperty('valid', true);

@@ -1,6 +1,6 @@
-const { uniq } = require('../lang');
+const { uniq } = require('../');
 
-test('uniq', async (done) => {
+test('uniq', done => {
   expect(uniq([])).toEqual([]);
   expect(uniq(['test'])).toEqual(['test']);
   expect(uniq(['test', 'test'])).toEqual(['test']);

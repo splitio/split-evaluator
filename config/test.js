@@ -10,6 +10,7 @@ module.exports = {
   },
   // Block the ExpressJS server till the SDK is ready.
   blockUntilReady: true,
+  // Impression Listener Webhook
   impressionsPerPost: 5,
   impressionsSendRate: 300,
 };

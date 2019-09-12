@@ -3,20 +3,20 @@ process.env.SPLITIO_API_KEY = 'localhost';
 
 const request = require('supertest');
 const app = require('../../app');
-const { expectError, expectErrorContaining } = require('../../utils/testWrapper/index');
+const { expectError, expectErrorContaining } = require('../../utils/testWrapper');
 
 describe('split', () => {
   // Testing authorization
   test('should be 401 if auth is not passed', async (done) => {
     const response = await request(app)
-      .get('/split?split-name=split');
+      .get('/manager/split?split-name=split');
     expectError(response, 401, 'Unauthorized');
     done();
   });
 
   test('should be 401 if auth does not match', async (done) => {
     const response = await request(app)
-      .get('/split?split-name=split')
+      .get('/manager/split?split-name=split')
       .set('Authorization', 'invalid');
     expectError(response, 401, 'Unauthorized');
     done();
@@ -27,7 +27,7 @@ describe('split', () => {
       'you passed a null or undefined split-name, split-name must be a non-empty string.'
     ];
     const response = await request(app)
-      .get('/split')
+      .get('/manager/split')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -38,7 +38,7 @@ describe('split', () => {
       'you passed an empty split-name, split-name must be a non-empty string.'
     ];
     const response = await request(app)
-      .get('/split?split-name=')
+      .get('/manager/split?split-name=')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -49,7 +49,7 @@ describe('split', () => {
       'you passed an empty split-name, split-name must be a non-empty string.'
     ];
     const response = await request(app)
-      .get('/split?split-name=     ')
+      .get('/manager/split?split-name=     ')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
     done();
@@ -57,7 +57,7 @@ describe('split', () => {
 
   test('should be 200 and matches with passed split in YAML', async (done) => {
     const response = await request(app)
-      .get('/split?split-name=my-experiment')
+      .get('/manager/split?split-name=my-experiment')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('name', 'my-experiment');

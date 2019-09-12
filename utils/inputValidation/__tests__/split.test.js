@@ -1,7 +1,7 @@
 const splitValidator = require('../split');
 
 describe('split validator', () => {
-  test('should return error on undefined', async (done) => {
+  test('should return error on undefined', done => {
     const expected = 'you passed a null or undefined split-name, split-name must be a non-empty string.';
 
     const result = splitValidator();
@@ -12,7 +12,7 @@ describe('split validator', () => {
     done();
   });
 
-  test('should return error on empty', async (done) => {
+  test('should return error on empty', done => {
     const expected = 'you passed an empty split-name, split-name must be a non-empty string.';
 
     const result = splitValidator('');
@@ -23,7 +23,7 @@ describe('split validator', () => {
     done();
   });
 
-  test('should return error on trim', async (done) => {
+  test('should return error on trim', done => {
     const expected = 'you passed an empty split-name, split-name must be a non-empty string.';
 
     const result = splitValidator('  ');
@@ -34,7 +34,7 @@ describe('split validator', () => {
     done();
   });
 
-  test('should be valid when ok', async (done) => {
+  test('should be valid when ok', done => {
     const result = splitValidator('my-split');
     
     expect(result).toHaveProperty('valid', true);
@@ -43,7 +43,7 @@ describe('split validator', () => {
     done();
   });
 
-  test('should be valid when ok and should trim', async (done) => {
+  test('should be valid when ok and should trim', done => {
     const result = splitValidator(' my-split     ');
     
     expect(result).toHaveProperty('valid', true);
