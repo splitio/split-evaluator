@@ -59,7 +59,7 @@ describe('get-all-treatments-with-config', () => {
 
   test('should be 400 if keys is an empty array', async (done) => {
     const expected = [
-      'There should be at least one matchingKey-trafficType element.'
+      'there should be at least one matchingKey-trafficType element.'
     ];
     const response = await request(app)
       .get('/client/get-all-treatments-with-config?keys=[]')

@@ -1,25 +1,16 @@
+const errorWrapper = require('./wrapper/error');
+const okWrapper = require('./wrapper/ok');
 const lang = require('../lang');
 
 const validateProperties = (maybeProperties) => {
-  const error = {
-    valid: false,
-    error: 'properties must be a plain object.',
-  };
   // eslint-disable-next-line eqeqeq
-  if (maybeProperties == undefined) {
-    return {
-      valid: true,
-      value: null,
-    };
-  }
+  if (maybeProperties == undefined) return okWrapper(null);
+
   try {
-    const attributes = JSON.parse(maybeProperties);
-    return (lang.isObject(attributes)) ? {
-      valid: true,
-      value: attributes,
-    } : error;
+    const properties = JSON.parse(maybeProperties);
+    return (lang.isObject(properties)) ? okWrapper(properties) : errorWrapper('properties must be a plain object.');
   } catch (e) {
-    return error;
+    return errorWrapper('properties must be a plain object.');
   }
 };
 

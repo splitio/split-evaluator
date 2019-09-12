@@ -1,4 +1,4 @@
-const { isFinite } = require('../');
+const { isFinite } = require('..');
 
 test('isFinite', done => {
   expect(isFinite('test')).toBe(false);

@@ -1,13 +1,11 @@
+const errorWrapper = require('./wrapper/error');
+const okWrapper = require('./wrapper/ok');
 const lang = require('../lang');
 const splitValidator = require('./split');
 
 const validateSplits = (maybeSplits) => {
-  if (maybeSplits == undefined) { // eslint-disable-line eqeqeq
-    return {
-      valid: false,
-      error: 'you passed a null or undefined split-names, split-names must be a non-empty array.',
-    };
-  }
+  // eslint-disable-next-line eqeqeq
+  if (maybeSplits == undefined) return errorWrapper('you passed a null or undefined split-names, split-names must be a non-empty array.');
 
   maybeSplits = maybeSplits.split(',');
 
@@ -20,16 +18,10 @@ const validateSplits = (maybeSplits) => {
     });
 
     // Strip off duplicated values if we have valid split names then return
-    if (validatedArray.length) return {
-      valid: true,
-      value: lang.uniq(validatedArray),
-    };
+    if (validatedArray.length) return okWrapper(lang.uniq(validatedArray));
   }
 
-  return {
-    valid: false,
-    error: 'split-names must be a non-empty array.',
-  };
+  return errorWrapper('split-names must be a non-empty array.');
 };
 
 module.exports = validateSplits;

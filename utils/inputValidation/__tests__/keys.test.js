@@ -36,7 +36,7 @@ describe('keys validator', () => {
   });
 
   test('should return error when keys is an empty array', done => {
-    const expected = 'There should be at least one matchingKey-trafficType element.';
+    const expected = 'there should be at least one matchingKey-trafficType element.';
 
     const result = keysValidator('[]');
 
