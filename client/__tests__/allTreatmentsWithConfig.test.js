@@ -254,8 +254,8 @@ describe('get-all-treatments-with-config', () => {
         'other-experiment-2': {
           treatment: 'on',
           config: null,
-        }
-      }
+        },
+      },
     };
     const response = await request(app)
       .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":12345,"trafficType":"localhost"}]')
@@ -283,7 +283,7 @@ describe('get-all-treatments-with-config', () => {
         'other-experiment-2': {
           treatment: 'on',
           config: null,
-        }
+        },
       },
       account: {},
     };

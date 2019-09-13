@@ -250,8 +250,8 @@ describe('get-all-treatments', () => {
         },
         'other-experiment-2': {
           treatment: 'on',
-        }
-      }
+        },
+      },
     };
     const response = await request(app)
       .get('/client/get-all-treatments?keys=[{"matchingKey":12345,"trafficType":"localhost"}]')
@@ -275,7 +275,7 @@ describe('get-all-treatments', () => {
         },
         'other-experiment-2': {
           treatment: 'on',
-        }
+        },
       },
       account: {},
     };
