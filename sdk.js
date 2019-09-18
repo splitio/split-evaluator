@@ -52,6 +52,15 @@ if (process.env.SPLITIO_SCHEDULER) {
   }
 }
 
+if (process.env.SPLITIO_IMPRESSION_LISTENER) {
+  const logImpression = require('./listener');
+  settings = merge({}, settings, {
+    impressionListener: {
+      logImpression,
+    },
+  });
+}
+
 let isClientReady = false;
 
 // Our SDK factory instance.

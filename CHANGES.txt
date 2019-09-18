@@ -7,6 +7,7 @@
 * Added `inputValidation` module.
 * Added `get-treatment-with-config`, `get-treatments` and `get-treatments-with-config` and `track` APIs.
 * Added `split`, `splits` and `names` APIs.
+* Added `impressionListener`.
 
 ## 1.4.5 (October 8, 2018)
 
