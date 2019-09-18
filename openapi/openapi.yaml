@@ -106,6 +106,12 @@ components:
         error:
           type: string
           example: Unauthorized
+    NotFound:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Split my-split was not found.
     Split:
       type: object
       properties:
@@ -414,7 +420,7 @@ paths:
         - $ref: '#/components/parameters/properties'
       responses:
         '200':
-          description: OK
+          description: Successfully queued event
         '400':
           description: Bad request
           content:
@@ -457,6 +463,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
         '500':
           description: Internal server error
   /manager/splits:
