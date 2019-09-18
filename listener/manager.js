@@ -12,7 +12,6 @@ const URL = process.env.SPLITIO_IMPRESSION_LISTENER;
 // reaches the max size, it will execute an explicit flush of the impressions accumulated.
 class ImpressionManager {
   constructor() {
-    this._stopImpressionSenderTimeout = false;
     this._stopImpressionSender = false;
     this._impressionQueue = new ImpressionQueue();
   }
@@ -46,12 +45,6 @@ class ImpressionManager {
 
   start() {
     this._startImpressionsSender();
-  }
-
-  // In case we need to stop the process
-  stop() {
-    this._stopImpressionSenderTimeout && clearTimeout(this._stopImpressionSenderTimeout);
-    this._stopImpressionSender && this._stopImpressionSender();
   }
 
   trackImpression(impression) {
