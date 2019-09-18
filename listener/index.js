@@ -1,7 +1,7 @@
-const config = require('config');
-const IMPRESSIONS_PER_POST = config.get('impressionsPerPost') ? config.get('impressionsPerPost') : 500;
-const { addImpression, getSize } = require('./impressionQueue');
-const context = require('./context');
+const ImpressionManager = require('./manager');
+
+const impressionManager = new ImpressionManager();
+impressionManager.start();
 
 /**
  * logImpression  impresion listener handler
@@ -19,12 +19,7 @@ const logImpression = (impressionData) => {
   };
 
   // Adds Impression to queue
-  addImpression(impressionToAdd);
-
-  // Flushes only if is greater than equal IMPRESSIONS_PER_POST
-  if (getSize() >= IMPRESSIONS_PER_POST) {
-    context.flushAndResetTime();
-  }
+  impressionManager.trackImpression(impressionToAdd);
 };
 
 module.exports = logImpression;
