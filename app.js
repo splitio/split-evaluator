@@ -24,9 +24,14 @@ if (!EXT_API_KEY) {
 
 app.use(morgan('tiny'));
 
+// OPENAPI 3.0 Definition
+// Grabs yaml
 const openApiDefinition = YAML.load(fs.readFileSync('./openapi/openapi.yaml').toString());
+// Updates version to current one
 openApiDefinition.info.version = utils.getVersion();
+// Puts server url and port
 openApiDefinition.servers = [{url: `http://localhost:${process.env.SPLITIO_SERVER_PORT || 7548}`}];
+// Serve swagger
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(openApiDefinition));
 
 // Auth middleware
