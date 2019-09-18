@@ -25,9 +25,12 @@ class ImpressionManager {
       },
       json: true
     };
-    return impressions.length > 0 ? request(options)
+    return (impressions.length > 0) ? request(options)
       .then(() => Promise.resolve())
-      .catch(error => console.log(error && error.message)) : Promise.resolve();
+      .catch(error => {
+        console.log(error && error.message);
+        return Promise.reject(error);
+      }) : Promise.resolve();
   }
 
   _startImpressionsSender() {
