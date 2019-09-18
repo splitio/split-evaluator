@@ -1,6 +1,6 @@
-process.env.SPLITIO_EXT_API_KEY = 'test';
-process.env.SPLITIO_API_KEY = 'localhost';
-process.env.SPLITIO_IMPRESSION_LISTENER = 'http://localhost:7546';
+process.env.SPLIT_EVALUATOR_EXT_API_KEY = 'test';
+process.env.SPLIT_EVALUATOR_API_KEY = 'localhost';
+process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT = 'http://localhost:7546';
 
 const http = require('http');
 const request = require('supertest');

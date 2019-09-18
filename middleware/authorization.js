@@ -1,4 +1,4 @@
-const EXT_API_KEY = process.env.SPLITIO_EXT_API_KEY;
+const EXT_API_KEY = process.env.SPLIT_EVALUATOR_EXT_API_KEY;
 
 /**
  * authorization  checks if EXT_API_KEY matches with the one passed

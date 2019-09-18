@@ -4,7 +4,7 @@ const repeat = require('./repeat');
 const { getImpressionsToPost } = require('./impressionQueue');
 
 const IMPRESSION_SEND_RATE = config.get('impressionsSendRate') ? config.get('impressionsSendRate') : 30000;
-const url = process.env.SPLITIO_IMPRESSION_LISTENER;
+const url = process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT;
 
 /**
  * postImpressions  posts impressions to provided endpoint

@@ -6,7 +6,7 @@ const app = require('./app');
 // Used for BUR
 const client = require('./sdk').client;
 
-const PORT = process.env.SPLITIO_SERVER_PORT || 7548;
+const PORT = process.env.SPLIT_EVALUATOR_SERVER_PORT || 7548;
 
 // Only available for in memory settings.
 if (config.get('blockUntilReady')) {
