@@ -62,7 +62,7 @@ versions in sync.
 * Updated README.md.
 * Added NEWS.txt, CHANGES.txt and LICENSE files.
 * Removed docker-hub support.
-* Making SPLIT_EVALUATOR_EXT_API_KEY header optional. If it is not set, it won't be required.
+* Making SPLIT_EVALUATOR_AUTH_TOKEN header optional. If it is not set, it won't be required.
 * Adding some logs and errors for better debugging.
 * Modifying `/get-treatment` response to return the `splitName` field.
 * Modifying `/get-treatments` endpoint to receive an array of keys and return only feature flags for

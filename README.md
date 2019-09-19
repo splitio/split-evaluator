@@ -6,11 +6,11 @@ This services exposes a set of APIs to produce server side evaluation of flags b
 
 1. `nvm use`
 2. `npm install`
-3. `SPLIT_EVALUATOR_API_KEY=xxxxxxx SPLIT_EVALUATOR_EXT_API_KEY=yyyyyy SPLIT_EVALUATOR_SERVER_PORT=7548 SPLITIO_DEBUG='on' npm start`
+3. `SPLIT_EVALUATOR_API_KEY=xxxxxxx SPLIT_EVALUATOR_AUTH_TOKEN=yyyyyy SPLIT_EVALUATOR_SERVER_PORT=7548 SPLITIO_DEBUG='on' npm start`
 
    SPLIT_EVALUATOR_API_KEY could be overriden quickly, but we recommend the usage of [node-config](https://github.com/lorenwest/node-config#quick-start),
    switch the environment variable NODE_ENV. Please read the details [here](https://github.com/lorenwest/node-config#quick-start).  
-   SPLIT_EVALUATOR_EXT_API_KEY could be any value you like, against which we will compare the received Authorization header.
+   SPLIT_EVALUATOR_AUTH_TOKEN could be any value you like, against which we will compare the received Authorization header.
    SPLIT_EVALUATOR_SERVER_PORT is the port number on which the server will run, default is 7548.  
    For logging details see the [NodeJS SDK docs](https://docs.split.io/docs/nodejs-sdk-overview#section-logging).  
 
@@ -30,7 +30,7 @@ This services exposes a set of APIs to produce server side evaluation of flags b
         (Optional) This should be a json string of the attributes you want to include in the getTreatment call.
 
     EXAMPLE
-      curl 'http://localhost:4444/get-treatment?key=my-customer-key&split-name=my-experiment&attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization: {SPLIT_EVALUATOR_EXT_API_KEY}'
+      curl 'http://localhost:4444/get-treatment?key=my-customer-key&split-name=my-experiment&attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization: {SPLIT_EVALUATOR_AUTH_TOKEN}'
 
     RESPONSE
       {
@@ -49,7 +49,7 @@ This services exposes a set of APIs to produce server side evaluation of flags b
         (Optional) This should be a json string of the attributes you want to include in the getTreatments call.
 
     EXAMPLE
-      curl 'http://localhost:4444/get-treatments?keys=\[\{"matchingKey":"my-first-key","trafficType":"account"\},\{"matchingKey":"my-second-key","bucketingKey":"my-bucketing-key","trafficType":"user"\}\]&attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization: {SPLIT_EVALUATOR_EXT_API_KEY}'
+      curl 'http://localhost:4444/get-treatments?keys=\[\{"matchingKey":"my-first-key","trafficType":"account"\},\{"matchingKey":"my-second-key","bucketingKey":"my-bucketing-key","trafficType":"user"\}\]&attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization: {SPLIT_EVALUATOR_AUTH_TOKEN}'
 
     RESPONSE
       [
@@ -63,7 +63,7 @@ This services exposes a set of APIs to produce server side evaluation of flags b
       /admin/version
 
     EXAMPLE 
-      curl 'http//localhost:4444/admin/version' -H 'Authorization: {SPLIT_EVALUATOR_EXT_API_KEY}'
+      curl 'http//localhost:4444/admin/version' -H 'Authorization: {SPLIT_EVALUATOR_AUTH_TOKEN}'
       
     RESPONSE
       {
@@ -76,7 +76,7 @@ This services exposes a set of APIs to produce server side evaluation of flags b
       /admin/machine
 
     EXAMPLE 
-      curl 'http//localhost:4444/admin/machine' -H 'Authorization: {SPLIT_EVALUATOR_EXT_API_KEY}'
+      curl 'http//localhost:4444/admin/machine' -H 'Authorization: {SPLIT_EVALUATOR_AUTH_TOKEN}'
       
     RESPONSE
       {
@@ -88,7 +88,7 @@ This services exposes a set of APIs to produce server side evaluation of flags b
       /admin/ping
 
     EXAMPLE 
-      curl 'http//localhost:4444/admin/ping' -H 'Authorization: {SPLIT_EVALUATOR_EXT_API_KEY}'
+      curl 'http//localhost:4444/admin/ping' -H 'Authorization: {SPLIT_EVALUATOR_AUTH_TOKEN}'
       
     RESPONSE
       200: 'pong'
@@ -97,7 +97,7 @@ This services exposes a set of APIs to produce server side evaluation of flags b
       /admin/healthcheck
 
     EXAMPLE 
-      curl 'http//localhost:4444/admin/healthcheck' -H 'Authorization: {SPLIT_EVALUATOR_EXT_API_KEY}'
+      curl 'http//localhost:4444/admin/healthcheck' -H 'Authorization: {SPLIT_EVALUATOR_AUTH_TOKEN}'
       
     RESPONSE
       200: 'Split Evaluator working as expected.'
@@ -107,7 +107,7 @@ This services exposes a set of APIs to produce server side evaluation of flags b
       /admin/uptime
 
     EXAMPLE 
-      curl 'http//localhost:4444/admin/uptime' -H 'Authorization: {SPLIT_EVALUATOR_EXT_API_KEY}'
+      curl 'http//localhost:4444/admin/uptime' -H 'Authorization: {SPLIT_EVALUATOR_AUTH_TOKEN}'
       
     RESPONSE
       200: '0d 23h 5m 10s'
@@ -132,7 +132,7 @@ docker run -e SPLIT_EVALUATOR_API_KEY={YOUR_API_KEY} -e SPLITIO_DEBUG='off' -e S
 **NOTE:** *SPLITIO_DEBUG & SPLIT_EVALUATOR_SERVER_PORT are optionals*
 
 #### Configs:
-`SPLIT_EVALUATOR_EXT_API_KEY` : Callhome will validate every request against Authorization header. This is not a Split API key but an arbitrary value.  
+`SPLIT_EVALUATOR_AUTH_TOKEN` : Callhome will validate every request against Authorization header. This is not a Split API key but an arbitrary value.  
 `SPLIT_EVALUATOR_API_KEY` : Api-Key for you Split Environment.  
 `SPLITIO_DEBUG` : (Optional) Usable for enabling/disabling the logs of the SDK. By default they are off.  
 `SPLIT_EVALUATOR_SERVER_PORT` :  TCP Port of the server inside the container.
