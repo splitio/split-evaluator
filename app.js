@@ -26,6 +26,7 @@ const openApiDefinition = YAML.load(fs.readFileSync('./openapi/openapi.yaml').to
 // Informs warn and remove security tag
 if (!EXT_API_KEY) {
   delete openApiDefinition.security;
+  delete openApiDefinition.components.securitySchemes;
   console[console.warn ? 'warn' : 'log']('External API key not provided. If you want a security filter use the EXT_API_KEY environment variable as explained on the README file.');
 }
 // Updates version to current one
