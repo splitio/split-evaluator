@@ -1,41 +1,7 @@
 const path = require('path');
+const { nullOrEmpty, parseNumber, validUrl } = require('./validators');
 
-const throwError = (msg) => {
-  console.log(msg);
-  throw new Error(msg);
-};
-
-const isUndefined = (name) => {
-  const input = process.env[name];
-  // eslint-disable-next-line eqeqeq
-  if (input == undefined) throwError(`you passed a null or undefined ${name}, ${name} must be a non-empty string.`);
-  return input;
-};
-
-const isEmpty = (name) => {
-  const trimmed = process.env[name].trim();
-  if (trimmed.length === 0) throwError(`you passed an empty ${name}, ${name} must be a non-empty string.`);
-  return trimmed;
-};
-
-const nullOrEmpty = (name) => {
-  isUndefined(name);
-  return isEmpty(name);
-};
-
-const parseNumber = (name) => {
-  const input = process.env[name];
-  // eslint-disable-next-line eqeqeq
-  if (input == undefined) return null;
-
-  const trimmed = input.trim();
-  if (trimmed.length === 0) throwError(`you passed an empty ${name}, ${name} must be a non-empty string.`);
-  const inputNumber = Number(trimmed);
-  if (isNaN(inputNumber)) throwError(`you passed an invalid ${name}, ${name} must be a valid convertion number.`);
-  return inputNumber;
-};
-
-const getSDKConfigs = () => {
+const getConfigs = () => {
   const configs = {
     features: path.join(__dirname, 'split.yml'),
   };
@@ -80,7 +46,7 @@ const getSDKConfigs = () => {
   if (sdk) urls.sdk = sdk;
 
   // IMPRESSION LISTENER
-  if (process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT && isEmpty('SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT') !== null) {
+  if (process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT && validUrl('SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT')) {
     console.log('Setting impression listener.');
     const logImpression = require('../../listener/');
     configs.impressionListener = {
@@ -101,4 +67,4 @@ const getSDKConfigs = () => {
   return configs;
 };
 
-module.exports = getSDKConfigs;
+module.exports = getConfigs;

@@ -37,7 +37,12 @@ describe('getConfigs', () => {
 
     // Test ok
     process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT = 'something';
-    expect(() => settings().not.toThrow());
+    expect(() => settings().toThrow());
+
+    process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT = '1234567';
+    expect(() => settings().toThrow());
+
+    process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT = 'http://localhost:1111/impressions';
 
     const options = settings();
     expect(options).toHaveProperty('core', { authorizationKey: 'something'});
@@ -79,7 +84,7 @@ describe('getConfigs', () => {
     process.env.SPLIT_EVALUATOR_EVENTS_QUEUE_SIZE = '100';
     expect(() => settings().toThrow());
 
-    process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT = 'something';
+    process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT = 'https://127.0.0.1';
     expect(() => settings().not.toThrow());
 
     const options = settings();
