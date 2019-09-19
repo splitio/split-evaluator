@@ -8,7 +8,7 @@ const validUrl = (name) => {
   if (/^((https?:\/\/)|(www.))(?:([a-zA-Z]+)(\.([a-zA-Z]+))*|(\d+\.\d+.\d+.\d+))(:\d{1,5})?(\/.*)?$/.test(url)) {
     return url;
   }
-  throwError(`${url} you passed an invalid url.`);
+  throwError(`you passed an invalid url for ${name}. Received "${url}".`);
 };
 
 const isUndefined = (name) => {
@@ -37,12 +37,32 @@ const parseNumber = (name) => {
 
   const trimmed = isEmpty(name);
   const inputNumber = Number(trimmed);
-  if (isNaN(inputNumber)) throwError(`you passed an invalid ${name}, ${name} must be a valid convertion number.`);
+  if (isNaN(inputNumber)) throwError(`you passed an invalid ${name}, ${name} must be a valid number.`);
   return inputNumber;
+};
+
+const validLogLevel = (name) => {
+  const input = process.env[name];
+
+  // eslint-disable-next-line eqeqeq
+  if (input == undefined) return null;
+
+  const logLevel = isEmpty(name).toUpperCase();
+  switch(logLevel) {
+    case 'DEBUG':
+    case 'INFO':
+    case 'WARN':
+    case 'ERROR':
+    case 'NONE':
+      return logLevel;
+    default:
+      throwError(`you passed ${logLevel} is an invalid log level, ${name} accepts NONE|DEBUG|INFO|WARN|ERROR`);
+  }
 };
 
 module.exports = {
   validUrl,
+  validLogLevel,
   nullOrEmpty,
   parseNumber,
 };

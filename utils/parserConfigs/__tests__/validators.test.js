@@ -1,4 +1,4 @@
-const { nullOrEmpty, parseNumber, validUrl } = require('../validators');
+const { nullOrEmpty, parseNumber, validUrl, validLogLevel } = require('../validators');
 
 describe('validators', () => {
   test('nullOrEmpty', done => {
@@ -33,6 +33,21 @@ describe('validators', () => {
     expect(() => validUrl('www.test.com:12345').not.toThrow());
     expect(() => validUrl('www.test.com:12345/impr').not.toThrow());
     expect(() => validUrl('www.test.com/impr').not.toThrow());
+    done();
+  });
+
+  test('validLogLevel', done => {
+    expect(() => validLogLevel().not.toThrow());
+    expect(() => validLogLevel('').toThrow());
+    expect(() => validLogLevel('   ').toThrow());
+    expect(() => validLogLevel('a  ').toThrow());
+    expect(() => validLogLevel('INFO').not.toThrow());
+    expect(() => validLogLevel('info ').not.toThrow());
+    expect(() => validLogLevel('WARN').not.toThrow());
+    expect(() => validLogLevel('warn').not.toThrow());
+    expect(() => validLogLevel('ERROR').not.toThrow());
+    expect(() => validLogLevel('NONE').not.toThrow());
+    expect(() => validLogLevel('DEBUG').not.toThrow());
     done();
   });
 });

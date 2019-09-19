@@ -1,15 +1,15 @@
 const path = require('path');
-const { nullOrEmpty, parseNumber, validUrl } = require('./validators');
+const { nullOrEmpty, parseNumber, validUrl, validLogLevel } = require('./validators');
 
 const getConfigs = () => {
   const configs = {
     features: path.join(__dirname, 'split.yml'),
   };
 
-  // DEBUG
-  if (process.env.SPLIT_EVALUATOR_LOG_DEBUG && (process.env.SPLIT_EVALUATOR_LOG_DEBUG.toLowerCase() === 'true')) {
-    console.log('Setting debug level true');
-    configs.debug = true;
+  // LOG LEVEL
+  const logLevel = validLogLevel('SPLIT_EVALUATOR_LOG_LEVEL');
+  if (logLevel) {
+    configs.logLevel = logLevel;
   }
 
   // CORE OPTIONS

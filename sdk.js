@@ -4,10 +4,18 @@
 const SplitFactory = require('@splitsoftware/splitio').SplitFactory;
 const settings = require('./utils/parserConfigs')();
 
-let isClientReady = false;
+const logLevel = settings.logLevel;
+delete settings.logLevel;
 
+let isClientReady = false;
 // Our SDK factory instance.
 const factory = SplitFactory(settings);
+
+if (logLevel) {
+  console.log('Setting log level with', logLevel);
+  factory.Logger.setLogLevel(logLevel);
+}
+
 // Our client.
 const client = factory.client();
 // Our manager.

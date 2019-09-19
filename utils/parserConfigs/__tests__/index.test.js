@@ -1,7 +1,6 @@
 const settings = require('../index');
 
 describe('getConfigs', () => {
-  // Testing authorization
   test('apikey', done => {
     // Test null
     expect(() => settings().toThrow());
@@ -23,6 +22,50 @@ describe('getConfigs', () => {
     expect(options).not.toHaveProperty('impressionListener');
     expect(options).not.toHaveProperty('scheduler');
     expect(options).not.toHaveProperty('urls');
+    done();
+  });
+
+  test('log level', done => {
+    process.env.SPLIT_EVALUATOR_API_KEY = 'something';
+
+    // Test empty
+    process.env.SPLIT_EVALUATOR_LOG_LEVEL = '';
+    expect(() => settings().toThrow());
+
+    // Test wrong level
+    process.env.SPLIT_EVALUATOR_LOG_LEVEL = 'WRONG';
+    expect(() => settings().toThrow());
+
+    // Test INFO
+    process.env.SPLIT_EVALUATOR_LOG_LEVEL = 'INFO';
+    expect(() => settings().not.toThrow());
+    const info = settings();
+    expect(info).toHaveProperty('logLevel', 'INFO');
+
+    // Test WARN
+    process.env.SPLIT_EVALUATOR_LOG_LEVEL = 'WARN';
+    expect(() => settings().not.toThrow());
+    const warn = settings();
+    expect(warn).toHaveProperty('logLevel', 'WARN');
+
+    // Test ERROR
+    process.env.SPLIT_EVALUATOR_LOG_LEVEL = 'ERROR';
+    expect(() => settings().not.toThrow());
+    const error = settings();
+    expect(error).toHaveProperty('logLevel', 'ERROR');
+
+    // Test NONE
+    process.env.SPLIT_EVALUATOR_LOG_LEVEL = 'NONE';
+    expect(() => settings().not.toThrow());
+    const none = settings();
+    expect(none).toHaveProperty('logLevel', 'NONE');
+
+    // Test DEBUG
+    process.env.SPLIT_EVALUATOR_LOG_LEVEL = 'DEBUG';
+    expect(() => settings().not.toThrow());
+    const debug = settings();
+    expect(debug).toHaveProperty('logLevel', 'DEBUG');
+
     done();
   });
 
