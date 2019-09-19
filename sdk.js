@@ -2,12 +2,7 @@
 // SDK initialization and factory instanciation.
 //
 const SplitFactory = require('@splitsoftware/splitio').SplitFactory;
-const context = require('./listener/context');
 const settings = require('./utils/parserConfigs')();
-
-if (settings.impressionListener) {
-  context.start();
-}
 
 let isClientReady = false;
 

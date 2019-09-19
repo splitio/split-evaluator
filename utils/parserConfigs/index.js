@@ -1,5 +1,4 @@
 const path = require('path');
-const logImpression = require('../../listener/impressionListener');
 
 const throwError = (msg) => {
   console.log(msg);
@@ -83,6 +82,7 @@ const getSDKConfigs = () => {
   // IMPRESSION LISTENER
   if (process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT && isEmpty('SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT') !== null) {
     console.log('Setting impression listener.');
+    const logImpression = require('../../listener/');
     configs.impressionListener = {
       logImpression,
     };
