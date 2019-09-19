@@ -18,15 +18,16 @@ const utils = require('./utils/utils');
 
 const EXT_API_KEY = process.env.SPLITIO_EXT_API_KEY;
 
-if (!EXT_API_KEY) {
-  console[console.warn ? 'warn' : 'log']('External API key not provided. If you want a security filter use the EXT_API_KEY environment variable as explained on the README file.');
-}
-
 app.use(morgan('tiny'));
 
 // OPENAPI 3.0 Definition
 // Grabs yaml
 const openApiDefinition = YAML.load(fs.readFileSync('./openapi/openapi.yaml').toString());
+// Informs warn and remove security tag
+if (!EXT_API_KEY) {
+  delete openApiDefinition.security;
+  console[console.warn ? 'warn' : 'log']('External API key not provided. If you want a security filter use the EXT_API_KEY environment variable as explained on the README file.');
+}
 // Updates version to current one
 openApiDefinition.info.version = utils.getVersion();
 // Puts server url and port
