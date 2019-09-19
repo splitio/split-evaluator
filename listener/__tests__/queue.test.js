@@ -1,3 +1,6 @@
+process.env.SPLITIO_EXT_API_KEY = 'test';
+process.env.SPLITIO_API_KEY = 'localhost';
+
 const ImpressionQueue = require('../queue');
 
 const impression1 = {

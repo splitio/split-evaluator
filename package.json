@@ -38,7 +38,8 @@
     "lodash": "^4.17.15",
     "morgan": "^1.9.1",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.7"
+    "request-promise-native": "^1.0.7",
+    "swagger-ui-express": "^4.0.7"
   },
   "engines": {
     "node": "10.15.1",
