@@ -44,7 +44,7 @@ const healthcheck = (req, res) => {
 const version = (req, res) => {
   console.log('Getting version.');
   const version = utils.getVersion();
-  const parts = sdk.settings.version.split('-');
+  const parts = sdk.settings.sdkVersion.split('-');
   const sdkLanguage = parts[0];
   const sdkVersion = parts.slice(1).join('-');
 
