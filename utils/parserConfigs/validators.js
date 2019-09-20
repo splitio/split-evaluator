@@ -48,16 +48,9 @@ const validLogLevel = (name) => {
   if (input == undefined) return null;
 
   const logLevel = isEmpty(name).toUpperCase();
-  switch(logLevel) {
-    case 'DEBUG':
-    case 'INFO':
-    case 'WARN':
-    case 'ERROR':
-    case 'NONE':
-      return logLevel;
-    default:
-      throwError(`you passed ${logLevel} is an invalid log level, ${name} accepts NONE|DEBUG|INFO|WARN|ERROR`);
-  }
+  const validLevels = ['DEBUG', 'INFO', 'WARN', 'ERROR', 'NONE'];
+  if (validLevels.includes(logLevel)) return logLevel;
+  throwError(`you passed ${logLevel} is an invalid log level, ${name} accepts NONE|DEBUG|INFO|WARN|ERROR`);
 };
 
 module.exports = {
