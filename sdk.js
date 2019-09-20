@@ -3,6 +3,7 @@
 //
 const SplitFactory = require('@splitsoftware/splitio').SplitFactory;
 const settings = require('./utils/parserConfigs')();
+const utils = require('./utils/utils');
 
 const logLevel = settings.logLevel;
 delete settings.logLevel;
@@ -10,6 +11,7 @@ delete settings.logLevel;
 let isClientReady = false;
 // Our SDK factory instance.
 const factory = SplitFactory(settings);
+factory.settings.version = `evaluator-${utils.getVersion()}`;
 
 if (logLevel) {
   console.log('Setting log level with', logLevel);

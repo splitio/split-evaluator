@@ -6,136 +6,12 @@ This services exposes a set of APIs to produce server side evaluation of flags b
 
 1. `nvm use`
 2. `npm install`
-3. `SPLIT_EVALUATOR_API_KEY=xxxxxxx SPLIT_EVALUATOR_AUTH_TOKEN=yyyyyy SPLIT_EVALUATOR_SERVER_PORT=7548 SPLITIO_DEBUG='on' npm start`
+3. `SPLIT_EVALUATOR_API_KEY=xxxxxxx SPLIT_EVALUATOR_AUTH_TOKEN=yyyyyy SPLIT_EVALUATOR_SERVER_PORT=7548 SPLIT_EVALUATOR_LOG_LEVEL=debug npm start`
 
    SPLIT_EVALUATOR_API_KEY could be overriden quickly, but we recommend the usage of [node-config](https://github.com/lorenwest/node-config#quick-start),
    switch the environment variable NODE_ENV. Please read the details [here](https://github.com/lorenwest/node-config#quick-start).  
    SPLIT_EVALUATOR_AUTH_TOKEN could be any value you like, against which we will compare the received Authorization header.
    SPLIT_EVALUATOR_SERVER_PORT is the port number on which the server will run, default is 7548.  
-   For logging details see the [NodeJS SDK docs](https://docs.split.io/docs/nodejs-sdk-overview#section-logging).  
-
-## Services
-
-    GET
-      /get-treatment
-
-    QUERY PARAMS
-      key:
-        This is the key used in the getTreatment call.
-      bucketing-key:
-        (Optional) This is the bucketing key used in the getTreatment call.
-      split-name:
-        This should be the name of the split you want to include in the getTreatment call.
-      attributes:
-        (Optional) This should be a json string of the attributes you want to include in the getTreatment call.
-
-    EXAMPLE
-      curl 'http://localhost:4444/get-treatment?key=my-customer-key&split-name=my-experiment&attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization: {SPLIT_EVALUATOR_AUTH_TOKEN}'
-
-    RESPONSE
-      {
-        "splitName": "my-experiment",
-        "treatment": "on"
-      }
-
-    GET
-      /get-treatments
-
-    QUERY PARAMS
-      keys:
-        This is the array of keys to be used in the getTreatments call. Each key should specify a `matchingKey` 
-        and a `trafficType`. You can also specify a `bucketingKey`.
-      attributes:
-        (Optional) This should be a json string of the attributes you want to include in the getTreatments call.
-
-    EXAMPLE
-      curl 'http://localhost:4444/get-treatments?keys=\[\{"matchingKey":"my-first-key","trafficType":"account"\},\{"matchingKey":"my-second-key","bucketingKey":"my-bucketing-key","trafficType":"user"\}\]&attributes=\{"attribute1":"one","attribute2":2,"attribute3":true\}' -H 'Authorization: {SPLIT_EVALUATOR_AUTH_TOKEN}'
-
-    RESPONSE
-      [
-        { "splitName": "my-experiment", "treatment":"on" },
-        { "splitName": "my-second-experiment", "treatment":"off" },
-        ...
-        { "splitName": "my-last-experiment", "treatment":"visa" }
-      ]
-
-    GET 
-      /admin/version
-
-    EXAMPLE 
-      curl 'http//localhost:4444/admin/version' -H 'Authorization: {SPLIT_EVALUATOR_AUTH_TOKEN}'
-      
-    RESPONSE
-      {
-        version: '1.0.2',
-        sdk: 'nodejs',
-        sdkVersion: '9.3.4'
-      }
-
-    GET 
-      /admin/machine
-
-    EXAMPLE 
-      curl 'http//localhost:4444/admin/machine' -H 'Authorization: {SPLIT_EVALUATOR_AUTH_TOKEN}'
-      
-    RESPONSE
-      {
-        ip: '10.0.0.125',
-        name: 'machine_name'
-      }
-    
-    GET 
-      /admin/ping
-
-    EXAMPLE 
-      curl 'http//localhost:4444/admin/ping' -H 'Authorization: {SPLIT_EVALUATOR_AUTH_TOKEN}'
-      
-    RESPONSE
-      200: 'pong'
-    
-    GET 
-      /admin/healthcheck
-
-    EXAMPLE 
-      curl 'http//localhost:4444/admin/healthcheck' -H 'Authorization: {SPLIT_EVALUATOR_AUTH_TOKEN}'
-      
-    RESPONSE
-      200: 'Split Evaluator working as expected.'
-      500: 'Split evaluator engine is not evaluating traffic properly.'
-
-    GET 
-      /admin/uptime
-
-    EXAMPLE 
-      curl 'http//localhost:4444/admin/uptime' -H 'Authorization: {SPLIT_EVALUATOR_AUTH_TOKEN}'
-      
-    RESPONSE
-      200: '0d 23h 5m 10s'
-
-
-## Running the service in Docker container
-
-### Command to build & run the docker container :
-By default te server uses the port 7548, which is the one exposed by the container.
-You can use a different one by setting the `SPLIT_EVALUATOR_SERVER_PORT` environment variable,
-but their exposure of that port to the host will depend on your settings.
-_You can just leave the default port and map it to whatever port you need_
-
-*Pull the image:* `docker pull splitsoftware/split-evaluator:<VERSION>`  
-
-*Run the container:*  
-
-```shell
-docker run -e SPLIT_EVALUATOR_API_KEY={YOUR_API_KEY} -e SPLITIO_DEBUG='off' -e SPLIT_EVALUATOR_SERVER_PORT=7549 -p 4444:7549 splitsoftware/split-evaluator:<VERSION>
-```
-
-**NOTE:** *SPLITIO_DEBUG & SPLIT_EVALUATOR_SERVER_PORT are optionals*
-
-#### Configs:
-`SPLIT_EVALUATOR_AUTH_TOKEN` : Callhome will validate every request against Authorization header. This is not a Split API key but an arbitrary value.  
-`SPLIT_EVALUATOR_API_KEY` : Api-Key for you Split Environment.  
-`SPLITIO_DEBUG` : (Optional) Usable for enabling/disabling the logs of the SDK. By default they are off.  
-`SPLIT_EVALUATOR_SERVER_PORT` :  TCP Port of the server inside the container.
 
 ## Build Docker Image
 This command must be executed at root folder
@@ -153,3 +29,36 @@ Pushing `latest` image. If tag is not explicit on `docker pull` command, the tag
 docker build -t splitsoftware/split-evaluator:latest .
 docker push splitsoftware/split-evaluator:latest
 ```
+
+## Documentation
+For further information about Split Evaluator you can visit our [official SDK documentation](https://help.split.io/hc/en-us/articles/360020037072-Split-Evaluator).
+
+### About Split:
+Split is the leading platform for feature experimentation, empowering businesses of all sizes to make smarter product decisions. Companies like Vevo, Twilio, and LendingTree rely on Split to securely release new features, target them to customers, and measure the impact of features on their customer experience metrics. Founded in 2015, Split's team comes from some of the most innovative enterprises in Silicon Valley, including Google, LinkedIn, Salesforce and Databricks. Split is based in Redwood City, California and backed by Accel Partners and Lightspeed Venture Partners.
+
+Our platform is a unified solution for continuous delivery and full-stack experimentation. Split unifies DevOps and product management, helping agile engineering and product teams accelerate the pace of product delivery and make data-driven decisions, through our robust feature flagging and extensive experimentation capabilities. With Split, organizations can now accelerate time to value, mitigate risk, and drive better outcomes, all in a unified platform.
+
+To learn more about Split, contact hello@split.io, or start a 14-day trial at https://www.split.io/signup/.
+
+Split has built and maintains a SDKs for:
+
+* Java [Github](https://github.com/splitio/java-client) [Docs](http://docs.split.io/docs/java-sdk-guide)
+* Javascript [Github](https://github.com/splitio/javascript-client) [Docs](http://docs.split.io/docs/javascript-sdk-overview)
+* Node [Github](https://github.com/splitio/javascript-client) [Docs](http://docs.split.io/docs/nodejs-sdk-overview)
+* .NET [Github](https://github.com/splitio/.net-client) [Docs](http://docs.split.io/docs/net-sdk-overview)
+* Ruby [Github](https://github.com/splitio/ruby-client) [Docs](http://docs.split.io/docs/ruby-sdk-overview)
+* PHP [Github](https://github.com/splitio/php-client) [Docs](http://docs.split.io/docs/php-sdk-overview)
+* Python [Github](https://github.com/splitio/python-client) [Docs](http://docs.split.io/docs/python-sdk-overview)
+* GO [Github](https://github.com/splitio/go-client) [Docs](http://docs.split.io/docs/go-sdk-overview)
+* Android [Github](https://github.com/splitio/android-client) [Docs](https://docs.split.io/docs/android-sdk-overview)
+* IOS [Github](https://github.com/splitio/ios-client) [Docs](https://docs.split.io/docs/ios-sdk-overview)
+
+For a comprehensive list of opensource projects visit our [Github page](https://github.com/splitio?utf8=%E2%9C%93&query=%20only%3Apublic%20).
+
+**Learn more about Split:**
+
+Visit [split.io/product](https://www.split.io/product) for an overview of Split, or visit our documentation at [docs.split.io](http://docs.split.io) for more detailed information.
+
+**System Status:**
+
+We use a status page to monitor the availability of Split’s various services. You can check the current status at [status.split.io](http://status.split.io).
