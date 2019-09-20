@@ -1,5 +1,5 @@
-process.env.SPLITIO_EXT_API_KEY = 'test';
-process.env.SPLITIO_API_KEY = 'localhost';
+process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'test';
+process.env.SPLIT_EVALUATOR_API_KEY = 'localhost';
 
 const request = require('supertest');
 const app = require('../../app');
@@ -250,8 +250,8 @@ describe('get-all-treatments', () => {
         },
         'other-experiment-2': {
           treatment: 'on',
-        }
-      }
+        },
+      },
     };
     const response = await request(app)
       .get('/client/get-all-treatments?keys=[{"matchingKey":12345,"trafficType":"localhost"}]')
@@ -275,7 +275,7 @@ describe('get-all-treatments', () => {
         },
         'other-experiment-2': {
           treatment: 'on',
-        }
+        },
       },
       account: {},
     };

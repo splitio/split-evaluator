@@ -1,5 +1,5 @@
-process.env.SPLITIO_EXT_API_KEY = 'test';
-process.env.SPLITIO_API_KEY = 'localhost';
+process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'test';
+process.env.SPLIT_EVALUATOR_API_KEY = 'localhost';
 
 const os = require('os');
 const ip = require('ip');

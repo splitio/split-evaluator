@@ -13,8 +13,10 @@ const split = async (req, res) => {
   const splitName = req.splitio.splitName;
   
   try {
-    const splits = await manager.split(splitName);
-    res.send(splits);
+    const split = await manager.split(splitName);
+    return split ? res.send(split) : res.status(404).send({
+      error: `Split "${splitName}" was not found.`,
+    });
   } catch (error) {
     res.status(500).send({error});
   }

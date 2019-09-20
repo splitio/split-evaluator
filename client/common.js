@@ -18,7 +18,7 @@ const filterSplitsByTT = (splitViews, trafficType) => splitViews.reduce((acc, vi
  */
 const parseKey = (matchingKey, bucketingKey) => !bucketingKey ? matchingKey : {
   matchingKey,
-  bucketingKey
+  bucketingKey,
 };
 
 module.exports = {

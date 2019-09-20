@@ -1,7 +1,7 @@
 const trafficTypeValidator = require('../trafficType');
 
 describe('trafficType validator', () => {
-  test('should return error on undefined', async (done) => {
+  test('should return error on undefined', done => {
     const expected = 'you passed a null or undefined traffic-type, traffic-type must be a non-empty string.';
 
     const result = trafficTypeValidator();
@@ -12,7 +12,7 @@ describe('trafficType validator', () => {
     done();
   });
 
-  test('should return error on empty', async (done) => {
+  test('should return error on empty', done => {
     const expected = 'you passed an empty traffic-type, traffic-type must be a non-empty string.';
 
     const result = trafficTypeValidator('');
@@ -23,7 +23,7 @@ describe('trafficType validator', () => {
     done();
   });
 
-  test('should be valid when ok', async (done) => {
+  test('should be valid when ok', done => {
     const result = trafficTypeValidator('my-traffic-type');
     
     expect(result).toHaveProperty('valid', true);

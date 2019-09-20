@@ -67,7 +67,7 @@ const getTreatments = async (req, res) => {
     const result = {};
     Object.keys(evaluationResults).forEach(split => {
       result[split] = {
-        treatment: evaluationResults[split]
+        treatment: evaluationResults[split],
       };
     });
 

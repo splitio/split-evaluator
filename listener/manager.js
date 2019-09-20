@@ -5,7 +5,6 @@ const ImpressionQueue = require('./queue');
 
 const IMPRESSIONS_PER_POST = config.get('impressionsPerPost') ? config.get('impressionsPerPost') : 500;
 const IMPRESSION_SEND_RATE = config.get('impressionsSendRate') ? config.get('impressionsSendRate') : 30000;
-const URL = process.env.SPLITIO_IMPRESSION_LISTENER;
 
 // ImpressionManager is in charge of creating the ImpressionQueue to store impressions for listener and starts
 // the task that will flush impressions every XXX seconds configured in sdk configs. If at some point the queue
@@ -19,11 +18,11 @@ class ImpressionManager {
   static postImpressions(impressions) {
     const options = {
       method: 'POST',
-      uri: URL,
+      uri: process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT,
       body: {
         impressions,
       },
-      json: true
+      json: true,
     };
     return (impressions.length > 0) ? request(options)
       .then(() => Promise.resolve())

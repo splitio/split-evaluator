@@ -16,7 +16,7 @@ const adminRouter = require('./admin/admin.router');
 // Utils
 const utils = require('./utils/utils');
 
-const EXT_API_KEY = process.env.SPLITIO_EXT_API_KEY;
+const AUTH_TOKEN = process.env.SPLIT_EVALUATOR_AUTH_TOKEN;
 
 app.use(morgan('tiny'));
 
@@ -24,16 +24,15 @@ app.use(morgan('tiny'));
 // Grabs yaml
 const openApiDefinition = YAML.load(fs.readFileSync('./openapi/openapi.yaml').toString());
 // Informs warn and remove security tag
-if (!EXT_API_KEY) {
+if (!AUTH_TOKEN) {
   delete openApiDefinition.security;
   delete openApiDefinition.components.securitySchemes;
-  console[console.warn ? 'warn' : 'log']('External API key not provided. If you want a security filter use the EXT_API_KEY environment variable as explained on the README file.');
+  console[console.warn ? 'warn' : 'log']('External API key not provided. If you want a security filter use the SPLIT_EVALUATOR_AUTH_TOKEN environment variable as explained as explained in our documentation.');
 }
 // Updates version to current one
 openApiDefinition.info.version = utils.getVersion();
 // Puts server url and port
-openApiDefinition.servers = [{url: `http://localhost:${process.env.SPLITIO_SERVER_PORT || 7548}`}];
-// Serve swagger
+openApiDefinition.servers = [{url: `http://localhost:${process.env.SPLIT_EVALUATOR_SERVER_PORT || 7548}`}];
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(openApiDefinition));
 
 // Auth middleware
@@ -48,7 +47,7 @@ app.get('/favicon.ico', (req, res) => res.status(204));
 app.get('*', function (req, res) {
   console.log('Wrong endpoint called.');
   res.json({
-    'route': 'Sorry this page does not exist!'
+    'route': 'Sorry this page does not exist!',
   });
 });
 

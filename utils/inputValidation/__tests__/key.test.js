@@ -2,7 +2,7 @@ const keyValidator = require('../key');
 const { getLongKey } = require('../../testWrapper');
 
 describe('key validator', () => {
-  test('should return error on undefined', async (done) => {
+  test('should return error on undefined', done => {
     const expected = 'you passed a null or undefined key, key must be a non-empty string.';
 
     const result = keyValidator(null, 'key');
@@ -13,7 +13,7 @@ describe('key validator', () => {
     done();
   });
 
-  test('should return error on empty', async (done) => {
+  test('should return error on empty', done => {
     const expected = 'you passed an empty string, key must be a non-empty string.';
 
     const result = keyValidator('', 'key');
@@ -24,7 +24,7 @@ describe('key validator', () => {
     done();
   });
 
-  test('should return error on trim', async (done) => {
+  test('should return error on trim', done => {
     const expected = 'you passed an empty string, key must be a non-empty string.';
 
     const result = keyValidator('   ', 'key');
@@ -35,7 +35,7 @@ describe('key validator', () => {
     done();
   });
 
-  test('should return error when key is too long', async (done) => {
+  test('should return error when key is too long', done => {
     let keyInput = getLongKey();
 
     const expected = 'key too long, key must be 250 characters or less.';
@@ -48,7 +48,7 @@ describe('key validator', () => {
     done();
   });
 
-  test('should return error when key is invalid', async (done) => {
+  test('should return error when key is invalid', done => {
     const expected = 'you passed an invalid key, key must be a non-empty string.';
 
     const result = keyValidator(true, 'key');
@@ -59,7 +59,7 @@ describe('key validator', () => {
     done();
   });
 
-  test('should be valid when is Number', async (done) => {
+  test('should be valid when is Number', done => {
     const result = keyValidator(12345, 'key');
 
     expect(result).toHaveProperty('valid', true);
@@ -68,7 +68,7 @@ describe('key validator', () => {
     done();
   });
 
-  test('should be valid when ok', async (done) => {
+  test('should be valid when ok', done => {
     const result = keyValidator('key', 'key');
 
     expect(result).toHaveProperty('valid', true);
@@ -77,7 +77,7 @@ describe('key validator', () => {
     done();
   });
 
-  test('should be valid when ok and should trim', async (done) => {
+  test('should be valid when ok and should trim', done => {
     const result = keyValidator('   key ', 'key');
 
     expect(result).toHaveProperty('valid', true);

@@ -1,7 +1,7 @@
 const propertiesValidator = require('../properties');
 
 describe('properties validator', () => {
-  test('should return error on invalid properties', async (done) => {
+  test('should return error on invalid properties', done => {
     const expected = 'properties must be a plain object.';
 
     const result = propertiesValidator('test');
@@ -12,7 +12,7 @@ describe('properties validator', () => {
     done();
   });
 
-  test('should return error on invalid properties 2', async (done) => {
+  test('should return error on invalid properties 2', done => {
     const expected = 'properties must be a plain object.';
 
     const result = propertiesValidator('[]');
@@ -23,7 +23,7 @@ describe('properties validator', () => {
     done();
   });
 
-  test('should return error on invalid properties 3', async (done) => {
+  test('should return error on invalid properties 3', done => {
     const expected = 'properties must be a plain object.';
 
     const result = propertiesValidator('true');
@@ -34,7 +34,7 @@ describe('properties validator', () => {
     done();
   });
 
-  test('should be valid when properties is an object', async (done) => {
+  test('should be valid when properties is an object', done => {
     const result = propertiesValidator('{"my-prop":true}');
     expect(result).toHaveProperty('valid', true);
     expect(result).toHaveProperty('value', {
@@ -44,7 +44,7 @@ describe('properties validator', () => {
     done();
   });
 
-  test('should be valid when properties is empty object', async (done) => {
+  test('should be valid when properties is empty object', done => {
     const result = propertiesValidator('{}');
     
     expect(result).toHaveProperty('valid', true);
@@ -53,7 +53,7 @@ describe('properties validator', () => {
     done();
   });
 
-  test('should be valid when properties is null', async (done) => {
+  test('should be valid when properties is null', done => {
     const result = propertiesValidator();
     
     expect(result).toHaveProperty('valid', true);
