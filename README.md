@@ -17,6 +17,11 @@ This services exposes a set of APIs to produce server side evaluation of flags b
 You can pull the Docker image from [Docker Hub](https://hub.docker.com/r/splitsoftware/split-evaluator) and run it into your container environment.
 
 ```shell
+docker pull splitsoftware/split-evaluator:latest
+```
+
+### Run
+```shell
 docker run --rm --name split-evaluator \
  -p 7548:7548 \
  -e SPLIT_EVALUATOR_API_KEY=<your-sdk-api-key> \
