@@ -1,28 +1,57 @@
 {
   "name": "split-evaluator",
-  "version": "1.4.5",
-  "description": "Split-Evaluator microservice",
+  "version": "2.0.0",
+  "description": "Split-Evaluator",
+  "repository": "splitio/split-evaluator",
+  "homepage": "https://github.com/splitio/split-evaluator#readme",
+  "bugs": "https://github.com/splitio/split-evaluator/issues",
+  "license": "Apache-2.0",
+  "author": "Facundo Cabrera <facundo@split.io>",
+  "contributors": [
+    {
+      "name": "Nico Zelaya",
+      "email": "nicolas.zelaya@split.io",
+      "url": "https://github.com/NicoZelaya"
+    },
+    {
+      "name": "Matias Melograno",
+      "email": "matias.melograno@split.io",
+      "url": "https://github.com/mmelograno"
+    }
+  ],
+  "jest": {
+    "testPathIgnorePatterns": [
+      "config"
+    ]
+  },
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "lint": "eslint .",
+    "test": "NODE_ENV=test jest"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/splitio/testing-node-js.git"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/splitio/split-evaluator/issues"
-  },
-  "homepage": "https://github.com/splitio/split-evaluator#readme",
   "dependencies": {
-    "@splitsoftware/splitio": "~10.4.0",
+    "@splitsoftware/splitio": "^10.8.3",
     "config": "1.25.1",
-    "express": "^4.16.3",
-    "lodash": "^4.17.11"
+    "express": "^4.17.1",
+    "morgan": "^1.9.1",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
+    "swagger-ui-express": "^4.0.7"
   },
   "engines": {
-    "node": "6.10.3",
-    "npm": "3.10.10"
+    "node": "10.15.1",
+    "npm": "6.10.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "babel-jest": "^24.8.0",
+    "eslint": "^6.1.0",
+    "jest": "^24.8.0",
+    "nodemon": "^1.19.1",
+    "superagent": "^5.1.0",
+    "supertest": "^4.0.2"
   }
 }

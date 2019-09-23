@@ -1,15 +1,15 @@
-FROM alpine:3.5
-RUN mkdir split-evaluator
-WORKDIR split-evaluator
-EXPOSE 7548
+FROM node:10
+
+WORKDIR /usr/src/split-evaluator
+
+COPY package*.json ./
+
+RUN npm install
 
 COPY . .
 
-RUN apk update && apk upgrade
-RUN apk add bash
-RUN apk add nodejs
-RUN rm -rf /var/cache/apk/*
-RUN npm install
+EXPOSE 7548
 
-ENV SPLITIO_SERVER_PORT=7548
+ENV SPLIT_EVALUATOR_SERVER_PORT=7548
+
 ENTRYPOINT ["npm", "start"]

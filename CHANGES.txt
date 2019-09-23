@@ -1,3 +1,24 @@
+## 2.0.0 (September 23, 2019)
+
+* Added client apis: `get-treatment-with-config`, `get-treatments` and `get-treatments-with-config` and `track`.
+* Added manager apis: `split`, `splits` and `names`.
+* Added `impressionListener` webhook.
+* Added testing framework.
+* Added new env variables:
+    - SPLIT_EVALUATOR_LOG_LEVEL
+    - SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT
+    - SPLIT_EVALUATOR_SPLITS_REFRESH_RATE
+    - SPLIT_EVALUATOR_SEGMENTS_REFRESH_RATE
+    - SPLIT_EVALUATOR_METRICS_POST_RATE
+    - SPLIT_EVALUATOR_IMPRESSIONS_POST_RATE
+    - SPLIT_EVALUATOR_EVENTS_POST_RATE
+    - SPLIT_EVALUATOR_EVENTS_QUEUE_SIZE
+    For migration instructions see our official documentation.
+* Renamed SPLITIO_API_KEY in favor of SPLIT_EVALUATOR_API_KEY
+* Renamed SPLITIO_EXT_API_KEY in favor of SPLIT_EVALUATOR_AUTH_TOKEN
+* Renamed SPLITIO_SERVER_PORT in favor of SPLIT_EVALUATOR_SERVER_PORT
+* Removed SPLITIO_DEBUG and SPLITIO_SCHEDULER.
+
 ## 1.4.5 (October 8, 2018)
 
 * Updating SDK version to v10.4.0 which is the latest stable to the date. Adding tilde.
@@ -51,7 +72,7 @@ versions in sync.
 * Updated README.md.
 * Added NEWS.txt, CHANGES.txt and LICENSE files.
 * Removed docker-hub support.
-* Making SPLITIO_EXT_API_KEY header optional. If it is not set, it won't be required.
+* Making SPLIT_EVALUATOR_AUTH_TOKEN header optional. If it is not set, it won't be required.
 * Adding some logs and errors for better debugging.
 * Modifying `/get-treatment` response to return the `splitName` field.
 * Modifying `/get-treatments` endpoint to receive an array of keys and return only feature flags for

@@ -1,29 +1,28 @@
-/**
- * To be mounted at /admin
- */
-const express = require('express');
-const router = express.Router();
-
 const os = require('os');
 const ip = require('ip');
 
-const utils = require('../utils');
+const utils = require('../utils/utils');
 const sdkModule = require('../sdk');
 const sdk = sdkModule.factory;
 
 /**
- * ping method, just that.
+ * ping pings server
+ * @param {*} req 
+ * @param {*} res 
  */
-router.get('/ping', (req, res) => {
+const ping = (req, res) => {
   console.log('pong');
   res.status(200).send('pong');
-});
+};
+
 /**
- * health check method. Will respond according to SDK status. Two options:
- *    200 - Everything is OK. Ready to evaluate.
- *    500 - Something is wrong or not ready yet. Not able to perform evaluations.
+ * healthcheck  checks if SDK and environtment is healthy or not.
+ * 200 - Everything is OK. Ready to evaluate.
+ * 500 - Something is wrong or not ready yet. Not able to perform evaluations.
+ * @param {*} req 
+ * @param {*} res 
  */
-router.get('/healthcheck', (req, res) => {
+const healthcheck = (req, res) => {
   console.log('Running health check.');
   let status = 500;
   let msg = 'Split evaluator engine is not evaluating traffic properly.';
@@ -35,27 +34,33 @@ router.get('/healthcheck', (req, res) => {
 
   console.log('Health check status: ' + status + ' - ' + msg);
   res.status(status).send(msg);
-});
+};
+
 /**
- * version method. Returns the version of the Split evaluator and the SDK type and version.
+ * version  returns the current version of Split Evaluator
+ * @param {*} req 
+ * @param {*} res 
  */
-router.get('/version', (req, res) => {
+const version = (req, res) => {
   console.log('Getting version.');
   const version = utils.getVersion();
-  const parts = sdk.settings.version.split('-');
+  const parts = sdk.settings.sdkVersion.split('-');
   const sdkLanguage = parts[0];
   const sdkVersion = parts.slice(1).join('-');
 
   res.send({
     version,
     sdk: sdkLanguage,
-    sdkVersion
+    sdkVersion,
   });
-});
+};
+
 /**
- * Returns some data from the machine running the evaluator, ip and hostname.
+ * machine  returns the machine instance name and machine ip
+ * @param {*} req 
+ * @param {*} res 
  */
-router.get('/machine', (req, res) => {
+const machine = (req, res) => {
   console.log('Getting machine information.');
   let address; let hostname;
 
@@ -68,16 +73,25 @@ router.get('/machine', (req, res) => {
 
   res.send({
     ip: address,
-    name: hostname
+    name: hostname,
   });
-});
+};
+
 /**
- * Returns the uptime of the server.
+ * uptime returns the uptime of the server
+ * @param {*} req 
+ * @param {*} res 
  */
-router.get('/uptime', (req, res) => {
+const uptime = (req, res) => {
   const uptime = utils.uptime();
   console.log('Getting uptime: ' + uptime);
   res.send('' + uptime);
-});
+};
 
-module.exports = router;
+module.exports = {
+  ping,
+  healthcheck,
+  version,
+  machine,
+  uptime,
+};
