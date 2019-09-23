@@ -13,21 +13,15 @@ This services exposes a set of APIs to produce server side evaluation of flags b
    SPLIT_EVALUATOR_AUTH_TOKEN could be any value you like, against which we will compare the received Authorization header.
    SPLIT_EVALUATOR_SERVER_PORT is the port number on which the server will run, default is 7548.  
 
-## Build Docker Image
-This command must be executed at root folder
-`docker build -t splitsoftware/split-evaluator:<VERSION> . && docker build -t splitsoftware/split-evaluator:latest .`
-
-## Push Docker Image
-Before pushing image you must be logged in docker cloud. So run this command:
-`docker login`
-And push the image:
-`docker push splitsoftware/split-evaluator:<VERSION> && docker push splitsoftware/split-evaluator:latest`
-
-Pushing `latest` image. If tag is not explicit on `docker pull` command, the tag will be set by Docker engine as `latest`. So it is important create an image with this tag and push it.
+## Docker
+You can pull the Docker image from [Docker Hub](https://hub.docker.com/r/splitsoftware/split-evaluator) and run it into your container environment.
 
 ```shell
-docker build -t splitsoftware/split-evaluator:latest .
-docker push splitsoftware/split-evaluator:latest
+docker run --rm --name split-evaluator \
+ -p 7548:7548 \
+ -e SPLIT_EVALUATOR_API_KEY=<your-sdk-api-key> \
+ -e SPLIT_EVALUATOR_AUTH_TOKEN=<your-auth-token> \
+ splitsoftware/split-evaluator
 ```
 
 ## Documentation
