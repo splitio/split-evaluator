@@ -4,6 +4,7 @@ const swaggerUI = require('swagger-ui-express');
 const YAML = require('js-yaml');
 const fs = require('fs');
 const app = express();
+const { validUrl } = require('./utils/parserConfigs/validators');
 
 // Middlewares
 const authorization = require('./middleware/authorization');
@@ -32,7 +33,11 @@ if (!AUTH_TOKEN) {
 // Updates version to current one
 openApiDefinition.info.version = utils.getVersion();
 // Puts server url and port
-openApiDefinition.servers = [{url: `http://localhost:${process.env.SPLIT_EVALUATOR_SERVER_PORT || 7548}`}];
+
+// SWAGGER URL
+const swaggerUrl = process.env.SPLIT_EVALUATOR_SWAGGER_URL ? validUrl('SPLIT_EVALUATOR_SWAGGER_URL') : 'http://localhost';
+
+openApiDefinition.servers = [{url: `${swaggerUrl}:${process.env.SPLIT_EVALUATOR_SERVER_PORT || 7548}`}];
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(openApiDefinition));
 
 // Auth middleware
