@@ -5,7 +5,7 @@ const throwError = (msg) => {
 
 const validUrl = (name) => {
   const url = process.env[name];
-  if (/^((https?:\/\/)|(www.))(?:([a-zA-Z-_]+)(\.([a-zA-Z-_]+))*|(\d+\.\d+.\d+.\d+))(:\d{1,5})?(\/.*)?$/.test(url)) {
+  if (/^(https?:\/\/)?((([\da-zA-Z-]+)(\.([\da-zA-Z-]+))*)|(\d+\.\d+.\d+.\d+))(:\d{1,5})?(\/.*)?$/.test(url)) {
     return url;
   }
   throwError(`you passed an invalid url for ${name}. Received "${url}".`);
