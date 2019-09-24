@@ -7,7 +7,30 @@ This services exposes a set of APIs to produce server side evaluation of flags b
 Split Evaluator supports Node version 8 or higher.
 
 ## Getting started
-Please refer to [our official docs](https://help.split.io/hc/en-us/articles/360020037072-Split-Evaluator) for instructions on how to setup and run the Split Evaluator.
+Below is a simple example that describes the instantiation of Split Evaluator:
+
+### Usage via NodeJs
+1. Install npm packages via `npm install`
+2. Then, execute `SPLIT_EVALUATOR_API_KEY=<your-sdk-api-key> SPLIT_EVALUATOR_AUTH_TOKEN=<your-auth-token> SPLIT_EVALUATOR_SERVER_PORT=7548 SPLIT_EVALUATOR_LOG_LEVEL=debug npm start`
+
+### Docker
+1. You can pull the Docker image from [Docker Hub](https://hub.docker.com/r/splitsoftware/split-evaluator) and run it into your container environment.
+
+```shell
+docker pull splitsoftware/split-evaluator:latest
+```
+
+2. Run the image:
+
+```shell
+docker run --rm --name split-evaluator \
+ -p 7548:7548 \
+ -e SPLIT_EVALUATOR_API_KEY=<your-sdk-api-key> \
+ -e SPLIT_EVALUATOR_AUTH_TOKEN=<your-auth-token> \
+ splitsoftware/split-evaluator
+```
+
+Please refer to [our official docs](https://help.split.io/hc/en-us/articles/360020037072-Split-Evaluator) to learn about all the functionality provided by Split Evaluator and the configuration options available for tailoring it to your current application setup.
 
 ## Submitting issues 
 Split team monitors all issues submitted to this [issue tracker](https://github.com/splitio/split-evaluator/issues). We encourage to use this issue tracker to submit any bug report, feedback and feature enhancements. We'll do our best to respond in a timely manner.
