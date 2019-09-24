@@ -1,63 +1,44 @@
-# Split Evaluator service
+# Split Evaluator [![Build Status](https://api.travis-ci.com/splitio/split-evaluator.svg?branch=master)](https://api.travis-ci.com/splitio/split-evaluator)
 
+## Overview
 This services exposes a set of APIs to produce server side evaluation of flags by wrapping a NodeJS SDK.
+ 
+## Compatibility
+Split Evaluator supports Node version 8 or higher.
 
-## Usage with NodeJS
+## Getting started
+Please refer to [our official docs](https://help.split.io/hc/en-us/articles/360020037072-Split-Evaluator) for instructions on how to setup and run the Split Evaluator.
 
-1. `nvm use`
-2. `npm install`
-3. `SPLIT_EVALUATOR_API_KEY=xxxxxxx SPLIT_EVALUATOR_AUTH_TOKEN=yyyyyy SPLIT_EVALUATOR_SERVER_PORT=7548 SPLIT_EVALUATOR_LOG_LEVEL=debug npm start`
+## Submitting issues 
+Split team monitors all issues submitted to this [issue tracker](https://github.com/splitio/split-evaluator/issues). We encourage to use this issue tracker to submit any bug report, feedback and feature enhancements. We'll do our best to respond in a timely manner.
 
-   SPLIT_EVALUATOR_API_KEY could be overriden quickly, but we recommend the usage of [node-config](https://github.com/lorenwest/node-config#quick-start),
-   switch the environment variable NODE_ENV. Please read the details [here](https://github.com/lorenwest/node-config#quick-start).  
-   SPLIT_EVALUATOR_AUTH_TOKEN could be any value you like, against which we will compare the received Authorization header.
-   SPLIT_EVALUATOR_SERVER_PORT is the port number on which the server will run, default is 7548.  
+## Contributing
+Please see [Contributors Guide](CONTRIBUTORS-GUIDE.md) to find all you need to submit a PR.
+ 
+## License
+Licensed under the Apache License, Version 2.0. See: [Apache License](http://www.apache.org/licenses/).
 
-## Docker
-You can pull the Docker image from [Docker Hub](https://hub.docker.com/r/splitsoftware/split-evaluator) and run it into your container environment.
-
-```shell
-docker pull splitsoftware/split-evaluator:latest
-```
-
-### Run
-```shell
-docker run --rm --name split-evaluator \
- -p 7548:7548 \
- -e SPLIT_EVALUATOR_API_KEY=<your-sdk-api-key> \
- -e SPLIT_EVALUATOR_AUTH_TOKEN=<your-auth-token> \
- splitsoftware/split-evaluator
-```
-
-## Documentation
-For further information about Split Evaluator you can visit our [official SDK documentation](https://help.split.io/hc/en-us/articles/360020037072-Split-Evaluator).
-
-### About Split:
-Split is the leading platform for feature experimentation, empowering businesses of all sizes to make smarter product decisions. Companies like Vevo, Twilio, and LendingTree rely on Split to securely release new features, target them to customers, and measure the impact of features on their customer experience metrics. Founded in 2015, Split's team comes from some of the most innovative enterprises in Silicon Valley, including Google, LinkedIn, Salesforce and Databricks. Split is based in Redwood City, California and backed by Accel Partners and Lightspeed Venture Partners.
-
-Our platform is a unified solution for continuous delivery and full-stack experimentation. Split unifies DevOps and product management, helping agile engineering and product teams accelerate the pace of product delivery and make data-driven decisions, through our robust feature flagging and extensive experimentation capabilities. With Split, organizations can now accelerate time to value, mitigate risk, and drive better outcomes, all in a unified platform.
-
-To learn more about Split, contact hello@split.io, or start a 14-day trial at https://www.split.io/signup/.
-
+## About Split 
+Split is the leading Feature Delivery Platform for engineering teams that want to confidently release features as fast as they can develop them.
+Split’s fine-grained management, real-time monitoring, and data-driven experimentation ensure that new features will improve customer experience without breaking or degrading performance.
+Companies like Twilio, Salesforce, GoDaddy and WePay trust Split to power their feature delivery.
+ 
+To learn more about Split, contact hello@split.io, or get started with feature flags for free at https://www.split.io/signup.
+ 
 Split has built and maintains a SDKs for:
-
+ 
 * Java [Github](https://github.com/splitio/java-client) [Docs](http://docs.split.io/docs/java-sdk-guide)
 * Javascript [Github](https://github.com/splitio/javascript-client) [Docs](http://docs.split.io/docs/javascript-sdk-overview)
 * Node [Github](https://github.com/splitio/javascript-client) [Docs](http://docs.split.io/docs/nodejs-sdk-overview)
-* .NET [Github](https://github.com/splitio/.net-client) [Docs](http://docs.split.io/docs/net-sdk-overview)
+* .NET [Github](https://github.com/splitio/.net-core-client) [Docs](http://docs.split.io/docs/net-sdk-overview)
 * Ruby [Github](https://github.com/splitio/ruby-client) [Docs](http://docs.split.io/docs/ruby-sdk-overview)
 * PHP [Github](https://github.com/splitio/php-client) [Docs](http://docs.split.io/docs/php-sdk-overview)
 * Python [Github](https://github.com/splitio/python-client) [Docs](http://docs.split.io/docs/python-sdk-overview)
 * GO [Github](https://github.com/splitio/go-client) [Docs](http://docs.split.io/docs/go-sdk-overview)
 * Android [Github](https://github.com/splitio/android-client) [Docs](https://docs.split.io/docs/android-sdk-overview)
 * IOS [Github](https://github.com/splitio/ios-client) [Docs](https://docs.split.io/docs/ios-sdk-overview)
-
+ 
 For a comprehensive list of opensource projects visit our [Github page](https://github.com/splitio?utf8=%E2%9C%93&query=%20only%3Apublic%20).
-
-**Learn more about Split:**
-
+ 
+**Learn more about Split:** 
 Visit [split.io/product](https://www.split.io/product) for an overview of Split, or visit our documentation at [docs.split.io](http://docs.split.io) for more detailed information.
-
-**System Status:**
-
-We use a status page to monitor the availability of Split’s various services. You can check the current status at [status.split.io](http://status.split.io).
