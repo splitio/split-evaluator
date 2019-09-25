@@ -2,6 +2,8 @@
 
 ## Overview
 This services exposes a set of APIs to produce server side evaluation of flags by wrapping a NodeJS SDK.
+
+[![Twitter Follow](https://img.shields.io/twitter/follow/splitsoftware.svg?style=social&label=Follow&maxAge=1529000)](https://twitter.com/intent/follow?screen_name=splitsoftware)
  
 ## Compatibility
 Split Evaluator supports Node version 8 or higher.
