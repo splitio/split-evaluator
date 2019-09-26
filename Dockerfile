@@ -1,10 +1,18 @@
-FROM node:10
+# Builder stage
+FROM node:10-alpine AS builder
 
 WORKDIR /usr/src/split-evaluator
 
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
-RUN npm install
+RUN npm install --only=production
+
+# Runner stage
+FROM node:10-alpine AS runner
+
+WORKDIR /usr/src/split-evaluator
+
+COPY --from=builder /usr/src/split-evaluator/node_modules ./node_modules
 
 COPY . .
 
