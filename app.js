@@ -35,7 +35,7 @@ openApiDefinition.info.version = utils.getVersion();
 // Puts server url and port
 
 // SWAGGER URL
-const swaggerUrl = process.env.SPLIT_EVALUATOR_SWAGGER_URL ? validUrl('SPLIT_EVALUATOR_SWAGGER_URL') : `http://localhost${process.env.SPLIT_EVALUATOR_SERVER_PORT || 7548}`;
+const swaggerUrl = process.env.SPLIT_EVALUATOR_SWAGGER_URL ? validUrl('SPLIT_EVALUATOR_SWAGGER_URL') : `http://localhost:${process.env.SPLIT_EVALUATOR_SERVER_PORT || 7548}`;
 openApiDefinition.servers = [{url: swaggerUrl}];
 
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(openApiDefinition));
