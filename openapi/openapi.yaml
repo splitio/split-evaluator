@@ -60,7 +60,7 @@ components:
         type: string
       description: keys used to perform the evaluation It is a JSON string array that must include at least one 'matchingKey' and 'trafficType'.
       required: true
-      example: "{\"matchingKey\": \"customer-id\", \"trafficType\": \"user\", \"bucketingKey\": \"my-bucketing-key\"}"
+      example: "[{\"matchingKey\": \"customer-id\", \"trafficType\": \"user\", \"bucketingKey\": \"my-bucketing-key\"}]"
     event-type:
       in: query
       name: event-type
