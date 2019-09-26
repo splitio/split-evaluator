@@ -1,6 +1,7 @@
 2.0.1 (September 26, 2019)
 - Updating url regex to accept: `-`.`_` and digits.
 - Updating SDK version to v10.8.4 which is the latest stable to the date.
+- Updating docker base image to patch security vulnerabilities.
 
 2.0.0 (September 23, 2019)
 - Adding client apis: `get-treatment-with-config`, `get-treatments` and `get-treatments-with-config` and `track`.
