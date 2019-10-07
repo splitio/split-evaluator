@@ -1,19 +1,43 @@
-language: node_js
+# language: node_js
+#
+# node_js:
+#   - "lts/*"
+#
+# services:
+#   - docker
+#
+# cache: npm
+#
+# before_script:
+#   - BUILD_VERSION=$(cat package.json | grep version | head -1 | awk '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')
+#
+# script:
+#   - npm run lint
+#   - npm run test
+#
+# after_success:
+#   - docker build -t splitsoftware/split-evaluator:${BUILD_VERSION} -t splitsoftware/split-evaluator:latest .
 
-node_js:
-  - "lts/*"
+jobs:
+  include:
+    - stage: test
+      language: node_js
+      node_js:
+        - "lts/*"
+      cache: npm
+      script:
+        - npm run lint
+        - npm run test
 
-services:
-  - docker
+    - stage: docker
+      language: minimal
+      services:
+        - docker
+      before_script:
+        - BUILD_VERSION=$(cat package.json | grep version | head -1 | awk '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')
+      script:
+        - docker build -t splitsoftware/split-evaluator:${BUILD_VERSION} -t splitsoftware/split-evaluator:latest .
 
-cache: npm
-
-before_script:
-  - BUILD_VERSION=$(cat package.json | grep version | head -1 | awk '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')
-
-script:
-  - npm run lint
-  - npm run test
-
-after_success:
-  - docker build -t splitsoftware/split-evaluator:${BUILD_VERSION} -t splitsoftware/split-evaluator:latest .
+stages:
+  - name: test
+  - name: docker
