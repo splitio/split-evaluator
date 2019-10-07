@@ -23,7 +23,8 @@ jobs:
           echo "${ARTIFACTORY_PASSWORD}" | docker login -u "${ARTIFACTORY_USER}" --password-stdin "${ARTIFACTORY_REGISTRY}" &&
           docker push ${ARTIFACTORY_REGISTRY}/split-evaluator
         skip_cleanup: true
-        all_branches: true
+        on:
+          all_branches: true
 
 stages:
   - name: test
