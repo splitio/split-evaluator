@@ -23,10 +23,9 @@ jobs:
           echo "${ARTIFACTORY_PASSWORD}" | docker login -u "${ARTIFACTORY_USER}" --password-stdin "${ARTIFACTORY_REGISTRY}" &&
           docker push ${ARTIFACTORY_REGISTRY}/split-evaluator
         skip_cleanup: true
-        on:
-          branch: INFRA-1540
+        all_branches: true
 
 stages:
   - name: test
   - name: xray
-    if: (branch = INFRA-1540) OR (type = cron)
+    if: (branch = development OR branch = master OR branch = INFRA-1540) OR (type = cron)
