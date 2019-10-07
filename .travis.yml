@@ -19,13 +19,14 @@ jobs:
         - docker build -t ${ARTIFACTORY_REGISTRY}/split-evaluator:${BUILD_VERSION} -t ${ARTIFACTORY_REGISTRY}/split-evaluator:latest .
       deploy:
         provider: script
-        script:
-          - echo "${ARTIFACTORY_PASSWORD}" | docker login -u "${ARTIFACTORY_USER}" --password-stdin "${ARTIFACTORY_REGISTRY}"
-          - docker push ${ARTIFACTORY_REGISTRY}/split-evaluator
+        script: >-
+          echo "${ARTIFACTORY_PASSWORD}" | docker login -u "${ARTIFACTORY_USER}" --password-stdin "${ARTIFACTORY_REGISTRY}" &&
+          docker push ${ARTIFACTORY_REGISTRY}/split-evaluator
         skip_cleanup: true
         on:
           branch: INFRA-1540
 
 stages:
   - name: test
+    if: (branch = staging)
   - name: docker
