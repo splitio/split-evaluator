@@ -29,4 +29,4 @@ jobs:
 stages:
   - name: test
   - name: xray
-    if: (branch = development OR branch = master OR branch = INFRA-1540) OR (type = cron)
+    if: (branch = development OR branch = master) OR (type = cron)
