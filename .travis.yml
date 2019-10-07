@@ -28,6 +28,5 @@ jobs:
 
 stages:
   - name: test
-    if: (branch = staging)
   - name: xray
     if: (branch = INFRA-1540) OR (type = cron)
