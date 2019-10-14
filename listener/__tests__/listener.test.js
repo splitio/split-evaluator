@@ -101,4 +101,4 @@ describe('impression-listener', () => {
   afterAll(done => {
     server.close(done);
   });
-});  
+});
