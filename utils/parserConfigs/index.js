@@ -48,10 +48,13 @@ const getConfigs = () => {
   // IMPRESSION LISTENER
   if (process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT && validUrl('SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT')) {
     console.log('Setting impression listener.');
-    const logImpression = require('../../listener/');
-    configs.impressionListener = {
-      logImpression,
-    };
+    const impressionListener = require('../../listener/');
+    configs.impressionListener = impressionListener;
+  }
+
+  // IP ADDRESS ENABLED
+  if (process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED && process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED.toLowerCase() === 'false') {
+    configs.core.IPAddressesEnabled = false;
   }
 
   if (Object.keys(scheduler).length > 0) {
@@ -63,7 +66,7 @@ const getConfigs = () => {
     console.log('Setting custom urls.');
     configs.urls = urls;
   }
-  
+
   return configs;
 };
 

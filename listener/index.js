@@ -12,4 +12,6 @@ const logImpression = (impressionData) => {
   impressionManager.trackImpression(impressionData.impression);
 };
 
-module.exports = logImpression;
+module.exports = {
+  logImpression,
+};
