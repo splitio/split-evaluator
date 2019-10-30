@@ -1,4 +1,4 @@
-2.0.2 (October XX, 2019)
+2.0.2 (October 31, 2019)
 - Added setting SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED to disable reporting IP Addresses and Machine name back to Split cloud.
 
 2.0.1 (September 26, 2019)
