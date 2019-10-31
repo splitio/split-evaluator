@@ -69,6 +69,22 @@ describe('getConfigs', () => {
     done();
   });
 
+  test('ipAddressesEnabled', done => {
+    // Test ok
+    process.env.SPLIT_EVALUATOR_API_KEY = 'something';
+    expect(() => settings().not.toThrow());
+
+    process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED = 'false';
+    expect(() => settings().not.toThrow());
+
+    const options = settings();
+    expect(options).toHaveProperty('core', { authorizationKey: 'something', IPAddressesEnabled: false });
+    expect(options).not.toHaveProperty('impressionListener');
+    expect(options).not.toHaveProperty('scheduler');
+    expect(options).not.toHaveProperty('urls');
+    done();
+  });
+
   test('listener', done => {
     // Test empty
     process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT = '';
@@ -86,6 +102,8 @@ describe('getConfigs', () => {
     expect(() => settings().toThrow());
 
     process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT = 'http://localhost:1111/impressions';
+
+    process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED = null;
 
     const options = settings();
     expect(options).toHaveProperty('core', { authorizationKey: 'something'});
@@ -129,6 +147,8 @@ describe('getConfigs', () => {
 
     process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT = 'https://127.0.0.1';
     expect(() => settings().not.toThrow());
+
+    process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED = null;
 
     const options = settings();
     expect(options).toHaveProperty('core', { authorizationKey: 'something'});

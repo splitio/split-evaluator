@@ -1,3 +1,6 @@
+2.0.2 (October 31, 2019)
+- Added setting SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED to disable reporting IP Addresses and Machine name back to Split cloud.
+
 2.0.1 (September 26, 2019)
 - Updated url regex to accept: `-`.`_` and digits.
 - Updated SDK version to v10.8.4 which is the latest stable to the date.
