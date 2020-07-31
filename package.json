@@ -32,7 +32,7 @@
     "test": "NODE_ENV=test jest"
   },
   "dependencies": {
-    "@splitsoftware/splitio": "^10.9.0",
+    "@splitsoftware/splitio": "^10.13.0",
     "config": "1.25.1",
     "express": "^4.17.1",
     "morgan": "^1.9.1",
@@ -50,7 +50,7 @@
     "babel-jest": "^24.8.0",
     "eslint": "^6.1.0",
     "jest": "^24.8.0",
-    "nodemon": "^1.19.1",
+    "nodemon": "^2.0.4",
     "superagent": "^5.1.0",
     "supertest": "^4.0.2"
   }
