@@ -29,4 +29,4 @@ jobs:
 stages:
   - name: test
   - name: xray
-    if: (branch = development OR branch = master) OR (type = cron)
+    if: (branch = development OR branch = master OR branch = dependency_updates) OR (type = cron)
