@@ -1,4 +1,4 @@
-2.0.4 (Feb 23, 2021)
+2.0.4 (Feb 24, 2021)
 - Updated SDK version to v10.15.3 which is the latest stable to the date and includes benefitial fixes.
 - Updated many dependencies and fixing vulnerabilities.
 
