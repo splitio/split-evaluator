@@ -1,3 +1,7 @@
+2.0.4 (Feb 24, 2021)
+- Updated SDK version to v10.15.3 which is the latest stable to the date and includes benefitial fixes.
+- Updated many dependencies and fixing vulnerabilities.
+
 2.0.3 (July 31, 2020)
 - Updated SDK version to v10.14.0 which is the latest stable to the date and uses the new Streaming architecture.
 - Updated many dependencies and fixing vulnerabilities.
