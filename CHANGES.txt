@@ -1,5 +1,8 @@
+2.0.5 (Mar 18, 2021)
+- Updated SDK version to v10.15.3 which is the latest stable to the date and includes a fix for streaming when detecting a segment for the first time amongst other updates. See more here https://github.com/splitio/javascript-client/blob/development/CHANGES.txt
+
 2.0.4 (Feb 24, 2021)
-- Updated SDK version to v10.15.3 which is the latest stable to the date and includes benefitial fixes.
+- Updated SDK version to v10.15.3 which is the latest stable to the date and includes impressions deduplication as well as other benefitial fixes. In this release you might notice a memory consumption increase due to a new LRU cache but don't be alarmed unless it doesn't stabilize around 256mb increase if reaching peak allocation.
 - Updated many dependencies and fixing vulnerabilities.
 
 2.0.3 (July 31, 2020)
