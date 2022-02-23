@@ -1,6 +1,8 @@
 2.0.6 (Feb XX, 2022)
 - Updated SDK version to v10.17.2 which is the latest stable to the date and includes vulnerability fixes and improvements. See more here https://github.com/splitio/javascript-client/blob/development/CHANGES.txt
 - Updated many dependencies and fixing vulnerabilities.
+- Updated base image to node:16-alpine3.14 as well as some NPM dependencies for vulnerability fixes.
+- Updated engine settings on package json to match Node 16 version validated.
 
 2.0.5 (Mar 18, 2021)
 - Updated SDK version to v10.15.4 which is the latest stable to the date and includes a fix for streaming when detecting a segment for the first time amongst other updates. See more here https://github.com/splitio/javascript-client/blob/development/CHANGES.txt
