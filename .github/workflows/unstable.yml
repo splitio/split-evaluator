@@ -9,11 +9,6 @@ jobs:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
     steps:
-
-  build-docker-image:
-    name: Build Docker Image
-    runs-on: ubuntu-latest
-    steps:
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
