@@ -1,4 +1,4 @@
-2.0.6 (Feb XX, 2022)
+2.0.6 (Feb 24, 2022)
 - Updated SDK version to v10.17.2 which is the latest stable to the date and includes vulnerability fixes and improvements. See more here https://github.com/splitio/javascript-client/blob/development/CHANGES.txt
 - Updated many dependencies and fixing vulnerabilities.
 - Updated base image to node:16-alpine3.14 as well as some NPM dependencies for vulnerability fixes.
