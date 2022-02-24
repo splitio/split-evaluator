@@ -1,8 +1,9 @@
 name: ci
 on:
   pull_request:
-    branches-ignore:
-      - none
+    branches:
+      - development
+      - master
 
 jobs:
   build-and-test:
