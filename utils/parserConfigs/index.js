@@ -44,6 +44,8 @@ const getConfigs = () => {
   if (events) urls.events = events;
   const sdk = process.env.SPLIT_EVALUATOR_SDK_URL;
   if (sdk) urls.sdk = sdk;
+  const auth = process.env.SPLIT_EVALUATOR_AUTH_SERVICE_URL;
+  if (auth) urls.auth = auth;
 
   // IMPRESSION LISTENER
   if (process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT && validUrl('SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT')) {
