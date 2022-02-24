@@ -1,4 +1,4 @@
-# Split Evaluator 
+# Split Evaluator
 [![Build Status](https://api.travis-ci.com/splitio/split-evaluator.svg?branch=master)](https://api.travis-ci.com/splitio/split-evaluator)
 
 ## Overview
@@ -35,7 +35,7 @@ docker run --rm --name split-evaluator \
 
 Please refer to [our official docs](https://help.split.io/hc/en-us/articles/360020037072-Split-Evaluator) to learn about all the functionality provided by Split Evaluator and the configuration options available for tailoring it to your current application setup.
 
-## Submitting issues 
+## Submitting issues
 The Split team monitors all issues submitted to this [issue tracker](https://github.com/splitio/split-evaluator/issues). We encourage you to use this issue tracker to submit any bug reports, feedback, and feature enhancements. We'll do our best to respond in a timely manner.
 
 ## Contributing

@@ -1,0 +1,45 @@
+name: ci
+on:
+  pull_request:
+    branches-ignore:
+      - none
+
+jobs:
+  build-and-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'lts/*'
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
+
+  build-docker-image:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          registry: splitio-docker-dev.jfrog.io
+          username: ${{ secrets.ARTIFACTORY_DOCKER_USER }}
+          password: ${{ secrets.ARTIFACTORY_DOCKER_PASS }}
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create build version
+        run: echo "BUILD_VERSION=$(cat package.json | grep version | head -1 | awk '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')" >> $GITHUB_ENV
+
+      - name: Docker Build
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: false
