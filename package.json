@@ -41,8 +41,8 @@
     "swagger-ui-express": "^4.3.0"
   },
   "engines": {
-    "node": "16.9.0",
-    "npm": "7.21.1"
+    "node": "16.14.0",
+    "npm": "8.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
