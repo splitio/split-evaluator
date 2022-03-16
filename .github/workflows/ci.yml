@@ -1,8 +1,7 @@
 name: ci
 on:
   pull_request:
-    branches:
-      types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened]
 
 jobs:
   build-and-test:
