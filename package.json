@@ -42,7 +42,7 @@
   },
   "engines": {
     "node": "16.14.0",
-    "npm": "8.3.1"
+    "npm": "8.5.4"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",

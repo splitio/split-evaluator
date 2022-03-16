@@ -18,7 +18,9 @@ jobs:
         with:
           node-version: 16.14.0
 
-      - run: npm install -g npm@8.3.1
+      - name: Install NPM
+        run: npm install -g npm@8.5.4
+
       - run: npm ci
       - run: npm run lint
       - run: npm run test
