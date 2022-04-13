@@ -1,6 +1,6 @@
 {
   "name": "split-evaluator",
-  "version": "2.1.0-rc1",
+  "version": "2.1.0-rc2",
   "description": "Split-Evaluator",
   "repository": "splitio/split-evaluator",
   "homepage": "https://github.com/splitio/split-evaluator#readme",
@@ -28,12 +28,12 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "start:debug": "node --inspect server.js",
+    "start:debug": "node --inspect-brk server.js",
     "lint": "eslint .",
     "test": "NODE_ENV=test jest"
   },
   "dependencies": {
-    "@splitsoftware/splitio": "10.18.0",
+    "@splitsoftware/splitio": "10.17.3",
     "config": "1.25.1",
     "express": "^4.17.1",
     "morgan": "^1.9.1",
