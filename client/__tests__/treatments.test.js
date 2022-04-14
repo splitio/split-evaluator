@@ -193,6 +193,17 @@ describe('get-treatments', () => {
     done();
   });
 
+  test('should be 400 if attributes is an invalid json (POST)', async (done) => {
+    const response = await request(app)
+      .post('/client/get-treatments?key=test&split-name=my-experiment')
+      .set('Content-Type', 'application/json')
+      .send('\|\\\"/regex/i') // Syntax error parsing the JSON.
+      .set('Authorization', 'test');
+    expectError(response, 400);
+    expect(response.body.error.type).toBe('entity.parse.failed'); // validate the error
+    done();
+  });
+
   test('should be 200 if is valid attributes (GET)', async (done) => {
     const response = await request(app)
       .get('/client/get-treatments?key=test&split-names=my-experiment&attributes={"test":"test"}')

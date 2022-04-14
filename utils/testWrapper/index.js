@@ -1,7 +1,7 @@
 const expectError = (response, code, message) => {
   expect(response.statusCode).toBe(code);
   expect(response.body).toHaveProperty('error');
-  expect(response.body.error).toBe(message);
+  if (message) expect(response.body.error).toBe(message);
 };
 
 const expectErrorContaining = (response, code, message) => {
