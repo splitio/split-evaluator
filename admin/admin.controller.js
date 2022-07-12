@@ -1,5 +1,5 @@
 const os = require('os');
-const ip = require('ip');
+const ip = require('@splitsoftware/splitio/lib/utils/ip');
 
 const utils = require('../utils/utils');
 const sdkModule = require('../sdk');
