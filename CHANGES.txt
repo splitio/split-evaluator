@@ -1,5 +1,7 @@
-2.1.0 (April XX, 2022)
+2.1.0 (Jul 12, 2022)
  - Added support for attributes in post.
+ - Updated the SDK version to 10.20.0 which is the latest to the date. 
+ - Updated npm dependencies for vulnerability fixes.
 
 2.0.7 (Mar 28, 2022)
  - Updated alpine image for vulnerabilities.
