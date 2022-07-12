@@ -10,9 +10,11 @@ delete settings.logLevel;
 
 let isClientReady = false;
 // Our SDK factory instance.
-const factory = SplitFactory(settings);
-factory.settings.sdkVersion = factory.settings.version;
-factory.settings.version = `evaluator-${utils.getVersion()}`;
+const factory = SplitFactory(settings, ({settings}) => {
+  // Do not try this at home.
+  settings.sdkVersion = settings.version;
+  settings.version = `evaluator-${utils.getVersion()}`;
+});
 
 if (logLevel) {
   console.log('Setting log level with', logLevel);
