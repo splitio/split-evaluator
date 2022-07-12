@@ -2,7 +2,7 @@ process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'test';
 process.env.SPLIT_EVALUATOR_API_KEY = 'localhost';
 
 const os = require('os');
-const ip = require('ip');
+const ip = require('@splitsoftware/splitio/lib/utils/ip');
 const request = require('supertest');
 const app = require('../../app');
 const { expectError } = require('../../utils/testWrapper/index');

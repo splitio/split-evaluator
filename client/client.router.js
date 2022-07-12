@@ -136,12 +136,44 @@ const allTreatmentValidation = (req, res, next) => {
   next();
 };
 
+// Simple method to reuse the full logic of the GET version of get treatment operations,
+// by just connecting the json payload parsed on the right spot.
+const fwdAttributesFromPost = function parseAttributesMiddleware(req, res, next) {
+  req.query.attributes = req.body.attributes;
+
+  next();
+};
+
+const handleBodyParserErr = function handleBodyParserErr(error, req, res, next) {
+  if (error) {
+    return res
+      .status(400)
+      .send({
+        error,
+      });
+  }
+
+  next();
+};
+
+// Getting treatments regularly
 router.get('/get-treatment', treatmentValidation, clientController.getTreatment);
 router.get('/get-treatment-with-config', treatmentValidation, clientController.getTreatmentWithConfig);
 router.get('/get-treatments', treatmentsValidation, clientController.getTreatments);
 router.get('/get-treatments-with-config', treatmentsValidation, clientController.getTreatmentsWithConfig);
-router.get('/track', trackValidation, clientController.track);
 router.get('/get-all-treatments', allTreatmentValidation, clientController.getAllTreatments);
 router.get('/get-all-treatments-with-config', allTreatmentValidation, clientController.getAllTreatmentsWithConfig);
+
+// Getting treatments as POST's for big attribute sets
+const JSON_PARSE_OPTS = { limit: '300kb' };
+router.post('/get-treatment',express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, handleBodyParserErr, treatmentValidation, clientController.getTreatment);
+router.post('/get-treatment-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, handleBodyParserErr, treatmentValidation, clientController.getTreatmentWithConfig);
+router.post('/get-treatments', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, handleBodyParserErr, treatmentsValidation, clientController.getTreatments);
+router.post('/get-treatments-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost,  handleBodyParserErr, treatmentsValidation, clientController.getTreatmentsWithConfig);
+router.post('/get-all-treatments', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, handleBodyParserErr, allTreatmentValidation, clientController.getAllTreatments);
+router.post('/get-all-treatments-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, handleBodyParserErr, allTreatmentValidation, clientController.getAllTreatmentsWithConfig);
+
+// Other methods
+router.get('/track', trackValidation, clientController.track);
 
 module.exports = router;
