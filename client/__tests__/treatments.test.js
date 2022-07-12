@@ -197,6 +197,7 @@ describe('get-treatments', () => {
     const response = await request(app)
       .post('/client/get-treatments?key=test&split-name=my-experiment')
       .set('Content-Type', 'application/json')
+      // eslint-disable-next-line no-useless-escape
       .send('\|\\\"/regex/i') // Syntax error parsing the JSON.
       .set('Authorization', 'test');
     expectError(response, 400);
