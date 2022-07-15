@@ -91,6 +91,15 @@ components:
         type: string
       description:  A JSON string that will be a map of key value pairs that can be used to filter your metrics.
       example: "{\"prop1\": 1}"
+  requestBodies:
+    EvaluationRequestBody:
+      description: A JSON of the attributes to include in the evaluation.
+      schema:
+        type: object
+        properties:
+          attributes:
+            type: object
+      example: "{ attributes: { my-attr1: 'test' }}"
   schemas:
     InputValidation:
       type: object
@@ -158,6 +167,46 @@ paths:
         - $ref: '#/components/parameters/split-name'
         - $ref: '#/components/parameters/bucketing-key'
         - $ref: '#/components/parameters/attributes'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  splitName:
+                    type: string
+                  treatment:
+                    type: string
+                example:
+                  splitName: my-split
+                  treatment: on
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - client
+      summary: performs single evaluation but receiving the attributes on the request body.
+      description: Calls getTreatment method from the SDK.
+      parameters:
+        - $ref: '#/components/parameters/key'
+        - $ref: '#/components/parameters/split-name'
+        - $ref: '#/components/parameters/bucketing-key'
+      requestBody:
+        - $ref: '#/components/requestBodies/EvaluationRequestBody'
       responses:
         '200':
           description: Evaluation result
