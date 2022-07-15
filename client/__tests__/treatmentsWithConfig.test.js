@@ -186,7 +186,7 @@ describe('get-treatments-with-config', () => {
     done();
   });
 
-  test('should be 200 if is valid attributes', async (done) => {
+  test('should be 200 if is valid attributes (GET)', async (done) => {
     const response = await request(app)
       .get('/client/get-treatments-with-config?key=test&split-names=my-experiment&attributes={"test":"test"}')
       .set('Authorization', 'test');
@@ -199,9 +199,53 @@ describe('get-treatments-with-config', () => {
     done();
   });
 
-  test('should be 200 when attributes is null', async (done) => {
+  test('should be 200 when attributes is null (GET)', async (done) => {
     const response = await request(app)
       .get('/client/get-treatments-with-config?key=test&split-names=my-experiment,my-experiment')
+      .set('Authorization', 'test');
+    expectOkMultipleResults(response, 200, {
+      'my-experiment': {
+        treatment: 'on',
+        config: '{"desc" : "this applies only to ON treatment"}',
+      },
+    }, 1);
+    done();
+  });
+
+  test('should be 200 if is valid attributes (POST)', async (done) => {
+    const response = await request(app)
+      .post('/client/get-treatments-with-config?key=test&split-names=my-experiment')
+      .send({attributes: { test:'test' }})
+      .set('Authorization', 'test');
+    expectOkMultipleResults(response, 200, {
+      'my-experiment': {
+        treatment: 'on',
+        config: '{"desc" : "this applies only to ON treatment"}',
+      },
+    }, 1);
+    done();
+  });
+
+  test('should be 200 if is valid attributes stringified (POST)', async (done) => {
+    const response = await request(app)
+      .get('/client/get-treatments-with-config?key=test&split-names=my-experiment&attributes={"test":"test"}')
+      .send(JSON.stringify({attributes: { test:'test' }}))
+      .set('Authorization', 'test');
+    expectOkMultipleResults(response, 200, {
+      'my-experiment': {
+        treatment: 'on',
+        config: '{"desc" : "this applies only to ON treatment"}',
+      },
+    }, 1);
+    done();
+  });
+
+  test('should be 200 when attributes is null (POST)', async (done) => {
+    const response = await request(app)
+      .get('/client/get-treatments-with-config?key=test&split-names=my-experiment,my-experiment')
+      .send({
+        attributes: null,
+      })
       .set('Authorization', 'test');
     expectOkMultipleResults(response, 200, {
       'my-experiment': {

@@ -193,7 +193,19 @@ describe('get-treatments', () => {
     done();
   });
 
-  test('should be 200 if is valid attributes', async (done) => {
+  test('should be 400 if attributes is an invalid json (POST)', async (done) => {
+    const response = await request(app)
+      .post('/client/get-treatments?key=test&split-name=my-experiment')
+      .set('Content-Type', 'application/json')
+      // eslint-disable-next-line no-useless-escape
+      .send('\|\\\"/regex/i') // Syntax error parsing the JSON.
+      .set('Authorization', 'test');
+    expectError(response, 400);
+    expect(response.body.error.type).toBe('entity.parse.failed'); // validate the error
+    done();
+  });
+
+  test('should be 200 if is valid attributes (GET)', async (done) => {
     const response = await request(app)
       .get('/client/get-treatments?key=test&split-names=my-experiment&attributes={"test":"test"}')
       .set('Authorization', 'test');
@@ -205,9 +217,54 @@ describe('get-treatments', () => {
     done();
   });
 
-  test('should be 200 when attributes is null', async (done) => {
+  test('should be 200 when attributes is null (GET)', async (done) => {
     const response = await request(app)
       .get('/client/get-treatments?key=test&split-names=my-experiment,my-experiment')
+      .set('Authorization', 'test');
+    expectOkMultipleResults(response, 200, {
+      'my-experiment': {
+        treatment: 'on',
+      },
+    }, 1);
+    done();
+  });
+
+  test('should be 200 if is valid attributes (POST)', async (done) => {
+    const response = await request(app)
+      .post('/client/get-treatments?key=test&split-names=my-experiment')
+      .set('Authorization', 'test')
+      .send({
+        attributes: {test:'test'},
+      });
+    expectOkMultipleResults(response, 200, {
+      'my-experiment': {
+        treatment: 'on',
+      },
+    }, 1);
+    done();
+  });
+
+  test('should be 200 if is valid attributes as string (POST)', async (done) => {
+    const response = await request(app)
+      .post('/client/get-treatments?key=test&split-names=my-experiment')
+      .send(JSON.stringify({
+        attributes: {test:'test'},
+      }))
+      .set('Authorization', 'test');
+    expectOkMultipleResults(response, 200, {
+      'my-experiment': {
+        treatment: 'on',
+      },
+    }, 1);
+    done();
+  });
+
+  test('should be 200 if attributes is null (POST)', async (done) => {
+    const response = await request(app)
+      .post('/client/get-treatments?key=test&split-names=my-experiment,my-experiment')
+      .send({
+        attributes: null,
+      })
       .set('Authorization', 'test');
     expectOkMultipleResults(response, 200, {
       'my-experiment': {

@@ -21,7 +21,7 @@ describe('ip addresses', () => {
       process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT = 'http://localhost:7546';
       const app = require('../../app');
       const os = require('os');
-      const localIp = require('ip');
+      const localIp = require('@splitsoftware/splitio/lib/utils/ip');
   
       const sdkModule = require('../../sdk');
       sdkModule.factory.settings.impressionListener.logImpression = log;
@@ -67,7 +67,7 @@ describe('ip addresses', () => {
       process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED = 'true';
       const app = require('../../app');
       const os = require('os');
-      const localIp = require('ip');
+      const localIp = require('@splitsoftware/splitio/lib/utils/ip');
   
       const sdkModule = require('../../sdk');
       sdkModule.factory.settings.impressionListener.logImpression = log;

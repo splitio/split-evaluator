@@ -1,4 +1,5 @@
 const attributesValidator = require('../attributes');
+const validAttributesMock = { 'my-attr1':true, 'my-attr2':5, 'my-attr3': 'asd', 'my-attr4': [] };
 
 describe('attributes validator', () => {
   test('should return error on invalid attributes', done => {
@@ -35,10 +36,20 @@ describe('attributes validator', () => {
   });
 
   test('should be valid when attributes is an object', done => {
-    const result = attributesValidator('{"my-attr1":true}');
+    const result = attributesValidator(validAttributesMock);
     expect(result).toHaveProperty('valid', true);
     expect(result).toHaveProperty('value', {
-      'my-attr1': true,
+      ...validAttributesMock,
+    });
+    expect(result).not.toHaveProperty('error');
+    done();
+  });
+
+  test('should be valid when attributes is a stringified object', done => {
+    const result = attributesValidator(JSON.stringify(validAttributesMock));
+    expect(result).toHaveProperty('valid', true);
+    expect(result).toHaveProperty('value', {
+      ...validAttributesMock,
     });
     expect(result).not.toHaveProperty('error');
     done();
