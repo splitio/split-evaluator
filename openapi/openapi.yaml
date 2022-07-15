@@ -94,13 +94,18 @@ components:
   requestBodies:
     EvaluationRequestBody:
       description: A JSON of the attributes to include in the evaluation.
-      schema:
-        type: object
-        properties:
-          attributes:
-            type: object
-      example: "{ attributes: { my-attr1: 'test' }}"
+      required: false
+      content: 
+        application/json:
+          schema:
+            $ref: '#/components/schemas/JsonPayload'
   schemas:
+    JsonPayload:
+      type: object
+      properties:
+        attributes:
+          type: object
+      example: { attributes: { myattr1: 'test' }}
     InputValidation:
       type: object
       properties:
@@ -206,7 +211,7 @@ paths:
         - $ref: '#/components/parameters/split-name'
         - $ref: '#/components/parameters/bucketing-key'
       requestBody:
-        - $ref: '#/components/requestBodies/EvaluationRequestBody'
+        $ref: '#/components/requestBodies/EvaluationRequestBody'
       responses:
         '200':
           description: Evaluation result
