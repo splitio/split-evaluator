@@ -1,5 +1,5 @@
 2.1.0 (Jul 14, 2022)
- - Added support for attributes in post.
+ - Added support for attribute values to be sent as JSON in a POST version of the get treatment endpoints, to avoid query param limitations.
  - Updated the SDK version to 10.20.0 which is the latest to the date. 
  - Updated npm dependencies for vulnerability fixes.
  - Updated base image to node:16.16.0-alpine3.16
