@@ -1,6 +1,6 @@
 openapi: '3.0.2'
 info:
-  version: 
+  version:
   title: Split Evaluator
   description: Using Split involves using one of our SDKs. The Split team builds and maintains these SDKs for some of the most popular language libraries and the SDKs are available under open source licenses. For languages where there is no native SDK support, Split offers the Split Evaluator, a small service capable of evaluating some or all available features for a given customer via a REST endpoint.
   license:
@@ -95,7 +95,7 @@ components:
     EvaluationRequestBody:
       description: A JSON of the attributes to include in the evaluation.
       required: false
-      content: 
+      content:
         application/json:
           schema:
             $ref: '#/components/schemas/JsonPayload'
@@ -158,7 +158,7 @@ components:
         $ref: '#/components/schemas/Split'
 
 security:
-  - Authorization: [] 
+  - Authorization: []
 
 paths:
   /client/get-treatment:
@@ -177,7 +177,7 @@ paths:
           description: Evaluation result
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   splitName:
@@ -217,7 +217,7 @@ paths:
           description: Evaluation result
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   splitName:
@@ -257,7 +257,50 @@ paths:
           description: Evaluation result
           content:
             application/json:
-              schema: 
+              schema:
+                type: object
+                properties:
+                  splitName:
+                    type: string
+                  treatment:
+                    type: string
+                  config:
+                    type: string
+                example:
+                  splitName: my-split
+                  treatment: on
+                  config: "{\"color\": \"blue\" }"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - client
+      summary: performs single evaluation and attachs config, but receiving the attributes on the request body.
+      description: Calls getTreatmentWithConfig method from the SDK.
+      parameters:
+        - $ref: '#/components/parameters/key'
+        - $ref: '#/components/parameters/split-name'
+        - $ref: '#/components/parameters/bucketing-key'
+      requestBody:
+        $ref: '#/components/requestBodies/EvaluationRequestBody'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
                   splitName:
@@ -300,7 +343,44 @@ paths:
           description: Evaluation result
           content:
             application/json:
-              schema: 
+              schema:
+                type: object
+                example:
+                  'my-split':
+                    treatment: on
+                  'my-split2':
+                    treatment: off
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - client
+      summary: performs multiple evaluation at once, but receiving the attributes on the request body.
+      description: Calls getTreatments method from the SDK.
+      parameters:
+        - $ref: '#/components/parameters/key'
+        - $ref: '#/components/parameters/split-names'
+        - $ref: '#/components/parameters/bucketing-key'
+      requestBody:
+        $ref: '#/components/requestBodies/EvaluationRequestBody'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema:
                 type: object
                 example:
                   'my-split':
@@ -337,7 +417,46 @@ paths:
           description: Evaluation result
           content:
             application/json:
-              schema: 
+              schema:
+                type: object
+                example:
+                  'my-split':
+                    treatment: on
+                    config: null
+                  'my-split2':
+                    treatment: off
+                    config: "{\"color\": \"blue\" }"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - client
+      summary: performs multiple evaluation at once and attachs config, but receiving the attributes on the request body.
+      description: Calls getTreatmentsWithConfig method from the SDK.
+      parameters:
+        - $ref: '#/components/parameters/key'
+        - $ref: '#/components/parameters/split-names'
+        - $ref: '#/components/parameters/bucketing-key'
+      requestBody:
+        $ref: '#/components/requestBodies/EvaluationRequestBody'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema:
                 type: object
                 example:
                   'my-split':
@@ -364,7 +483,7 @@ paths:
     get:
       tags:
         - client
-      summary:  matches splits for passed trafficType and evaluates with passed key
+      summary: matches splits for passed trafficType and evaluates with passed key
       description: Calls getTreatments method from the SDK once it have all the splitNames for the keys provided.
       parameters:
         - $ref: '#/components/parameters/keys'
@@ -374,7 +493,55 @@ paths:
           description: Evaluation result
           content:
             application/json:
-              schema: 
+              schema:
+                type: object
+                items:
+                  type: object
+                  properties:
+                    splitName:
+                      type: string
+                    treatment:
+                      type: string
+                example:
+                  user:
+                    'my-split':
+                      treatment: on
+                    'my-split-2':
+                      treatment: off
+                  account:
+                    'my-split-3':
+                      treatment: on
+                    'my-split-4':
+                      treatment: off
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - client
+      summary: matches splits for passed trafficType and evaluates with passed key, but receiving the attributes on the request body.
+      description: Calls getTreatments method from the SDK once it have all the splitNames for the keys provided.
+      parameters:
+        - $ref: '#/components/parameters/keys'
+      requestBody:
+        $ref: '#/components/requestBodies/EvaluationRequestBody'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema:
                 type: object
                 items:
                   type: object
@@ -412,8 +579,8 @@ paths:
     get:
       tags:
         - client
-      summary:  matches splits for passed trafficType and evaluates with passed key and attaches configs
-      description: Calls getTreatments method from the SDK once it have all the splitNames for the keys provided.
+      summary: matches splits for passed trafficType and evaluates with passed key and attaches configs
+      description: Calls getTreatmentsWithConfig method from the SDK once it have all the splitNames for the keys provided.
       parameters:
         - $ref: '#/components/parameters/keys'
         - $ref: '#/components/parameters/attributes'
@@ -422,7 +589,59 @@ paths:
           description: Evaluation result
           content:
             application/json:
-              schema: 
+              schema:
+                type: object
+                items:
+                  type: object
+                  properties:
+                    splitName:
+                      type: string
+                    treatment:
+                      type: string
+                example:
+                  user:
+                    'my-split':
+                      treatment: on
+                      config: "{\"color\": \"yellow\" }"
+                    'my-split-2':
+                      treatment: off
+                      config: "{\"color\": \"red\" }"
+                  account:
+                    'my-split-3':
+                      treatment: on
+                      config: null
+                    'my-split-4':
+                      treatment: off
+                      config: "{\"color\": \"blue\" }"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - client
+      summary: matches splits for passed trafficType and evaluates with passed key and attaches configs, but receiving the attributes on the request body.
+      description: Calls getTreatmentsWithConfig method from the SDK once it have all the splitNames for the keys provided.
+      parameters:
+        - $ref: '#/components/parameters/keys'
+      requestBody:
+        $ref: '#/components/requestBodies/EvaluationRequestBody'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema:
                 type: object
                 items:
                   type: object
@@ -690,4 +909,4 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unauthorized'
-    
+
