@@ -1,6 +1,6 @@
 {
   "name": "split-evaluator",
-  "version": "2.1.0",
+  "version": "2.1.0-rc4",
   "description": "Split-Evaluator",
   "repository": "splitio/split-evaluator",
   "homepage": "https://github.com/splitio/split-evaluator#readme",
@@ -43,8 +43,7 @@
     "swagger-ui-express": "^4.3.0"
   },
   "engines": {
-    "node": "16.16.0",
-    "npm": "8.11.0"
+    "node": "16"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
