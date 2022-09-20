@@ -1,9 +1,10 @@
 const path = require('path');
-const { nullOrEmpty, parseNumber, validUrl, validLogLevel } = require('./validators');
+const {  parseNumber, validUrl, validLogLevel } = require('./validators');
 
 const getConfigs = () => {
   const configs = {
     features: path.join(__dirname, 'split.yml'),
+    core: {},
   };
 
   // LOG LEVEL
@@ -11,11 +12,6 @@ const getConfigs = () => {
   if (logLevel) {
     configs.logLevel = logLevel;
   }
-
-  // CORE OPTIONS
-  configs.core = {
-    authorizationKey: nullOrEmpty('SPLIT_EVALUATOR_API_KEY'),
-  };
 
   // SCHEDULER OPTIONS
   const scheduler = {};
@@ -46,6 +42,8 @@ const getConfigs = () => {
   if (sdk) urls.sdk = sdk;
   const auth = process.env.SPLIT_EVALUATOR_AUTH_SERVICE_URL;
   if (auth) urls.auth = auth;
+  const telemetry = process.env.SPLIT_EVALUATOR_TELEMETRY_URL;
+  if (telemetry) urls.telemetry = telemetry;
 
   // IMPRESSION LISTENER
   if (process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT && validUrl('SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT')) {

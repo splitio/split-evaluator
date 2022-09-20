@@ -53,9 +53,15 @@ const validLogLevel = (name) => {
   throwError(`you passed ${logLevel} is an invalid log level, ${name} accepts NONE|DEBUG|INFO|WARN|ERROR`);
 };
 
+const validEnvironment = (environment) => {
+  if(!environment['API_KEY']) throwError('API_KEY value not present in one or more environment config');
+  if(!environment['AUTH_TOKEN']) throwError('AUTH_TOKEN value not present in one or more environment config');
+};
+
 module.exports = {
   validUrl,
   validLogLevel,
   nullOrEmpty,
   parseNumber,
+  validEnvironment,
 };

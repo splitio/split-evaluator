@@ -1,16 +1,14 @@
 const config = require('config');
 const utils = require('./utils/utils');
+const environmentManager = require('./environmentManager');
 
 const app = require('./app');
-
-// Used for BUR
-const client = require('./sdk').client;
 
 const PORT = process.env.SPLIT_EVALUATOR_SERVER_PORT || 7548;
 
 // Only available for in memory settings.
 if (config.get('blockUntilReady')) {
-  client.ready().then(spinUpServer);
+  environmentManager.ready().then(spinUpServer);
 } else {
   spinUpServer();
 }
