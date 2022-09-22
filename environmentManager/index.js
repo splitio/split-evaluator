@@ -1,6 +1,7 @@
 const settings = require('../utils/parserConfigs')();
 const { validEnvironment } = require('../utils/parserConfigs/validators');
 const { getSplitFactory } = require('../sdk');
+const ImpressionManager = require('../listener/manager');
 
 class EnvironmentManager {
   
@@ -14,6 +15,8 @@ class EnvironmentManager {
     
     this._initializeEnvironments(JSON.parse(process.env['SPLIT_EVALUATOR_ENVIRONMENTS']));
     
+    const impressionManager = new ImpressionManager();
+    impressionManager.start();
   }
   
   _initializeEnvironments(environmentConfigs){
@@ -34,6 +37,7 @@ class EnvironmentManager {
       this._clientReadiness(this._environments[authToken].factory.client());
       
     });     
+    this.ready();  
   }
   
   _clientReadiness(client){
@@ -43,6 +47,10 @@ class EnvironmentManager {
   
   getFactory(authToken) {    
     return this._environments[authToken].factory;
+  }
+  
+  getVersion() {
+    return this._environments[this.getAuthTokens()[0]].factory.settings.sdkVersion;
   }
   
   getClient(authToken) {

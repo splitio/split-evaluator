@@ -1,7 +1,6 @@
 const ImpressionManager = require('./manager');
 
 const impressionManager = new ImpressionManager();
-impressionManager.start();
 
 /**
  * logImpression  impresion listener handler
