@@ -7,14 +7,14 @@ jest.mock('../../sdk', () => ({
     let sdk = jest.requireActual('../../sdk');
     const factory = sdk.getSplitFactory(settings);
     const client = factory.client();
-    client.getTreatment = jest.fn(() => { return factory.settings.core.authorizationKey });
-    client.getTreatments = jest.fn(() => { return [factory.settings.core.authorizationKey] });
-    client.getTreatmentWithConfig = jest.fn(() => { return { treatment: factory.settings.core.authorizationKey, config: null }});
-    client.getTreatmentsWithConfig = jest.fn(() => { return [{ treatment: factory.settings.core.authorizationKey, config: null }] });
+    client.getTreatment = jest.fn(() => { return factory.settings.core.authorizationKey; });
+    client.getTreatments = jest.fn(() => { return [factory.settings.core.authorizationKey]; });
+    client.getTreatmentWithConfig = jest.fn(() => { return { treatment: factory.settings.core.authorizationKey, config: null }; });
+    client.getTreatmentsWithConfig = jest.fn(() => { return [{ treatment: factory.settings.core.authorizationKey, config: null }]; });
     client.track = jest.fn(() => {});
     client.destroy = jest.fn(() => {});
     return factory;
-  })
+  }),
 }));
 
 // Multiple environment
@@ -24,10 +24,10 @@ describe('environmentManager', () => {
   beforeEach(() => {
     jest.resetModules();
   });
-  
-  
-  
-  
+
+
+
+
   // getTreatment
   describe('get-treatment', () => {
     // Testing environment for authToken test-multiple
@@ -38,7 +38,7 @@ describe('environmentManager', () => {
       expect(response.body.treatment).toEqual('testapikey');
       done();
     });
-    
+
     // Testing environment for authToken test
     test('[GET] should be 200 if is valid authToken and return localhost', async (done) => {
       const response = await request(app)
@@ -47,7 +47,7 @@ describe('environmentManager', () => {
       expect(response.body.treatment).toEqual('localhost');
       done();
     });
-    
+
     // Testing environment for non existent authToken
     test('[GET] should be 401 if is non existent authToken and return unauthorized error', async (done) => {
       const response = await request(app)
@@ -56,7 +56,7 @@ describe('environmentManager', () => {
       expect(response.body).toEqual({'error':'Unauthorized'});
       done();
     });
-    
+
     test('[POST] should be 200 if is valid authToken and return testapikey', async (done) => {
       const response = await request(app)
         .post('/client/get-treatment?key=test&split-name=my-experiment')
@@ -78,7 +78,7 @@ describe('environmentManager', () => {
       expect(response.body.treatment).toEqual('localhost');
       done();
     });
-  
+
     test('[POST] should be 401 if is non existent authToken and return unauthorized error', async (done) => {
       const response = await request(app)
         .post('/client/get-treatment?key=test&split-name=my-experiment')
@@ -90,10 +90,10 @@ describe('environmentManager', () => {
       done();
     });
   });
-  
-  
-  
-  
+
+
+
+
   // getTreatments
   describe('get-treatments', () => {
     // Testing environment for authToken test-multiple
@@ -104,7 +104,7 @@ describe('environmentManager', () => {
       expect(response.body[0].treatment).toEqual('testapikey');
       done();
     });
-    
+
     // Testing environment for authToken test
     test('[GET] should be 200 if is valid authToken and return localhost', async (done) => {
       const response = await request(app)
@@ -113,7 +113,7 @@ describe('environmentManager', () => {
       expect(response.body[0].treatment).toEqual('localhost');
       done();
     });
-    
+
     // Testing environment for non existent authToken
     test('[GET] should be 401 if is non existent authToken and return unauthorized error', async (done) => {
       const response = await request(app)
@@ -122,8 +122,8 @@ describe('environmentManager', () => {
       expect(response.body).toEqual({'error':'Unauthorized'});
       done();
     });
-    
-    
+
+
     test('[POST] should be 200 if is valid authToken and return testapikey', async (done) => {
       const response = await request(app)
         .post('/client/get-treatments?key=test&split-names=my-experiment,my-experiment')
@@ -145,7 +145,7 @@ describe('environmentManager', () => {
       expect(response.body[0].treatment).toEqual('localhost');
       done();
     });
-  
+
     test('[POST] should be 401 if is non existent authToken and return unauthorized error', async (done) => {
       const response = await request(app)
         .post('/client/get-treatments?key=test&split-names=my-experiment,my-experiment')
@@ -157,10 +157,10 @@ describe('environmentManager', () => {
       done();
     });
   });
-  
-  
-  
-  
+
+
+
+
   // getTreatmentWithConfig
   describe('get-treatment-with-config', () => {
     // Testing environment for authToken test-multiple
@@ -171,7 +171,7 @@ describe('environmentManager', () => {
       expect(response.body.treatment).toEqual('testapikey');
       done();
     });
-    
+
     // Testing environment for authToken test
     test('[GET] should be 200 if is valid authToken and return localhost', async (done) => {
       const response = await request(app)
@@ -180,7 +180,7 @@ describe('environmentManager', () => {
       expect(response.body.treatment).toEqual('localhost');
       done();
     });
-    
+
     // Testing environment for non existent authToken
     test('[GET] should be 401 if is non existent authToken and return unauthorized error', async (done) => {
       const response = await request(app)
@@ -189,7 +189,7 @@ describe('environmentManager', () => {
       expect(response.body).toEqual({'error':'Unauthorized'});
       done();
     });
-    
+
     test('[POST] should be 200 if is valid authToken and return testapikey', async (done) => {
       const response = await request(app)
         .post('/client/get-treatment-with-config?key=test&split-name=my-experiment')
@@ -198,7 +198,7 @@ describe('environmentManager', () => {
       expect(response.body.treatment).toEqual('testapikey');
       done();
     });
-    
+
     test('[POST] should be 200 if is valid authToken and return localhost', async (done) => {
       const response = await request(app)
         .post('/client/get-treatment-with-config?key=test&split-name=my-experiment')
@@ -207,7 +207,7 @@ describe('environmentManager', () => {
       expect(response.body.treatment).toEqual('localhost');
       done();
     });
-    
+
     test('[POST] should be 200 if is valid authToken and return unauthorized error', async (done) => {
       const response = await request(app)
         .post('/client/get-treatment-with-config?key=test&split-name=my-experiment')
@@ -217,10 +217,10 @@ describe('environmentManager', () => {
       done();
     });
   });
-  
-  
-  
-  
+
+
+
+
   // getTreatmentsWithConfig
   describe('get-treatments-with-config', () => {
     // Testing environment for authToken test-multiple
@@ -231,7 +231,7 @@ describe('environmentManager', () => {
       expect(response.body[0].treatment).toEqual('testapikey');
       done();
     });
-    
+
     // Testing environment for authToken test
     test('[GET] should be 200 if is valid authToken and return localhost', async (done) => {
       const response = await request(app)
@@ -240,7 +240,7 @@ describe('environmentManager', () => {
       expect(response.body[0].treatment).toEqual('localhost');
       done();
     });
-    
+
     // Testing environment for non existent authToken
     test('[GET] should be 401 if is non existent authToken and return unauthorized error', async (done) => {
       const response = await request(app)
@@ -249,7 +249,7 @@ describe('environmentManager', () => {
       expect(response.body).toEqual({'error':'Unauthorized'});
       done();
     });
-    
+
     test('[POST] should be 200 if is valid authToken and return testapikey', async (done) => {
       const response = await request(app)
         .post('/client/get-treatments-with-config?key=test&split-names=my-experiment')
@@ -258,7 +258,7 @@ describe('environmentManager', () => {
       expect(response.body[0].treatment).toEqual('testapikey');
       done();
     });
-    
+
     test('[POST] should be 200 if is valid authToken and return localhost', async (done) => {
       const response = await request(app)
         .post('/client/get-treatments-with-config?key=test&split-names=my-experiment')
@@ -267,7 +267,7 @@ describe('environmentManager', () => {
       expect(response.body[0].treatment).toEqual('localhost');
       done();
     });
-    
+
     test('[POST] should be 401 if is non existent authToken and return unauthorized error', async (done) => {
       const response = await request(app)
         .post('/client/get-treatments-with-config?key=test&split-names=my-experiment')
@@ -277,5 +277,5 @@ describe('environmentManager', () => {
       done();
     });
   });
-  
-})
+
+});
