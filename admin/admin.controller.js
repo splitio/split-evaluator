@@ -2,8 +2,6 @@ const os = require('os');
 const ip = require('@splitsoftware/splitio/lib/utils/ip');
 
 const utils = require('../utils/utils');
-const sdkModule = require('../sdk');
-const sdk = sdkModule.factory;
 const environmentManager = require('../environmentManager');
 
 /**
@@ -43,9 +41,8 @@ const healthcheck = (req, res) => {
  * @param {*} res 
  */
 const version = (req, res) => {
-  console.log('Getting version.');
   const version = utils.getVersion();
-  const parts = sdk.settings.sdkVersion.split('-');
+  const parts = environmentManager.getVersion().split('-');
   const sdkLanguage = parts[0];
   const sdkVersion = parts.slice(1).join('-');
 

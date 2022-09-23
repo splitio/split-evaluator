@@ -2,6 +2,7 @@ const settings = require('../utils/parserConfigs')();
 const { validEnvironment, validEnvironmentConfig } = require('../utils/parserConfigs/validators');
 const { getSplitFactory } = require('../sdk');
 const SPLIT_EVALUATOR_ENVIRONMENTS = 'SPLIT_EVALUATOR_ENVIRONMENTS';
+
 class EnvironmentManager {
   
   constructor() {
@@ -13,7 +14,6 @@ class EnvironmentManager {
     this._readyPromises = [];
     
     this._initializeEnvironments();
-    
   }
   
   _initializeEnvironments(){
@@ -36,6 +36,7 @@ class EnvironmentManager {
       this._clientReadiness(this._environments[authToken].factory.client());
       
     });     
+    this.ready();  
   }
   
   _clientReadiness(client){
@@ -45,6 +46,10 @@ class EnvironmentManager {
   
   getFactory(authToken) {    
     return this._environments[authToken].factory;
+  }
+  
+  getVersion() {
+    return this._environments[this.getAuthTokens()[0]].factory.settings.sdkVersion;
   }
   
   getClient(authToken) {

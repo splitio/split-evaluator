@@ -13,6 +13,7 @@ class ImpressionManager {
   constructor() {
     this._stopImpressionSender = false;
     this._impressionQueue = new ImpressionQueue();
+    this._startImpressionsSender();
   }
 
   static postImpressions(impressions) {
@@ -59,4 +60,4 @@ class ImpressionManager {
   }
 }
 
-module.exports = ImpressionManager;
+module.exports = new ImpressionManager();
