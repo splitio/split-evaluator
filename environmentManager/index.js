@@ -1,5 +1,5 @@
 const settings = require('../utils/parserConfigs')();
-const { validEnvironment } = require('../utils/parserConfigs/validators');
+const { validEnvironment, validEnvironmentConfig } = require('../utils/parserConfigs/validators');
 const { getSplitFactory } = require('../sdk');
 const ImpressionManager = require('../listener/manager');
 
@@ -13,13 +13,15 @@ class EnvironmentManager {
     // Ready promises for each client in environment manager
     this._readyPromises = [];
     
-    this._initializeEnvironments(JSON.parse(process.env['SPLIT_EVALUATOR_ENVIRONMENTS']));
+    this._initializeEnvironments();
     
     const impressionManager = new ImpressionManager();
     impressionManager.start();
   }
   
-  _initializeEnvironments(environmentConfigs){
+  _initializeEnvironments(){
+
+    const environmentConfigs = validEnvironmentConfig(SPLIT_EVALUATOR_ENVIRONMENTS);
     
     environmentConfigs.forEach(environment => {
       
