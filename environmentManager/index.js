@@ -1,7 +1,7 @@
 const settings = require('../utils/parserConfigs')();
 const { validEnvironment, validEnvironmentConfig } = require('../utils/parserConfigs/validators');
 const { getSplitFactory } = require('../sdk');
-const ImpressionManager = require('../listener/manager');
+const SPLIT_EVALUATOR_ENVIRONMENTS = 'SPLIT_EVALUATOR_ENVIRONMENTS';
 
 class EnvironmentManager {
   
@@ -14,9 +14,6 @@ class EnvironmentManager {
     this._readyPromises = [];
     
     this._initializeEnvironments();
-    
-    const impressionManager = new ImpressionManager();
-    impressionManager.start();
   }
   
   _initializeEnvironments(){
