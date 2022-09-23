@@ -1,10 +1,6 @@
 // Own modules
 const { parseKey, filterSplitsByTT } = require('./common');
-const sdkModule = require('../sdk');
-
-// Client and manager we will use
-const client = sdkModule.client;
-const manager = sdkModule.manager;
+const environmentManager = require('../environmentManager');
 
 /**
  * getTreatment evaluates a given split-name
@@ -12,6 +8,7 @@ const manager = sdkModule.manager;
  * @param {*} res 
  */
 const getTreatment = async (req, res) => {
+  const client = environmentManager.getClient(req.headers.authorization);
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const split = req.splitio.splitName;
   const attributes = req.splitio.attributes;
@@ -34,6 +31,7 @@ const getTreatment = async (req, res) => {
  * @param {*} res 
  */
 const getTreatmentWithConfig = async (req, res) => {
+  const client = environmentManager.getClient(req.headers.authorization);
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const split = req.splitio.splitName;
   const attributes = req.splitio.attributes;
@@ -57,6 +55,7 @@ const getTreatmentWithConfig = async (req, res) => {
  * @param {*} res 
  */
 const getTreatments = async (req, res) => {
+  const client = environmentManager.getClient(req.headers.authorization);
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const splits = req.splitio.splitNames;
   const attributes = req.splitio.attributes;
@@ -83,6 +82,7 @@ const getTreatments = async (req, res) => {
  * @param {*} res 
  */
 const getTreatmentsWithConfig = async (req, res) => {
+  const client = environmentManager.getClient(req.headers.authorization);
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const splits = req.splitio.splitNames;
   const attributes = req.splitio.attributes;
@@ -102,6 +102,7 @@ const getTreatmentsWithConfig = async (req, res) => {
  * @param {*} res 
  */
 const track = async (req, res) => {
+  const client = environmentManager.getClient(req.headers.authorization);
   const key = req.splitio.key;
   const trafficType = req.splitio.trafficType;
   const eventType = req.splitio.eventType;
@@ -121,7 +122,9 @@ const track = async (req, res) => {
  * @param {Object} keys 
  * @param {Object} attributes 
  */
-const allTreatments = async (keys, attributes) => {
+const allTreatments = async (authorization, keys, attributes) => {
+  const manager = environmentManager.getManager(authorization);
+  const client = environmentManager.getClient(authorization);
   try {
     // Grabs Splits from Manager
     const splitViews = await manager.splits();
@@ -155,7 +158,7 @@ const getAllTreatmentsWithConfig = async (req, res) => {
   const attributes = req.splitio.attributes;
 
   try {
-    const treatments = await allTreatments(keys, attributes);
+    const treatments = await allTreatments(req.headers.authorization, keys, attributes);
     res.send(treatments);
   } catch (error) {
     res.status(500).send({error});
@@ -172,7 +175,7 @@ const getAllTreatments = async (req, res) => {
   const attributes = req.splitio.attributes;
 
   try {
-    const treatments = await allTreatments(keys, attributes);
+    const treatments = await allTreatments(req.headers.authorization, keys, attributes);
     // Erases the config property for treatments
     const trafficTypes = Object.keys(treatments);
     trafficTypes.forEach(trafficType => {

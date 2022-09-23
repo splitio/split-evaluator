@@ -1,4 +1,4 @@
-const AUTH_TOKEN = process.env.SPLIT_EVALUATOR_AUTH_TOKEN;
+const environmentManager = require('../environmentManager');
 
 /**
  * authorization  checks if AUTH_TOKEN matches with the one passed
@@ -8,7 +8,7 @@ const AUTH_TOKEN = process.env.SPLIT_EVALUATOR_AUTH_TOKEN;
  * @param {*} next 
  */
 const authorization = (req, res, next) => {
-  if (!AUTH_TOKEN || req.headers.authorization === AUTH_TOKEN) {
+  if (environmentManager.validToken(req.headers.authorization)) {
     next();
   } else {
     console.log('Returning 401 Unauthorized.');

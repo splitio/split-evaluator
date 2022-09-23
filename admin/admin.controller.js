@@ -4,6 +4,7 @@ const ip = require('@splitsoftware/splitio/lib/utils/ip');
 const utils = require('../utils/utils');
 const sdkModule = require('../sdk');
 const sdk = sdkModule.factory;
+const environmentManager = require('../environmentManager');
 
 /**
  * ping pings server
@@ -27,7 +28,7 @@ const healthcheck = (req, res) => {
   let status = 500;
   let msg = 'Split evaluator engine is not evaluating traffic properly.';
 
-  if (sdkModule.isReady()) {
+  if (environmentManager.isReady()) {
     status = 200;
     msg = 'Split Evaluator working as expected.';
   }
