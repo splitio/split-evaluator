@@ -58,10 +58,18 @@ const validEnvironment = (environment) => {
   if(!environment['AUTH_TOKEN']) throwError('AUTH_TOKEN value not present in one or more environment config');
 };
 
+const validEnvironmentConfig = (environmentParam) => {
+  nullOrEmpty(environmentParam);
+  const environmentConfig = JSON.parse(process.env[environmentParam]);
+  if(!Array.isArray(environmentConfig)) throwError(`you passed an invalid ${environmentParam}, ${environmentParam} must be a list of environments.`);
+  return environmentConfig;
+};
+
 module.exports = {
   validUrl,
   validLogLevel,
   nullOrEmpty,
   parseNumber,
   validEnvironment,
+  validEnvironmentConfig,
 };
