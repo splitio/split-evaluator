@@ -9,9 +9,9 @@ const { expectOk, expectOkMultipleResults } = require('../../utils/testWrapper/i
 
 /**
  * matcherIlRequest matches the request body with paramaters passed
- * @param {string} body 
- * @param {number} length 
- * @param {array} expectedSplits 
+ * @param {string} body
+ * @param {number} length
+ * @param {array} expectedSplits
  */
 const matcherIlRequest = (body, length, expectedSplits) => {
   const ilRequest = JSON.parse(body);

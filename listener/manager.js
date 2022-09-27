@@ -46,10 +46,6 @@ class ImpressionManager {
     this._stopImpressionSender.reset();
   }
 
-  start() {
-    this._startImpressionsSender();
-  }
-
   trackImpression(impression) {
     this._impressionQueue.addImpression(impression);
 
