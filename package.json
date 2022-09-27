@@ -30,7 +30,7 @@
     "start": "node server.js",
     "start:debug": "node --inspect-brk server.js",
     "lint": "eslint .",
-    "test": "NODE_ENV=test jest"
+    "test": "NODE_ENV=test jest --detectOpenHandles"
   },
   "dependencies": {
     "@splitsoftware/splitio": "10.20.0",

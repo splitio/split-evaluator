@@ -16,7 +16,7 @@ describe('ip addresses', () => {
       environmentManager.getFactory(authToken).settings.impressionListener.logImpression = log;
     });
   };
-  
+
   process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT = 'http://localhost:7546';
 
   beforeEach(() => {
@@ -69,7 +69,7 @@ describe('ip addresses', () => {
       const os = require('os');
       const localIp = require('@splitsoftware/splitio/lib/utils/ip');
       mockListener();
-  
+
       const response = await request(app)
         .get('/client/get-treatment?key=test&split-name=my-experiment')
         .set('Authorization', 'test');
