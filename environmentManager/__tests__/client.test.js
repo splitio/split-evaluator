@@ -1,6 +1,8 @@
 const request = require('supertest');
 const app = require('../../app');
 
+console.log = jest.fn();
+
 // Mocked client to return authorization key when getTreatment is called
 jest.mock('../../sdk', () => ({
   getSplitFactory: jest.fn((settings) => {
@@ -11,15 +13,19 @@ jest.mock('../../sdk', () => ({
     client.getTreatments = jest.fn(() => { return [factory.settings.core.authorizationKey]; });
     client.getTreatmentWithConfig = jest.fn(() => { return { treatment: factory.settings.core.authorizationKey, config: null }; });
     client.getTreatmentsWithConfig = jest.fn(() => { return [{ treatment: factory.settings.core.authorizationKey, config: null }]; });
-    client.track = jest.fn(() => {});
+    client.track = jest.fn(() => {
+      const authorizationKey = factory.settings.core.authorizationKey;
+      console.log(authorizationKey);
+      return authorizationKey;
+    });
     return factory;
   }),
 }));
 
-// Multiple environment
+// Multiple environment - client endpoints
 // Mocked client should return authorizationKey when getTreatment is called
 // to verify that environmentManager is maping the right one for each authToken
-describe('environmentManager', () => {
+describe('environmentManager - client endpoints', () => {
 
   // getTreatment
   describe('get-treatment', () => {
@@ -242,6 +248,36 @@ describe('environmentManager', () => {
       const response = await request(app)
         .post('/client/get-treatments-with-config?key=test&split-names=my-experiment')
         .send({attributes: { test:'test' }})
+        .set('Authorization', 'non-existent');
+      expect(response.body).toEqual({'error':'Unauthorized'});
+    });
+  });
+
+
+
+
+  // track
+  describe('track', () => {
+    // Testing environment for authToken test-multiple
+    test('Should be 200 if is valid authToken and return testapikey', async () => {
+      await request(app)
+        .get('/client/track?key=my-key&event-type=my-event&traffic-type=my-traffic&properties={"prop1":3}&value=3.0')
+        .set('Authorization', 'test-multiple');
+      expect(console.log.mock.calls.pop()[0]).toEqual('testapikey');
+    });
+
+    // Testing environment for authToken test
+    test('Should be 200 if is valid authToken and return localhost', async () => {
+      await request(app)
+        .get('/client/track?key=my-key&event-type=my-event&traffic-type=my-traffic&properties={"prop1":3}&value=3.0')
+        .set('Authorization', 'test');
+      expect(console.log.mock.calls.pop()[0]).toEqual('localhost');
+    });
+
+    // Testing environment for non existent authToken
+    test('Should be 401 if is non existent authToken and return unauthorized error', async () => {
+      const response = await request(app)
+        .get('/client/track?key=my-key&event-type=my-event&traffic-type=my-traffic&properties={"prop1":3}&value=3.0')
         .set('Authorization', 'non-existent');
       expect(response.body).toEqual({'error':'Unauthorized'});
     });
