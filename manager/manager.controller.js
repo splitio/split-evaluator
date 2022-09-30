@@ -2,12 +2,12 @@ const environmentManager = require('../environmentManager');
 
 /**
  * split returns splitView for a particular split
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const split = async (req, res) => {
   const splitName = req.splitio.splitName;
-  
+
   try {
     const manager = environmentManager.getManager(req.headers.authorization);
     const split = await manager.split(splitName);
@@ -21,8 +21,8 @@ const split = async (req, res) => {
 
 /**
  * splits returns splits
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const splits = async (req, res) => {
   try {
@@ -38,8 +38,8 @@ const splits = async (req, res) => {
 
 /**
  * splitNames returns splitNames
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const splitNames = async (req, res) => {
   try {
