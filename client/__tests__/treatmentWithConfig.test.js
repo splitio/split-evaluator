@@ -241,17 +241,17 @@ describe('get-treatment-with-config', () => {
     response = await request(app)
       .get('/client/get-treatment-with-config?key=only_test&split-name=my-experiment')
       .set('Authorization', 'test');
-    expectOk(response, 200, 'off', 'my-experiment', '{"desc" : "this applies only to OFF and only for only_test. The rest will receive ON"}'); 
+    expectOk(response, 200, 'off', 'my-experiment', '{"desc" : "this applies only to OFF and only for only_test. The rest will receive ON"}');
     // With another split
     response = await request(app)
       .get('/client/get-treatment-with-config?key=test&split-name=other-experiment-3')
       .set('Authorization', 'test');
-    expectOk(response, 200, 'off', 'other-experiment-3', null);      
+    expectOk(response, 200, 'off', 'other-experiment-3', null);
     // With a non-existant split in yml
     response = await request(app)
       .get('/client/get-treatment-with-config?key=only_test&split-name=nonexistant-experiment')
       .set('Authorization', 'test');
-    expectOk(response, 200, 'control', 'nonexistant-experiment', null);        
+    expectOk(response, 200, 'control', 'nonexistant-experiment', null);
     done();
   });
 });

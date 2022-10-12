@@ -1,5 +1,5 @@
 const request = require('supertest');
-const { expectOk } = require('../../utils/testWrapper/index');
+const { expectOk, gracefulShutDown } = require('../../utils/testWrapper/index');
 
 describe('ip addresses', () => {
   let ip;
@@ -11,7 +11,7 @@ describe('ip addresses', () => {
   };
 
   const mockListener = () => {
-    const environmentManager = require('../../environmentManager');
+    const environmentManager = require('../../environmentManager').getInstance();
     environmentManager.getAuthTokens().forEach(authToken => {
       environmentManager.getFactory(authToken).settings.impressionListener.logImpression = log;
     });
@@ -21,6 +21,11 @@ describe('ip addresses', () => {
 
   beforeEach(() => {
     jest.resetModules();
+  });
+
+  afterEach(async (done) => {
+    await gracefulShutDown();
+    done();
   });
 
   describe('ip addresses default', () => {

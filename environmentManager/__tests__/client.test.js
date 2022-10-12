@@ -1,5 +1,6 @@
 const request = require('supertest');
 const app = require('../../app');
+const { gracefulShutDown } = require('../../utils/testWrapper/index');
 
 console.log = jest.fn();
 
@@ -25,10 +26,15 @@ jest.mock('../../sdk', () => ({
 // Multiple environment - client endpoints
 // Mocked client should return authorizationKey when getTreatment is called
 // to verify that environmentManager is maping the right one for each authToken
-describe('environmentManager - client endpoints', () => {
+describe('environmentManager - client endpoints', async () => {
+
+  afterEach(async (done) => {
+    await gracefulShutDown();
+    done();
+  });
 
   // getTreatment
-  describe('get-treatment', () => {
+  describe('get-treatment', async() => {
     // Testing environment for authToken test-multiple
     test('[GET] should be 200 if is valid authToken and return testapikey', async () => {
       const response = await request(app)

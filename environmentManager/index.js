@@ -3,78 +3,109 @@ const { validEnvironment, validEnvironmentConfig } = require('../utils/parserCon
 const { getSplitFactory } = require('../sdk');
 const SPLIT_EVALUATOR_ENVIRONMENTS = 'SPLIT_EVALUATOR_ENVIRONMENTS';
 
-class EnvironmentManager {
+const EnvironmentManagerFactory = (function(){
+  class EnvironmentManager {
 
-  constructor() {
+    constructor() {
 
-    // In environments are the apiKey, factory an clientReadiness status related to an authToken
-    this._environments = {};
+      // In environments are the apiKey, factory an clientReadiness status related to an authToken
+      this._environments = {};
 
-    // Ready promises for each client in environment manager
-    this._readyPromises = [];
+      // Ready promises for each client in environment manager
+      this._readyPromises = [];
 
-    this._initializeEnvironments();
+      this._initializeEnvironments();
+    }
+
+    _initializeEnvironments(){
+
+      const environmentConfigs = validEnvironmentConfig(SPLIT_EVALUATOR_ENVIRONMENTS);
+
+      environmentConfigs.forEach(environment => {
+
+        validEnvironment(environment);
+        const authToken = environment['AUTH_TOKEN'];
+        const apiKey = environment['API_KEY'];
+        settings.core.authorizationKey = apiKey;
+
+        this._environments[authToken] = {
+          apiKey: apiKey,
+          factory: getSplitFactory(settings),
+          isClientReady: false,
+        };
+
+        const client = this._environments[authToken].factory.client();
+        this._clientReadiness(client);
+
+
+      });
+      this.ready();
+    }
+
+    _clientReadiness(client){
+      this._readyPromises.push(client.ready());
+      client.on(client.Event.SDK_READY, () => client.isClientReady = true);
+    }
+
+    getFactory(authToken) {
+      return this._environments[authToken].factory;
+    }
+
+    getVersion() {
+      return this._environments[this.getAuthTokens()[0]].factory.settings.sdkVersion;
+    }
+
+    getClient(authToken) {
+      return this._environments[authToken].factory.client();
+    }
+
+    getManager(authToken) {
+      return this._environments[authToken].factory.manager();
+    }
+
+    validToken(authToken) {
+      return Object.keys(this._environments).indexOf(authToken) > -1;
+    }
+
+    getAuthTokens() {
+      return Object.keys(this._environments);
+    }
+
+    async ready() {
+      await Promise.all(this._readyPromises).then(this._clientsReady = true);
+    }
+
+    async destroy() {
+      this.getAuthTokens().forEach(async authToken => {
+        const client = this.getClient(authToken);
+        await client.destroy();
+      });
+      this._clientsReady = false;
+    }
+
+    isReady() {
+      return this._clientsReady;
+    }
   }
 
-  _initializeEnvironments(){
+  let instance;
 
-    const environmentConfigs = validEnvironmentConfig(SPLIT_EVALUATOR_ENVIRONMENTS);
+  return {
+    hasInstance: function() {
+      return !instance ? false : true;
+    },
+    getInstance: function() {
+      if (!instance) {
+        instance = new EnvironmentManager();
+        // Hide the constructor so the returned object can't be new'd...
+        instance.constructor = undefined;
+      }
+      return instance;
+    },
+    destroy: async function() {
+      await instance.destroy().then(instance = undefined);
+    },
+  };
+})();
 
-    environmentConfigs.forEach(environment => {
-
-      validEnvironment(environment);
-      const authToken = environment['AUTH_TOKEN'];
-      const apiKey = environment['API_KEY'];
-      settings.core.authorizationKey = apiKey;
-
-      this._environments[authToken] = {
-        apiKey: apiKey,
-        factory: getSplitFactory(settings),
-        isClientReady: false,
-      };
-
-      this._clientReadiness(this._environments[authToken].factory.client());
-
-    });
-    this.ready();
-  }
-
-  _clientReadiness(client){
-    this._readyPromises.push(client.ready());
-    client.on(client.Event.SDK_READY, () => client.isClientReady = true);
-  }
-
-  getFactory(authToken) {
-    return this._environments[authToken].factory;
-  }
-
-  getVersion() {
-    return this._environments[this.getAuthTokens()[0]].factory.settings.sdkVersion;
-  }
-
-  getClient(authToken) {
-    return this._environments[authToken].factory.client();
-  }
-
-  getManager(authToken) {
-    return this._environments[authToken].factory.manager();
-  }
-
-  validToken(authToken) {
-    return Object.keys(this._environments).indexOf(authToken) > -1;
-  }
-
-  getAuthTokens() {
-    return Object.keys(this._environments);
-  }
-
-  ready() {
-    return Promise.allSettled(this._readyPromises).then(this._clientsReady = true);
-  }
-
-  isReady() {
-    return this._clientsReady;
-  }
-}
-
-module.exports = new EnvironmentManager();
+module.exports = EnvironmentManagerFactory;

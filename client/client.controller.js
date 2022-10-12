@@ -1,11 +1,11 @@
 // Own modules
 const { parseKey, filterSplitsByTT } = require('./common');
-const environmentManager = require('../environmentManager');
+const environmentManager = require('../environmentManager').getInstance();
 
 /**
  * getTreatment evaluates a given split-name
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const getTreatment = async (req, res) => {
   const client = environmentManager.getClient(req.headers.authorization);
@@ -27,8 +27,8 @@ const getTreatment = async (req, res) => {
 
 /**
  * getTreatmentWithConfig evaluates a given split-name and returns config also
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const getTreatmentWithConfig = async (req, res) => {
   const client = environmentManager.getClient(req.headers.authorization);
@@ -51,8 +51,8 @@ const getTreatmentWithConfig = async (req, res) => {
 
 /**
  * getTreatments evaluates an array of split-names
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const getTreatments = async (req, res) => {
   const client = environmentManager.getClient(req.headers.authorization);
@@ -78,8 +78,8 @@ const getTreatments = async (req, res) => {
 
 /**
  * getTreatmentsWithConfig evaluates an array of split-names and returns configs also
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const getTreatmentsWithConfig = async (req, res) => {
   const client = environmentManager.getClient(req.headers.authorization);
@@ -98,8 +98,8 @@ const getTreatmentsWithConfig = async (req, res) => {
 
 /**
  * track events tracking
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const track = async (req, res) => {
   const client = environmentManager.getClient(req.headers.authorization);
@@ -119,8 +119,8 @@ const track = async (req, res) => {
 
 /**
  * allTreatments  matches splits for passed trafficType and evaluates with passed key
- * @param {Object} keys 
- * @param {Object} attributes 
+ * @param {Object} keys
+ * @param {Object} attributes
  */
 const allTreatments = async (authorization, keys, attributes) => {
   const manager = environmentManager.getManager(authorization);
@@ -150,8 +150,8 @@ const allTreatments = async (authorization, keys, attributes) => {
 
 /**
  * getAllTreatmentsWithConfig  returns the allTreatments evaluations with configs
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const getAllTreatmentsWithConfig = async (req, res) => {
   const keys = req.splitio.keys;
@@ -167,8 +167,8 @@ const getAllTreatmentsWithConfig = async (req, res) => {
 
 /**
  * getAllTreatments  returns the allTreatments evaluations
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const getAllTreatments = async (req, res) => {
   const keys = req.splitio.keys;

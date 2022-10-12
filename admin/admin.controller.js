@@ -2,12 +2,12 @@ const os = require('os');
 const ip = require('@splitsoftware/splitio/lib/utils/ip');
 
 const utils = require('../utils/utils');
-const environmentManager = require('../environmentManager');
+const environmentManager = require('../environmentManager').getInstance();
 
 /**
  * ping pings server
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const ping = (req, res) => {
   console.log('pong');
@@ -18,8 +18,8 @@ const ping = (req, res) => {
  * healthcheck  checks if SDK and environtment is healthy or not.
  * 200 - Everything is OK. Ready to evaluate.
  * 500 - Something is wrong or not ready yet. Not able to perform evaluations.
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const healthcheck = (req, res) => {
   console.log('Running health check.');
@@ -37,8 +37,8 @@ const healthcheck = (req, res) => {
 
 /**
  * version  returns the current version of Split Evaluator
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const version = (req, res) => {
   const version = utils.getVersion();
@@ -55,8 +55,8 @@ const version = (req, res) => {
 
 /**
  * machine  returns the machine instance name and machine ip
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const machine = (req, res) => {
   console.log('Getting machine information.');
@@ -77,8 +77,8 @@ const machine = (req, res) => {
 
 /**
  * uptime returns the uptime of the server
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const uptime = (req, res) => {
   const uptime = utils.uptime();

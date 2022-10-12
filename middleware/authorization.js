@@ -1,11 +1,11 @@
-const environmentManager = require('../environmentManager');
+const environmentManager = require('../environmentManager').getInstance();
 
 /**
  * authorization  checks if AUTH_TOKEN matches with the one passed
  * as header
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
  */
 const authorization = (req, res, next) => {
   if (environmentManager.validToken(req.headers.authorization)) {

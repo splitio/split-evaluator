@@ -54,6 +54,19 @@ const getLongKey = () => {
   return key;
 };
 
+const gracefulShutDown = async () => {
+
+  const environmentManagerFactory = require('../../environmentManager');
+  if (environmentManagerFactory && environmentManagerFactory.hasInstance()) {
+    await environmentManagerFactory.destroy();
+  }
+
+  const impressionManagerFactory = require('../../listener/manager');
+  if (impressionManagerFactory.hasInstance && impressionManagerFactory.hasInstance()) {
+    await impressionManagerFactory.destroy();
+  }
+};
+
 module.exports = {
   expectError,
   expectErrorContaining,
@@ -61,4 +74,5 @@ module.exports = {
   expectOkAllTreatments,
   expectOkMultipleResults,
   getLongKey,
+  gracefulShutDown,
 };
