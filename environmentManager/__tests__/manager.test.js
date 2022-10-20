@@ -1,39 +1,30 @@
 const request = require('supertest');
 const app = require('../../app');
 
-// Mocked client to return authorization key when getTreatment is called
-jest.mock('../../sdk', () => ({
-  getSplitFactory: jest.fn((settings) => {
-    let sdk = jest.requireActual('../../sdk');
-    const factory = sdk.getSplitFactory(settings);
-    const manager = factory.manager();
-    manager.split = jest.fn(() => { return factory.settings.core.authorizationKey; });
-    manager.splits = jest.fn(() => { return factory.settings.core.authorizationKey; });
-    manager.names = jest.fn(() => { return factory.settings.core.authorizationKey; });
-    return factory;
-  }),
-}));
-
 // Multiple environment - manager endpoints
-// Mocked manager should return authorizationKey when getTreatment is called
-// to verify that environmentManager is maping the right one for each authToken
 describe('environmentManager - manager endpoints', () => {
 
   // splits
-  test('[/splits] should be 200 if is valid authToken and return testapikey', async () => {
+  test('[/splits] should be 200 if is valid authToken and return splits on split2 yaml file for key_red', async () => {
     const response = await request(app)
       .get('/manager/splits')
-      .set('Authorization', 'test-multiple');
+      .set('Authorization', 'key_red');
     expect(response.statusCode).toBe(200);
-    expect(response.body.splits).toEqual('testapikey');
+    expect(response.body.splits.map(split => {return split.name;}))
+      .toEqual(
+        ['testing_split_red', 'testing_split_color', 'testing_split_only_wl', 'testing_split_with_wl', 'testing_split_with_config']
+      );
   });
 
-  test('[/splits] should be 200 if is valid authToken and return localhost', async () => {
+  test('[/splits] should be 200 if is valid authToken and return splits on split1 yaml file for key_blue', async () => {
     const response = await request(app)
       .get('/manager/splits')
-      .set('Authorization', 'test');
+      .set('Authorization', 'key_blue');
     expect(response.statusCode).toBe(200);
-    expect(response.body.splits).toEqual('localhost');
+    expect(response.body.splits.map(split => {return split.name;}))
+      .toEqual(
+        ['testing_split_blue', 'testing_split_color', 'testing_split_only_wl', 'testing_split_with_wl', 'testing_split_with_config']
+      );
   });
 
   test('[/splits] should be 401 if is non existent authToken and return unauthorized error', async () => {
@@ -47,25 +38,25 @@ describe('environmentManager - manager endpoints', () => {
 
 
   // split
-  test('[/split] should be 200 if is valid authToken and return testapikey', async () => {
+  test('[/split] should be 200 if is valid authToken and return split testing_split_red for key_red', async () => {
     const response = await request(app)
-      .get('/manager/split?split-name=multiple-environment')
-      .set('Authorization', 'test-multiple');
+      .get('/manager/split?split-name=testing_split_red')
+      .set('Authorization', 'key_red');
     expect(response.statusCode).toBe(200);
-    expect(response.text).toEqual('testapikey');
+    expect(response.body.name).toEqual('testing_split_red');
   });
 
-  test('[/split] should be 200 if is valid authToken and return localhost', async () => {
+  test('[/split] should be 200 if is valid authToken and return split testing_split_blue for key_blue', async () => {
     const response = await request(app)
-      .get('/manager/split?split-name=multiple-environment')
-      .set('Authorization', 'test');
+      .get('/manager/split?split-name=testing_split_blue')
+      .set('Authorization', 'key_blue');
     expect(response.statusCode).toBe(200);
-    expect(response.text).toEqual('localhost');
+    expect(response.body.name).toEqual('testing_split_blue');
   });
 
   test('[/split] should be 401 if is non existent authToken and return unauthorized error', async () => {
     const response = await request(app)
-      .get('/manager/split?split-name=multiple-environment')
+      .get('/manager/split?split-name=testing_split_blue')
       .set('Authorization', 'non-existent');
     expect(response.statusCode).toBe(401);
     expect(response.body).toEqual({'error':'Unauthorized'});
@@ -74,20 +65,26 @@ describe('environmentManager - manager endpoints', () => {
 
 
   // names
-  test('[/names] should be 200 if is valid authToken and return testapikey', async () => {
+  test('[/names] should be 200 if is valid authToken and return splits in split2.yml', async () => {
     const response = await request(app)
       .get('/manager/names')
-      .set('Authorization', 'test-multiple');
+      .set('Authorization', 'key_red');
     expect(response.statusCode).toBe(200);
-    expect(response.body.splits).toEqual('testapikey');
+    expect(response.body.splits)
+      .toEqual(
+        ['testing_split_red', 'testing_split_color', 'testing_split_only_wl', 'testing_split_with_wl', 'testing_split_with_config']
+      );
   });
 
-  test('[/names] should be 200 if is valid authToken and return localhost', async () => {
+  test('[/names] should be 200 if is valid authToken and return splits in split1.yml', async () => {
     const response = await request(app)
       .get('/manager/names')
-      .set('Authorization', 'test');
+      .set('Authorization', 'key_blue');
     expect(response.statusCode).toBe(200);
-    expect(response.body.splits).toEqual('localhost');
+    expect(response.body.splits)
+      .toEqual(
+        ['testing_split_blue', 'testing_split_color', 'testing_split_only_wl', 'testing_split_with_wl', 'testing_split_with_config']
+      );
   });
 
   test('[/names] should be 401 if is non existent authToken and return unauthorized error', async () => {
