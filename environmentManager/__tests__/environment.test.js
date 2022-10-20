@@ -313,6 +313,32 @@ describe('environmentManager - client endpoints',  () => {
         .set('Authorization', 'non-existent');
       expect(response.body).toEqual({'error':'Unauthorized'});
     });
+
+    test('Test destroy', async () => {
+      const key = 'key_red';
+      let response = await request(app)
+        .get('/client/get-treatment?key=blue&split-name=testing_split_color')
+        .set('Authorization', key);
+
+      const environmentManager = require('../../environmentManager').getInstance();
+      const client = environmentManager.getClient(key);
+      const manager = environmentManager.getManager(key);
+
+      expect(response.body.treatment).toEqual('red');
+      expect(environmentManager.isReady()).toBe(true);
+      expect(client.isClientReady).toBe(true);
+
+      await environmentManager.destroy();
+      expect(environmentManager.isReady()).toBe(false);
+      response = await request(app)
+        .get('/client/get-treatment?key=blue&split-name=testing_split_color')
+        .set('Authorization', key);
+      expect(response.body).toEqual({'error':'Unauthorized'}); // Environments list should be empty after destroy
+
+      expect(client.track('key', 'tt', 'event')).toBe(false); // After destroy, track calls return false;
+      expect(manager.splits().length).toBe(0); // After destroy, manager.splits returns empty array.;
+
+    });
   });
 
 });
