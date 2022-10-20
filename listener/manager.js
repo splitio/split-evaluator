@@ -64,18 +64,16 @@ const ImpressionManagerFactory = (function(){
   let instance;
 
   return {
-    hasInstance: function() {
+    hasInstance() {
       return !instance ? false : true;
     },
-    getInstance: function() {
+    getInstance() {
       if (!instance) {
         instance = new ImpressionManager();
-        // Hide the constructor so the returned object can't be new'd...
-        instance.constructor = undefined;
       }
       return instance;
     },
-    destroy: async function() {
+    async destroy() {
       await instance.destroy();
       instance = undefined;
     },

@@ -30,7 +30,7 @@ function gracefulShutDown(signal) {
   process.on(signal, async () => {
     console.info(`${signal} signal received.`);
     await environmentManagerFactory.destroy();
-    impressionManagerFactory.destroy();
+    await impressionManagerFactory.destroy();
     server.close(() => {
       console.log('Http server closed.');
       process.exit(0);

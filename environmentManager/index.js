@@ -76,11 +76,12 @@ const EnvironmentManagerFactory = (function(){
     }
 
     async destroy() {
-      this.getAuthTokens().forEach(async authToken => {
-        const client = this.getClient(authToken);
-        await client.destroy();
-      });
-      this._clientsReady = false;
+      Promise.all(
+        this.getAuthTokens().map(async authToken => {
+          const client = this.getClient(authToken);
+          await client.destroy();
+        })
+      ).then(this._clientsReady = false);
     }
 
     isReady() {
@@ -91,18 +92,16 @@ const EnvironmentManagerFactory = (function(){
   let instance;
 
   return {
-    hasInstance: function() {
+    hasInstance() {
       return !instance ? false : true;
     },
-    getInstance: function() {
+    getInstance() {
       if (!instance) {
         instance = new EnvironmentManager();
-        // Hide the constructor so the returned object can't be new'd...
-        instance.constructor = undefined;
       }
       return instance;
     },
-    destroy: async function() {
+    async destroy() {
       await instance.destroy().then(instance = undefined);
     },
   };

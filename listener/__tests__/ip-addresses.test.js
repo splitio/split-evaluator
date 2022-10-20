@@ -23,9 +23,8 @@ describe('ip addresses', () => {
     jest.resetModules();
   });
 
-  afterEach(async (done) => {
+  afterEach(async () => {
     await gracefulShutDown();
-    done();
   });
 
   describe('ip addresses default', () => {

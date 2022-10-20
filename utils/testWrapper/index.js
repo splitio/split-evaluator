@@ -57,12 +57,12 @@ const getLongKey = () => {
 const gracefulShutDown = async () => {
 
   const environmentManagerFactory = require('../../environmentManager');
-  if (environmentManagerFactory && environmentManagerFactory.hasInstance()) {
+  if (environmentManagerFactory.hasInstance()) {
     await environmentManagerFactory.destroy();
   }
 
   const impressionManagerFactory = require('../../listener/manager');
-  if (impressionManagerFactory.hasInstance && impressionManagerFactory.hasInstance()) {
+  if (impressionManagerFactory.hasInstance()) {
     await impressionManagerFactory.destroy();
   }
 };
