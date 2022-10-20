@@ -34,7 +34,7 @@ const EnvironmentManagerFactory = (function(){
           isClientReady: false,
         };
 
-        const client = this._environments[authToken].factory.client();
+        const client = this.getFactory(authToken).client();
         this._clientReadiness(client);
 
 
@@ -52,15 +52,15 @@ const EnvironmentManagerFactory = (function(){
     }
 
     getVersion() {
-      return this._environments[this.getAuthTokens()[0]].factory.settings.sdkVersion;
+      return this.getFactory(this.getAuthTokens()[0]).settings.sdkVersion;
     }
 
     getClient(authToken) {
-      return this._environments[authToken].factory.client();
+      return this.getFactory(authToken).client();
     }
 
     getManager(authToken) {
-      return this._environments[authToken].factory.manager();
+      return this.getFactory(authToken).manager();
     }
 
     validToken(authToken) {
@@ -72,16 +72,19 @@ const EnvironmentManagerFactory = (function(){
     }
 
     async ready() {
-      await Promise.all(this._readyPromises).then(this._clientsReady = true);
+      return Promise.all(this._readyPromises).then(() => { this._clientsReady = true; });
     }
 
     async destroy() {
-      Promise.all(
+      return Promise.all(
         this.getAuthTokens().map(async authToken => {
           const client = this.getClient(authToken);
-          await client.destroy();
+          return client.destroy();
         })
-      ).then(this._clientsReady = false);
+      ).then(() => {
+        this._clientsReady = false;
+        this._environments = [];
+      });
     }
 
     isReady() {
@@ -102,7 +105,7 @@ const EnvironmentManagerFactory = (function(){
       return instance;
     },
     async destroy() {
-      await instance.destroy().then(instance = undefined);
+      await instance.destroy().then(() => { instance = undefined; });
     },
   };
 })();
