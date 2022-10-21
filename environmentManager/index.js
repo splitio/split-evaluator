@@ -77,7 +77,7 @@ const EnvironmentManagerFactory = (function(){
 
     async destroy() {
       return Promise.all(
-        this.getAuthTokens().map(async authToken => {
+        this.getAuthTokens().map(authToken => {
           const client = this.getClient(authToken);
           return client.destroy();
         })
