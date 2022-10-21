@@ -5,6 +5,7 @@ const YAML = require('js-yaml');
 const fs = require('fs');
 const app = express();
 const { validUrl } = require('./utils/parserConfigs/validators');
+const environmentManager = require('./environmentManager').getInstance();
 
 // Middlewares
 const authorization = require('./middleware/authorization');
@@ -17,15 +18,13 @@ const adminRouter = require('./admin/admin.router');
 // Utils
 const utils = require('./utils/utils');
 
-const AUTH_TOKEN = process.env.SPLIT_EVALUATOR_AUTH_TOKEN;
-
 app.use(morgan('tiny'));
 
 // OPENAPI 3.0 Definition
 // Grabs yaml
 const openApiDefinition = YAML.load(fs.readFileSync('./openapi/openapi.yaml').toString());
 // Informs warn and remove security tag
-if (!AUTH_TOKEN) {
+if (!environmentManager.getAuthTokens().length) {
   delete openApiDefinition.security;
   delete openApiDefinition.components.securitySchemes;
   console[console.warn ? 'warn' : 'log']('External API key not provided. If you want a security filter use the SPLIT_EVALUATOR_AUTH_TOKEN environment variable as explained as explained in our documentation.');

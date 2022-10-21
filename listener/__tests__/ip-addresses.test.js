@@ -1,5 +1,5 @@
 const request = require('supertest');
-const { expectOk } = require('../../utils/testWrapper/index');
+const { expectOk, gracefulShutDown } = require('../../utils/testWrapper/index');
 
 describe('ip addresses', () => {
   let ip;
@@ -10,22 +10,29 @@ describe('ip addresses', () => {
     hostname = impressionData.hostname;
   };
 
+  const mockListener = () => {
+    const environmentManager = require('../../environmentManager').getInstance();
+    environmentManager.getAuthTokens().forEach(authToken => {
+      environmentManager.getFactory(authToken).settings.impressionListener.logImpression = log;
+    });
+  };
+
+  process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT = 'http://localhost:7546';
+
   beforeEach(() => {
     jest.resetModules();
   });
 
+  afterEach(async () => {
+    await gracefulShutDown();
+  });
+
   describe('ip addresses default', () => {
     test('should set hostname and ip when is default', async (done) => {
-      process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'test';
-      process.env.SPLIT_EVALUATOR_API_KEY = 'localhost';
-      process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT = 'http://localhost:7546';
       const app = require('../../app');
       const os = require('os');
       const localIp = require('@splitsoftware/splitio/lib/utils/ip');
-  
-      const sdkModule = require('../../sdk');
-      sdkModule.factory.settings.impressionListener.logImpression = log;
-  
+      mockListener();
       const response = await request(app)
         .get('/client/get-treatment?key=test&split-name=my-experiment')
         .set('Authorization', 'test');
@@ -38,15 +45,13 @@ describe('ip addresses', () => {
   });
 
   describe('ip addresses disabled', () => {
-    test('should not set hostname and ip when is false', async (done) => {
-      process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'test';
-      process.env.SPLIT_EVALUATOR_API_KEY = 'localhost';
-      process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT = 'http://localhost:7546';
+    beforeEach(() => {
       process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED = 'false';
+    });
+    test('should not set hostname and ip when is false', async (done) => {
       const app = require('../../app');
 
-      const sdkModule = require('../../sdk');
-      sdkModule.factory.settings.impressionListener.logImpression = log;
+      mockListener();
 
       const response = await request(app)
         .get('/client/get-treatment?key=test&split-name=my-experiment')
@@ -60,18 +65,15 @@ describe('ip addresses', () => {
   });
 
   describe('ip addresses enabled', () => {
-    test('should set hostname and ip when is true', async (done) => {
-      process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'test';
-      process.env.SPLIT_EVALUATOR_API_KEY = 'localhost';
-      process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT = 'http://localhost:7546';
+    beforeEach(() => {
       process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED = 'true';
+    });
+    test('should set hostname and ip when is true', async (done) => {
       const app = require('../../app');
       const os = require('os');
       const localIp = require('@splitsoftware/splitio/lib/utils/ip');
-  
-      const sdkModule = require('../../sdk');
-      sdkModule.factory.settings.impressionListener.logImpression = log;
-  
+      mockListener();
+
       const response = await request(app)
         .get('/client/get-treatment?key=test&split-name=my-experiment')
         .set('Authorization', 'test');

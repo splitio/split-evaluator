@@ -2,13 +2,12 @@ const os = require('os');
 const ip = require('@splitsoftware/splitio/lib/utils/ip');
 
 const utils = require('../utils/utils');
-const sdkModule = require('../sdk');
-const sdk = sdkModule.factory;
+const environmentManager = require('../environmentManager').getInstance();
 
 /**
  * ping pings server
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const ping = (req, res) => {
   console.log('pong');
@@ -19,15 +18,15 @@ const ping = (req, res) => {
  * healthcheck  checks if SDK and environtment is healthy or not.
  * 200 - Everything is OK. Ready to evaluate.
  * 500 - Something is wrong or not ready yet. Not able to perform evaluations.
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const healthcheck = (req, res) => {
   console.log('Running health check.');
   let status = 500;
   let msg = 'Split evaluator engine is not evaluating traffic properly.';
 
-  if (sdkModule.isReady()) {
+  if (environmentManager.isReady()) {
     status = 200;
     msg = 'Split Evaluator working as expected.';
   }
@@ -38,13 +37,12 @@ const healthcheck = (req, res) => {
 
 /**
  * version  returns the current version of Split Evaluator
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const version = (req, res) => {
-  console.log('Getting version.');
   const version = utils.getVersion();
-  const parts = sdk.settings.sdkVersion.split('-');
+  const parts = environmentManager.getVersion().split('-');
   const sdkLanguage = parts[0];
   const sdkVersion = parts.slice(1).join('-');
 
@@ -57,8 +55,8 @@ const version = (req, res) => {
 
 /**
  * machine  returns the machine instance name and machine ip
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const machine = (req, res) => {
   console.log('Getting machine information.');
@@ -79,8 +77,8 @@ const machine = (req, res) => {
 
 /**
  * uptime returns the uptime of the server
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
 const uptime = (req, res) => {
   const uptime = utils.uptime();

@@ -1,11 +1,8 @@
-const ImpressionManager = require('./manager');
-
-const impressionManager = new ImpressionManager();
-impressionManager.start();
+const impressionManager = require('./manager').getInstance();
 
 /**
  * logImpression  impresion listener handler
- * @param {Object} impressionData 
+ * @param {Object} impressionData
  */
 const logImpression = (impressionData) => {
   // Adds Impression to queue

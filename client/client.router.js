@@ -14,9 +14,9 @@ const { parseValidators } = require('../utils/utils');
 
 /**
  * treatmentValidation  performs input validation for treatment call.
- * @param {object} req 
- * @param {object} res 
- * @param {function} next 
+ * @param {object} req
+ * @param {object} res
+ * @param {function} next
  */
 const treatmentValidation = (req, res, next) => {
   const matchingKeyValidation = keyValidator(req.query.key, 'key');
@@ -46,9 +46,9 @@ const treatmentValidation = (req, res, next) => {
 
 /**
  * treatmentsValidation performs input validation for treatments call.
- * @param {object} req 
- * @param {object} res 
- * @param {function} next 
+ * @param {object} req
+ * @param {object} res
+ * @param {function} next
  */
 const treatmentsValidation = (req, res, next) => {
   const matchingKeyValidation = keyValidator(req.query.key, 'key');
@@ -78,9 +78,9 @@ const treatmentsValidation = (req, res, next) => {
 
 /**
  * trackValidation  performs input validation for event tracking calls.
- * @param {object} req 
- * @param {object} res 
- * @param {function} next 
+ * @param {object} req
+ * @param {object} res
+ * @param {function} next
  */
 const trackValidation = (req, res, next) => {
   const keyValidation = keyValidator(req.query.key, 'key');
@@ -111,9 +111,9 @@ const trackValidation = (req, res, next) => {
 
 /**
  * allTreatmentValidation performs input validation for all treatments call.
- * @param {object} req 
- * @param {object} res 
- * @param {function} next 
+ * @param {object} req
+ * @param {object} res
+ * @param {function} next
  */
 const allTreatmentValidation = (req, res, next) => {
   const keysValidation = keysValidator(req.query.keys);
