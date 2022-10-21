@@ -22,6 +22,12 @@
   "jest": {
     "testPathIgnorePatterns": [
       "config"
+    ],
+    "setupFiles": [
+      "<rootDir>/.jest/setEnvVars.js"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/.jest/app.setup.js"
     ]
   },
   "main": "server.js",
@@ -30,10 +36,10 @@
     "start": "node server.js",
     "start:debug": "node --inspect-brk server.js",
     "lint": "eslint .",
-    "test": "NODE_ENV=test jest --detectOpenHandles"
+    "test": "NODE_ENV=test jest"
   },
   "dependencies": {
-    "@splitsoftware/splitio": "10.20.0",
+    "@splitsoftware/splitio": "10.22.0",
     "config": "1.25.1",
     "express": "^4.17.1",
     "morgan": "^1.9.1",

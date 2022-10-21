@@ -5,7 +5,7 @@ const YAML = require('js-yaml');
 const fs = require('fs');
 const app = express();
 const { validUrl } = require('./utils/parserConfigs/validators');
-const environmentManager = require('./environmentManager');
+const environmentManager = require('./environmentManager').getInstance();
 
 // Middlewares
 const authorization = require('./middleware/authorization');

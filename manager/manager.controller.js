@@ -1,4 +1,4 @@
-const environmentManager = require('../environmentManager');
+const environmentManager = require('../environmentManager').getInstance();
 
 /**
  * split returns splitView for a particular split
