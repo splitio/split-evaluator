@@ -1,6 +1,13 @@
+2.1.1 (XXX XX, 2022)
+  - Updated SDK version to v10.22.0 which is the latest to the date.
+  - Added cors
+  - Added Multi environment support
+  - Added new env variables:
+    - SPLIT_EVALUATOR_ENVIRONMENTS
+
 2.1.0 (Jul 15, 2022)
  - Added support for attribute values to be sent as JSON in a POST version of the get treatment endpoints, to avoid query param limitations.
- - Updated the SDK version to 10.20.0 which is the latest to the date. 
+ - Updated the SDK version to 10.20.0 which is the latest to the date.
  - Updated npm dependencies for vulnerability fixes.
  - Updated base image to node:16.16.0-alpine3.16
 

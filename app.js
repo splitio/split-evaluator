@@ -18,6 +18,10 @@ const adminRouter = require('./admin/admin.router');
 // Utils
 const utils = require('./utils/utils');
 
+// Cors
+var cors = require('cors');
+app.use(cors());
+
 app.use(morgan('tiny'));
 
 // OPENAPI 3.0 Definition
