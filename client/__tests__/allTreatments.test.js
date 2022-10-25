@@ -1,6 +1,3 @@
-process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'test';
-process.env.SPLIT_EVALUATOR_API_KEY = 'localhost';
-
 const request = require('supertest');
 const app = require('../../app');
 const { expectError, expectErrorContaining, expectOkAllTreatments, getLongKey } = require('../../utils/testWrapper');
