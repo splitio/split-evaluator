@@ -2,6 +2,8 @@ const settings = require('../utils/parserConfigs')();
 const { validEnvironment, validEnvironmentConfig } = require('../utils/parserConfigs/validators');
 const { getSplitFactory } = require('../sdk');
 const SPLIT_EVALUATOR_ENVIRONMENTS = 'SPLIT_EVALUATOR_ENVIRONMENTS';
+const SPLIT_EVALUATOR_AUTH_TOKEN = 'SPLIT_EVALUATOR_AUTH_TOKEN';
+const SPLIT_EVALUATOR_API_KEY = 'SPLIT_EVALUATOR_API_KEY';
 
 const EnvironmentManagerFactory = (function(){
   class EnvironmentManager {
@@ -14,10 +16,20 @@ const EnvironmentManagerFactory = (function(){
       // Ready promises for each client in environment manager
       this._readyPromises = [];
 
+      this.requireAuth = true;
+
       this._initializeEnvironments();
     }
 
     _initializeEnvironments(){
+      if (!process.env.SPLIT_EVALUATOR_ENVIRONMENTS) {
+        const AUTH_TOKEN = process.env.SPLIT_EVALUATOR_AUTH_TOKEN;
+        if (!AUTH_TOKEN) this.requireAuth = false;
+        process.env.SPLIT_EVALUATOR_ENVIRONMENTS = `[{
+          "AUTH_TOKEN": "${process.env[SPLIT_EVALUATOR_AUTH_TOKEN]}",
+          "API_KEY": "${process.env[SPLIT_EVALUATOR_API_KEY]}"
+        }]`;
+      }
 
       const environmentConfigs = validEnvironmentConfig(SPLIT_EVALUATOR_ENVIRONMENTS);
 
@@ -64,7 +76,8 @@ const EnvironmentManagerFactory = (function(){
     }
 
     validToken(authToken) {
-      return Object.keys(this._environments).indexOf(authToken) > -1;
+      if (this.requireAuth) return Object.keys(this._environments).indexOf(authToken) > -1;
+      return true;
     }
 
     getAuthTokens() {

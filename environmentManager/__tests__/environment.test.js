@@ -342,3 +342,43 @@ describe('environmentManager - client endpoints',  () => {
   });
 
 });
+
+describe('environmentManager - empty environments',  () => {
+  beforeEach(() => {
+    jest.resetModules();
+  });
+  describe('empty AUTH_TOKEN - authorization not required',  () => {
+
+    test('[GET] should be 200 if authorization is not sent', async () => {
+      delete process.env.SPLIT_EVALUATOR_ENVIRONMENTS;
+      process.env.SPLIT_EVALUATOR_API_KEY = 'localhost';
+      const app = require('../../app');
+
+      // fetch without authorization
+      const response = await request(app)
+        .get('/client/get-treatment?key=test&split-name=my-experiment');
+      expect(response.body.treatment).toEqual('on');
+    });
+  });
+
+  describe('empty AUTH_TOKEN - authorization required',  () => {
+
+    test('[GET] should be 401 if authorization is not sent', async () => {
+      delete process.env.SPLIT_EVALUATOR_ENVIRONMENTS;
+      process.env.SPLIT_EVALUATOR_API_KEY = 'localhost';
+      process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'key_green';
+      const app = require('../../app');
+
+      // fetch without authorization - unauthorized error expected
+      let response = await request(app)
+        .get('/client/get-treatment?key=test&split-name=my-experiment');
+      expect(response.body).toEqual({'error': 'Unauthorized'});
+
+      // fetch with authorization
+      response = await request(app)
+        .get('/client/get-treatment?key=test&split-name=my-experiment')
+        .set('Authorization', 'key_green');
+      expect(response.body.treatment).toEqual('on');
+    });
+  });
+});
