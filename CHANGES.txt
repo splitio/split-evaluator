@@ -1,9 +1,10 @@
 2.1.1 (XXX XX, 2022)
   - Updated SDK version to v10.22.0 which is the latest to the date.
-  - Added cors
+  - Added new env variable to enable cors
   - Added Multi environment support
   - Added new env variables:
     - SPLIT_EVALUATOR_ENVIRONMENTS
+    - SPLIT_EVALUATOR_ENABLE_CORS
 
 2.1.0 (Jul 15, 2022)
  - Added support for attribute values to be sent as JSON in a POST version of the get treatment endpoints, to avoid query param limitations.
