@@ -58,8 +58,8 @@ const EnvironmentManagerFactory = (function(){
       this._readyPromises.push(client.ready());
       const encodedApiKey = apiKey.replace(/.(?=.{4,}$)/g, '#');
       client.on(client.Event.SDK_READY, () => {
-        console.info(`Client ready for api key ${encodedApiKey}`)
-        client.isClientReady = true
+        console.info(`Client ready for api key ${encodedApiKey}`);
+        client.isClientReady = true;
       });
       client.on(client.Event.SDK_READY_TIMED_OUT, () => {
         console.error(`Client timed out for api key ${encodedApiKey}`);
