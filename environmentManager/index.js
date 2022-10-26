@@ -68,6 +68,7 @@ const EnvironmentManagerFactory = (function(){
     }
 
     getFactory(authToken) {
+      if (!this.requireAuth) authToken = undefined;
       return this._environments[authToken].factory;
     }
 
@@ -128,6 +129,7 @@ const EnvironmentManagerFactory = (function(){
       return instance;
     },
     async destroy() {
+      if (!instance) return;
       await instance.destroy().then(() => { instance = undefined; });
     },
   };
