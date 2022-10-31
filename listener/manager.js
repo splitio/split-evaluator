@@ -74,6 +74,7 @@ const ImpressionManagerFactory = (function(){
       return instance;
     },
     async destroy() {
+      if (!instance) return;
       await instance.destroy();
       instance = undefined;
     },

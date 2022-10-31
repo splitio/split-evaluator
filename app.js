@@ -17,6 +17,12 @@ const adminRouter = require('./admin/admin.router');
 
 // Utils
 const utils = require('./utils/utils');
+// Cors
+if (process.env.SPLIT_EVALUATOR_ENABLE_CORS === 'true') {
+  console[console.warn ? 'warn' : 'log']('Cors enabled');
+  const cors = require('cors');
+  app.use(cors());
+}
 
 app.use(morgan('tiny'));
 
