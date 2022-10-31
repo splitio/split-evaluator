@@ -1,6 +1,6 @@
 {
   "name": "split-evaluator",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Split-Evaluator",
   "repository": "splitio/split-evaluator",
   "homepage": "https://github.com/splitio/split-evaluator#readme",
@@ -22,6 +22,12 @@
   "jest": {
     "testPathIgnorePatterns": [
       "config"
+    ],
+    "setupFiles": [
+      "<rootDir>/.jest/setEnvVars.js"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/.jest/app.setup.js"
     ]
   },
   "main": "server.js",
@@ -33,7 +39,7 @@
     "test": "NODE_ENV=test jest"
   },
   "dependencies": {
-    "@splitsoftware/splitio": "10.20.0",
+    "@splitsoftware/splitio": "10.22.0",
     "config": "1.25.1",
     "express": "^4.17.1",
     "morgan": "^1.9.1",

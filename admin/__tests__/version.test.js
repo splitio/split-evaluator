@@ -1,9 +1,5 @@
-process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'test';
-process.env.SPLIT_EVALUATOR_API_KEY = 'localhost';
-
 const utils = require('../../utils/utils');
-const sdkModule = require('../../sdk');
-const sdk = sdkModule.factory;
+const environmentManager = require('../../environmentManager').getInstance();
 
 const request = require('supertest');
 const app = require('../../app');
@@ -31,7 +27,7 @@ describe('version', () => {
       .get('/admin/version')
       .set('Authorization', 'test');
     const version = utils.getVersion();
-    const parts = sdk.settings.sdkVersion.split('-');
+    const parts = environmentManager.getVersion().split('-');
     const sdkLanguage = parts[0];
     const sdkVersion = parts.slice(1).join('-');
     expect(response.statusCode).toEqual(200);
