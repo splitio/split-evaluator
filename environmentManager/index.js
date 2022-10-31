@@ -47,19 +47,28 @@ const EnvironmentManagerFactory = (function(){
         };
 
         const client = this.getFactory(authToken).client();
-        this._clientReadiness(client);
+        this._clientReadiness(client, apiKey);
 
 
       });
       this.ready();
     }
 
-    _clientReadiness(client){
+    _clientReadiness(client, apiKey){
       this._readyPromises.push(client.ready());
-      client.on(client.Event.SDK_READY, () => client.isClientReady = true);
+      const encodedApiKey = apiKey.replace(/.(?=.{4,}$)/g, '#');
+      client.on(client.Event.SDK_READY, () => {
+        console.info(`Client ready for api key ${encodedApiKey}`);
+        client.isClientReady = true;
+      });
+      client.on(client.Event.SDK_READY_TIMED_OUT, () => {
+        console.error(`Client timed out for api key ${encodedApiKey}`);
+        process.exit();
+      });
     }
 
     getFactory(authToken) {
+      if (!this.requireAuth) authToken = undefined;
       return this._environments[authToken].factory;
     }
 
@@ -85,7 +94,9 @@ const EnvironmentManagerFactory = (function(){
     }
 
     async ready() {
-      return Promise.all(this._readyPromises).then(() => { this._clientsReady = true; });
+      return Promise.allSettled(this._readyPromises).then(() => {
+        this._clientsReady = true;
+      });
     }
 
     async destroy() {
@@ -118,6 +129,7 @@ const EnvironmentManagerFactory = (function(){
       return instance;
     },
     async destroy() {
+      if (!instance) return;
       await instance.destroy().then(() => { instance = undefined; });
     },
   };
