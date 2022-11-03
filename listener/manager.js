@@ -21,7 +21,7 @@ const ImpressionManagerFactory = (function(){
       const url = process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT;
       const options = {
         method: 'POST',
-        body: JSON.stringify({impressions}),
+        body: JSON.stringify({ impressions }),
         headers: {
           'Content-Type': 'application/json',
         },
