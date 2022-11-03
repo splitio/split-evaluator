@@ -28,7 +28,6 @@ const ImpressionManagerFactory = (function(){
         json: true,
       };
       return (impressions.length > 0) ? fetch(url, options)
-        .then(() => Promise.resolve())
         .catch(error => {
           console.log(error && error.message);
           return Promise.reject(error);
