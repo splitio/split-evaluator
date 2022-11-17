@@ -24,7 +24,10 @@ const EnvironmentManagerFactory = (function(){
     _initializeEnvironments(){
       if (!process.env.SPLIT_EVALUATOR_ENVIRONMENTS) {
         const AUTH_TOKEN = process.env.SPLIT_EVALUATOR_AUTH_TOKEN;
-        if (!AUTH_TOKEN) this.requireAuth = false;
+        if (!AUTH_TOKEN) {
+          this.requireAuth = false;
+          process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'splitToken'
+        }
         process.env.SPLIT_EVALUATOR_ENVIRONMENTS = `[{
           "AUTH_TOKEN": "${process.env[SPLIT_EVALUATOR_AUTH_TOKEN]}",
           "API_KEY": "${process.env[SPLIT_EVALUATOR_API_KEY]}"
@@ -39,6 +42,11 @@ const EnvironmentManagerFactory = (function(){
         const authToken = environment['AUTH_TOKEN'];
         const apiKey = environment['API_KEY'];
         settings.core.authorizationKey = apiKey;
+
+        if (this._environments[authToken]) {
+          console.error(`There are two or more environments with the same authToken '${authToken}' `)
+          process.exit();
+        }
 
         this._environments[authToken] = {
           apiKey: apiKey,
@@ -68,7 +76,7 @@ const EnvironmentManagerFactory = (function(){
     }
 
     getFactory(authToken) {
-      if (!this.requireAuth) authToken = undefined;
+      if (!this.requireAuth) authToken = 'splitToken';
       return this._environments[authToken].factory;
     }
 
