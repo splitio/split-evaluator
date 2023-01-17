@@ -1,5 +1,6 @@
 # Split Evaluator
-[![Build Status](https://api.travis-ci.com/splitio/split-evaluator.svg?branch=master)](https://api.travis-ci.com/splitio/split-evaluator)
+[![build workflow](https://github.com/splitio/split-evaluator/actions/workflows/ci.yml/badge.svg)](https://github.com/splitio/split-evaluator/actions)
+[![Documentation](https://img.shields.io/badge/split_evaluator-documentation-informational)](https://help.split.io/hc/en-us/articles/360020037072-Split-Evaluator)
 
 ## Overview
 This services exposes a set of APIs to produce server side evaluation of flags by wrapping a NodeJS SDK.
