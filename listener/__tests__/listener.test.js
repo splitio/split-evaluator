@@ -1,5 +1,3 @@
-process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'test';
-process.env.SPLIT_EVALUATOR_API_KEY = 'localhost';
 process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT = 'http://localhost:7546';
 
 const http = require('http');
@@ -9,9 +7,9 @@ const { expectOk, expectOkMultipleResults } = require('../../utils/testWrapper/i
 
 /**
  * matcherIlRequest matches the request body with paramaters passed
- * @param {string} body 
- * @param {number} length 
- * @param {array} expectedSplits 
+ * @param {string} body
+ * @param {number} length
+ * @param {array} expectedSplits
  */
 const matcherIlRequest = (body, length, expectedSplits) => {
   const ilRequest = JSON.parse(body);
