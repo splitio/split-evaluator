@@ -1,5 +1,5 @@
 const settings = require('../utils/parserConfigs')();
-const { validEnvironment, validEnvironmentConfig } = require('../utils/parserConfigs/validators');
+const { validEnvironment, validEnvironmentConfig, isString, throwError } = require('../utils/parserConfigs/validators');
 const { getSplitFactory } = require('../sdk');
 const SPLIT_EVALUATOR_ENVIRONMENTS = 'SPLIT_EVALUATOR_ENVIRONMENTS';
 const SPLIT_EVALUATOR_AUTH_TOKEN = 'SPLIT_EVALUATOR_AUTH_TOKEN';
@@ -43,9 +43,14 @@ const EnvironmentManagerFactory = (function(){
         const apiKey = environment['API_KEY'];
         settings.core.authorizationKey = apiKey;
 
+        if(!isString(authToken)) {
+          throwError(`authToken value ${authToken} must be a string value`);
+
+        }
+
         if (this._environments[authToken]) {
-          console.error(`There are two or more environments with the same authToken '${authToken}' `)
-          process.exit();
+          throwError(`There are two or more environments with the same authToken '${authToken}' `);
+
         }
 
         this._environments[authToken] = {
@@ -70,8 +75,7 @@ const EnvironmentManagerFactory = (function(){
         client.isClientReady = true;
       });
       client.on(client.Event.SDK_READY_TIMED_OUT, () => {
-        console.error(`Client timed out for api key ${encodedApiKey}`);
-        process.exit();
+        throwError(`Client timed out for api key ${encodedApiKey}`);
       });
     }
 
