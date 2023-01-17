@@ -1,0 +1,24 @@
+# Always blue
+- testing_split_blue:
+    treatment: "blue"
+- testing_split_color:
+    treatment: "blue"
+# This one will (or should) return control for non specified keys on whitelist
+- testing_split_only_wl:
+    treatment: "whitelisted"
+    keys: ["blue"]
+# Playing with whitelists
+- testing_split_with_wl:
+    treatment: "not_in_whitelist"
+    config: "{\"color\": \"green\"}"
+- testing_split_with_wl:
+    treatment: "one_key_wl"
+    keys: "key_blue"
+- testing_split_with_wl:
+    treatment: "multi_key_wl"
+    keys: ["blue"]
+    config: "{\"color\": \"red\"}"
+# All keys with config
+- testing_split_with_config:
+    treatment: "blue"
+    config: "{\"color\": \"blue\"}"

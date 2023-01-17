@@ -6,19 +6,18 @@ describe('getConfigs', () => {
     expect(() => settings().toThrow());
 
     // Test empty
-    process.env.SPLIT_EVALUATOR_API_KEY = '';
+    process.env.SPLIT_EVALUATOR_ENVIRONMENTS='[{"API_KEY":"","AUTH_TOKEN":"test"}]';
     expect(() => settings().toThrow());  
 
     // Test trim
-    process.env.SPLIT_EVALUATOR_API_KEY = '   ';
+    process.env.SPLIT_EVALUATOR_ENVIRONMENTS='[{"API_KEY":"   ","AUTH_TOKEN":"test"}]';
     expect(() => settings().toThrow());  
 
     // Test ok
-    process.env.SPLIT_EVALUATOR_API_KEY = 'something';
+    process.env.SPLIT_EVALUATOR_ENVIRONMENTS='[{"API_KEY":"something","AUTH_TOKEN":"test"}]';
     expect(() => settings().not.toThrow());
 
     const options = settings();
-    expect(options).toHaveProperty('core', { authorizationKey: 'something'});
     expect(options).not.toHaveProperty('impressionListener');
     expect(options).not.toHaveProperty('scheduler');
     expect(options).not.toHaveProperty('urls');
@@ -26,8 +25,6 @@ describe('getConfigs', () => {
   });
 
   test('log level', done => {
-    process.env.SPLIT_EVALUATOR_API_KEY = 'something';
-
     // Test empty
     process.env.SPLIT_EVALUATOR_LOG_LEVEL = '';
     expect(() => settings().toThrow());
@@ -71,14 +68,11 @@ describe('getConfigs', () => {
 
   test('ipAddressesEnabled', done => {
     // Test ok
-    process.env.SPLIT_EVALUATOR_API_KEY = 'something';
-    expect(() => settings().not.toThrow());
-
     process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED = 'false';
     expect(() => settings().not.toThrow());
 
     const options = settings();
-    expect(options).toHaveProperty('core', { authorizationKey: 'something', IPAddressesEnabled: false });
+    expect(options).toHaveProperty('core', { IPAddressesEnabled: false });
     expect(options).not.toHaveProperty('impressionListener');
     expect(options).not.toHaveProperty('scheduler');
     expect(options).not.toHaveProperty('urls');
@@ -106,7 +100,6 @@ describe('getConfigs', () => {
     process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED = null;
 
     const options = settings();
-    expect(options).toHaveProperty('core', { authorizationKey: 'something'});
     expect(options).toHaveProperty('impressionListener');
     expect(options).not.toHaveProperty('scheduler');
     expect(options).not.toHaveProperty('urls');
@@ -151,7 +144,6 @@ describe('getConfigs', () => {
     process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED = null;
 
     const options = settings();
-    expect(options).toHaveProperty('core', { authorizationKey: 'something'});
     expect(options).toHaveProperty('impressionListener');
     expect(options).toHaveProperty('scheduler');
     expect(options).toHaveProperty('scheduler.featuresRefreshRate', 1);
