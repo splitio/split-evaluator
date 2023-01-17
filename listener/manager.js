@@ -1,4 +1,4 @@
-const request = require('request-promise-native');
+const fetch = require('node-fetch');
 const config = require('config');
 const repeat = require('./repeat');
 const ImpressionQueue = require('./queue');
@@ -18,16 +18,16 @@ const ImpressionManagerFactory = (function(){
     }
 
     static postImpressions(impressions) {
+      const url = process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT;
       const options = {
         method: 'POST',
-        uri: process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT,
-        body: {
-          impressions,
+        body: JSON.stringify({ impressions }),
+        headers: {
+          'Content-Type': 'application/json',
         },
         json: true,
       };
-      return (impressions.length > 0) ? request(options)
-        .then(() => Promise.resolve())
+      return (impressions.length > 0) ? fetch(url, options)
         .catch(error => {
           console.log(error && error.message);
           return Promise.reject(error);
