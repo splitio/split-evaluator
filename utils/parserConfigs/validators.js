@@ -53,6 +53,10 @@ const validLogLevel = (name) => {
   throwError(`you passed ${logLevel} is an invalid log level, ${name} accepts NONE|DEBUG|INFO|WARN|ERROR`);
 };
 
+const isString = (value) => {
+  return (typeof value === 'string' || value instanceof String);
+};
+
 const validEnvironment = (environment) => {
   if(!environment['API_KEY']) throwError('API_KEY value not present in one or more environment config');
   if(!environment['AUTH_TOKEN']) throwError('AUTH_TOKEN value not present in one or more environment config');
@@ -60,16 +64,22 @@ const validEnvironment = (environment) => {
 
 const validEnvironmentConfig = (environmentParam) => {
   nullOrEmpty(environmentParam);
+  const input = process.env[environmentParam];
+  if (!isString(input))
+    throwError(`you passed an invalid ${environmentParam}, ${environmentParam} must be a string`);
   const environmentConfig = JSON.parse(process.env[environmentParam]);
-  if(!Array.isArray(environmentConfig)) throwError(`you passed an invalid ${environmentParam}, ${environmentParam} must be a list of environments.`);
+  if(!Array.isArray(environmentConfig))
+    throwError(`you passed an invalid ${environmentParam}, ${environmentParam} must be a list of environments.`);
   return environmentConfig;
 };
 
 module.exports = {
+  throwError,
   validUrl,
   validLogLevel,
   nullOrEmpty,
   parseNumber,
+  isString,
   validEnvironment,
   validEnvironmentConfig,
 };

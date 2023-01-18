@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@splitsoftware/splitio": "10.22.0",
-    "config": "1.25.1",
+    "config": "^1.31.0",
     "express": "^4.17.1",
     "morgan": "^1.9.1",
     "npm": "^8.13.2",

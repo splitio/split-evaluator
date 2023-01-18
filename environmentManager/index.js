@@ -1,5 +1,5 @@
 const settings = require('../utils/parserConfigs')();
-const { validEnvironment, validEnvironmentConfig } = require('../utils/parserConfigs/validators');
+const { validEnvironment, validEnvironmentConfig, isString, throwError } = require('../utils/parserConfigs/validators');
 const { getSplitFactory } = require('../sdk');
 const SPLIT_EVALUATOR_ENVIRONMENTS = 'SPLIT_EVALUATOR_ENVIRONMENTS';
 const SPLIT_EVALUATOR_AUTH_TOKEN = 'SPLIT_EVALUATOR_AUTH_TOKEN';
@@ -24,7 +24,10 @@ const EnvironmentManagerFactory = (function(){
     _initializeEnvironments(){
       if (!process.env.SPLIT_EVALUATOR_ENVIRONMENTS) {
         const AUTH_TOKEN = process.env.SPLIT_EVALUATOR_AUTH_TOKEN;
-        if (!AUTH_TOKEN) this.requireAuth = false;
+        if (!AUTH_TOKEN) {
+          this.requireAuth = false;
+          process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'splitToken';
+        }
         process.env.SPLIT_EVALUATOR_ENVIRONMENTS = `[{
           "AUTH_TOKEN": "${process.env[SPLIT_EVALUATOR_AUTH_TOKEN]}",
           "API_KEY": "${process.env[SPLIT_EVALUATOR_API_KEY]}"
@@ -39,6 +42,14 @@ const EnvironmentManagerFactory = (function(){
         const authToken = environment['AUTH_TOKEN'];
         const apiKey = environment['API_KEY'];
         settings.core.authorizationKey = apiKey;
+
+        if(!isString(authToken)) {
+          throwError(`authToken value ${authToken} must be a string value`);
+        }
+
+        if (this._environments[authToken]) {
+          throwError(`There are two or more environments with the same authToken '${authToken}' `);
+        }
 
         this._environments[authToken] = {
           apiKey: apiKey,
@@ -62,13 +73,12 @@ const EnvironmentManagerFactory = (function(){
         client.isClientReady = true;
       });
       client.on(client.Event.SDK_READY_TIMED_OUT, () => {
-        console.error(`Client timed out for api key ${encodedApiKey}`);
-        process.exit();
+        throwError(`Client timed out for api key ${encodedApiKey}`);
       });
     }
 
     getFactory(authToken) {
-      if (!this.requireAuth) authToken = undefined;
+      if (!this.requireAuth) authToken = 'splitToken';
       return this._environments[authToken].factory;
     }
 

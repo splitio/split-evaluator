@@ -7,11 +7,11 @@ describe('getConfigs', () => {
 
     // Test empty
     process.env.SPLIT_EVALUATOR_ENVIRONMENTS='[{"API_KEY":"","AUTH_TOKEN":"test"}]';
-    expect(() => settings().toThrow());  
+    expect(() => settings().toThrow());
 
     // Test trim
     process.env.SPLIT_EVALUATOR_ENVIRONMENTS='[{"API_KEY":"   ","AUTH_TOKEN":"test"}]';
-    expect(() => settings().toThrow());  
+    expect(() => settings().toThrow());
 
     // Test ok
     process.env.SPLIT_EVALUATOR_ENVIRONMENTS='[{"API_KEY":"something","AUTH_TOKEN":"test"}]';
