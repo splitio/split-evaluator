@@ -8,8 +8,6 @@ jest.mock('../sdk', () => ({
     const { __dirname } = require('../utils/utils');
     const path = require('path');
 
-    const timeOut = settings.core.authorizationKey === 'timeout'
-
     // Clients are configured in localhost mode if there is a features file maped to the authorizationKey value in mocksMap
     const mocksMap = {
       'localhost': '/parserConfigs/split.yml',
