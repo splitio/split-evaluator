@@ -45,9 +45,32 @@ const parseValidators = (validators) => {
   return errors;
 };
 
+
+/**
+ * Merges two JSON objects together, giving priority to the first object.
+ *
+ * @param {Object} obj1 - The first JSON object to be merged.
+ * @param {Object} obj2 - The second JSON object to be merged.
+ * @returns {Object} - The merged JSON object with properties from both obj1 and obj2
+ *
+ */
+function mergeWithPriority(obj1, obj2) {
+  let result = {};
+  for (let key in obj1) {
+    result[key] = obj1[key];
+  }
+  for (let key in obj2) {
+    if (!result[key]) {
+      result[key] = obj2[key];
+    }
+  }
+  return result;
+}
+
 module.exports = {
   getVersion,
   uptime,
   parseValidators,
+  mergeWithPriority,
   __dirname,
 };
