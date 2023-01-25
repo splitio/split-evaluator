@@ -81,8 +81,7 @@ const validGlobalConfig = (globalParam) => {
   try {
     const globalConfig = JSON.parse(process.env[globalParam]);
     return globalConfig;
-  }
-  catch (err) {
+  } catch (err) {
     throwError('Invalid globalConfig JSON');
   }
 };

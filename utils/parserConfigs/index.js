@@ -1,5 +1,4 @@
 const path = require('path');
-const { mergeWithPriority } = require('../utils');
 const { parseNumber, validUrl, validLogLevel, validGlobalConfig } = require('./validators');
 
 const getConfigs = () => {
@@ -8,22 +7,20 @@ const getConfigs = () => {
     core: {},
   };
 
+  const nulleableConfigs = {
+    core: undefined,
+    storage: undefined,
+    mode: undefined,
+    integrations: undefined,
+  };
+
   if (process.env.SPLIT_EVALUATOR_GLOBAL_CONFIG) {
     console.info('Setting global config');
     const globalConfig = validGlobalConfig('SPLIT_EVALUATOR_GLOBAL_CONFIG');
 
-    // Core configurations are being done in environments param
-    delete globalConfig.core;
-    // Always in memory (default)
-    delete globalConfig.storage;
-    // Always standalone (default)
-    delete globalConfig.mode;
-    // integrations not allowed
-    delete globalConfig.integrations;
-    // synchronization always enabled (default)
-    if (globalConfig.sync) delete globalConfig.sync.enabled;
+    configs = Object.assign(globalConfig, nulleableConfigs, configs);
+    if (configs.sync) Object.assign(configs.sync, {enabled: undefined} );
 
-    configs = mergeWithPriority(configs, globalConfig);
   }
 
   // LOG LEVEL
@@ -79,13 +76,13 @@ const getConfigs = () => {
   if (Object.keys(scheduler).length > 0) {
     console.log('Setting custom SDK scheduler timers.');
     // merge global and environment config priorizing environment variables
-    configs.scheduler = mergeWithPriority(scheduler, configs.scheduler);
+    configs.scheduler = configs.scheduler ? Object.assign(configs.scheduler, scheduler) : scheduler;
   }
 
   if (Object.keys(urls).length > 0) {
     console.log('Setting custom urls.');
     // merge global and environment config priorizing environment variables
-    configs.urls = mergeWithPriority(urls, configs.urls);
+    configs.urls = configs.urls ? Object.assign(configs.urls, urls) : urls;
   }
 
   return configs;

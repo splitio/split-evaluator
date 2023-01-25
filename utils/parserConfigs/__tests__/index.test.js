@@ -197,17 +197,17 @@ describe('getConfigs', () => {
     expect(config.scheduler).toEqual(constants.scheduler);
     expect(config.urls).toEqual(constants.urls);
     // storage should be deleted to use default in memory
-    expect(config).not.toHaveProperty('storage');
+    expect(config.storage).toEqual(undefined);
     expect(config.startup).toEqual(constants.startup);
     // should avoid sync.enabled property to use default false
-    delete constants.sync.enabled;
+    constants.sync.enabled = undefined;
     expect(config.sync).toEqual(constants.sync);
     // should avoid mode property to use default standalone
-    expect(config).not.toHaveProperty('mode');
+    expect(config.mode).toEqual(undefined);
     expect(config.debug).toBe(true);
     expect(config.streamingEnabled).toBe(false);
     // integrations config should be avoided
-    expect(config).not.toHaveProperty('integrations');
+    expect(config.integrations).toEqual(undefined);
 
     // scheduler evaluator configs should be priorized over global configs
     process.env.SPLIT_EVALUATOR_SPLITS_REFRESH_RATE = 2;
