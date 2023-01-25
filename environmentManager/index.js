@@ -59,19 +59,24 @@ const EnvironmentManagerFactory = (function(){
           throwError(`There are two or more environments with the same authToken '${authToken}' `);
         }
 
+        const { factory, telemetry, impressionsMode} = getSplitFactory(settings);
+
         // Creates an environment for authToken
         this._environments[authToken] = {
           apiKey: apiKey,
-          factory: getSplitFactory(settings),
+          factory: factory,
           isClientReady: false,
+          telemetry: telemetry,
+          impressionsMode: impressionsMode,
+          lastEvaluation: undefined,
         };
 
-        const client = this.getFactory(authToken).client();
-        this._clientReadiness(client, apiKey);
+        this._clientReadiness(authToken, apiKey);
       });
     }
 
-    _clientReadiness(client, apiKey){
+    _clientReadiness(authToken, apiKey){
+      const client = this.getFactory(authToken).client();
       // Add client ready promise to array to wait asynchronously to be resolved
       this._readyPromises.push(client.ready());
       // Encode apiKey to log it without exposing it (like ####1234)
@@ -81,11 +86,13 @@ const EnvironmentManagerFactory = (function(){
         console.info(`Client ready for api key ${encodedApiKey}`);
         this._clientsReady = true;
         client.isClientReady = true;
+        this._environments[authToken].isClientReady = true;
       });
       // Handle client timed out
       client.on(client.Event.SDK_READY_TIMED_OUT, () => {
         console.info(`Client timed out for api key ${encodedApiKey}`);
         client.isClientReady = false;
+        this._environments[authToken].isClientReady = false;
         client.destroy().then(() => {
           console.info('Timed out client destroyed');
         });
@@ -107,6 +114,25 @@ const EnvironmentManagerFactory = (function(){
 
     getManager(authToken) {
       return this.getFactory(authToken).manager();
+    }
+
+    getTelemetry(authToken) {
+      if (!this.requireAuth) authToken = 'splitToken';
+      const environment = this._environments[authToken];
+      const telemetry = environment.telemetry;
+      const stats = {
+        splits: telemetry ? telemetry.splits.getSplitNames() : [],
+        segments: telemetry ? telemetry.segments.getRegisteredSegments() : [],
+        ready: environment.isClientReady,
+        impressionsMode: environment.impressionsMode,
+        lastEvaluation: environment.lastEvaluation,
+      };
+      return stats;
+    }
+
+    updateLastEvaluation(authToken) {
+      if (!this.requireAuth) authToken = 'splitToken';
+      this._environments[authToken].lastEvaluation = new Date().toJSON();
     }
 
     validToken(authToken) {

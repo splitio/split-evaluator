@@ -15,6 +15,7 @@ const getTreatment = async (req, res) => {
 
   try {
     const evaluationResult = await client.getTreatment(key, split, attributes);
+    environmentManager.updateLastEvaluation(req.headers.authorization);
 
     res.send({
       splitName: split,
@@ -38,6 +39,7 @@ const getTreatmentWithConfig = async (req, res) => {
 
   try {
     const evaluationResult = await client.getTreatmentWithConfig(key, split, attributes);
+    environmentManager.updateLastEvaluation(req.headers.authorization);
 
     res.send({
       splitName: split,
@@ -62,6 +64,7 @@ const getTreatments = async (req, res) => {
 
   try {
     const evaluationResults = await client.getTreatments(key, splits, attributes);
+    environmentManager.updateLastEvaluation(req.headers.authorization);
 
     const result = {};
     Object.keys(evaluationResults).forEach(split => {
@@ -89,6 +92,7 @@ const getTreatmentsWithConfig = async (req, res) => {
 
   try {
     const evaluationResults = await client.getTreatmentsWithConfig(key, splits, attributes);
+    environmentManager.updateLastEvaluation(req.headers.authorization);
 
     res.send(evaluationResults);
   } catch (error) {
@@ -141,6 +145,7 @@ const allTreatments = async (authorization, keys, attributes) => {
       // Saves result for each trafficType
       evaluations[key.trafficType] = evaluation;
     }
+    environmentManager.updateLastEvaluation(authorization);
 
     return evaluations;
   } catch (error) {
@@ -159,6 +164,7 @@ const getAllTreatmentsWithConfig = async (req, res) => {
 
   try {
     const treatments = await allTreatments(req.headers.authorization, keys, attributes);
+    environmentManager.updateLastEvaluation(req.headers.authorization);
     res.send(treatments);
   } catch (error) {
     res.status(500).send({error});
@@ -186,6 +192,7 @@ const getAllTreatments = async (req, res) => {
         });
       }
     });
+    environmentManager.updateLastEvaluation(req.headers.authorization);
 
     res.send(treatments);
   } catch (error) {
