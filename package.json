@@ -21,7 +21,8 @@
   ],
   "jest": {
     "testPathIgnorePatterns": [
-      "config"
+      "config",
+      "environmentManager/__tests__/constants"
     ],
     "setupFiles": [
       "<rootDir>/.jest/setEnvVars.js"

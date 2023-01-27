@@ -73,6 +73,19 @@ const validEnvironmentConfig = (environmentParam) => {
   return environmentConfig;
 };
 
+const validGlobalConfig = (globalParam) => {
+  nullOrEmpty(globalParam);
+  const input = process.env[globalParam];
+  if (!isString(input))
+    throwError(`you passed an invalid ${globalParam}, ${globalParam} must be a string`);
+  try {
+    const globalConfig = JSON.parse(process.env[globalParam]);
+    return globalConfig;
+  } catch (err) {
+    throwError('Invalid globalConfig JSON');
+  }
+};
+
 module.exports = {
   throwError,
   validUrl,
@@ -82,4 +95,5 @@ module.exports = {
   isString,
   validEnvironment,
   validEnvironmentConfig,
+  validGlobalConfig,
 };

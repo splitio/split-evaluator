@@ -45,6 +45,7 @@ const parseValidators = (validators) => {
   return errors;
 };
 
+
 module.exports = {
   getVersion,
   uptime,
