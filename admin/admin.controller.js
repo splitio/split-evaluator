@@ -120,7 +120,7 @@ const stats = (req, res) => {
 
   const authTokens = environmentManager.getAuthTokens();
   authTokens.forEach((authToken) => {
-    stats.environments[authToken] = environmentManager.getTelemetry(authToken);
+    stats.environments[utils.ofuscate(authToken)] = environmentManager.getTelemetry(authToken);
   });
 
   res.status(200).send(stats);

@@ -1,6 +1,7 @@
 const settings = require('../utils/parserConfigs')();
 const { validEnvironment, validEnvironmentConfig, isString, throwError } = require('../utils/parserConfigs/validators');
 const { getSplitFactory } = require('../sdk');
+const { ofuscate } = require('../utils/utils');
 const SPLIT_EVALUATOR_ENVIRONMENTS = 'SPLIT_EVALUATOR_ENVIRONMENTS';
 const SPLIT_EVALUATOR_AUTH_TOKEN = 'SPLIT_EVALUATOR_AUTH_TOKEN';
 const SPLIT_EVALUATOR_API_KEY = 'SPLIT_EVALUATOR_API_KEY';
@@ -80,7 +81,7 @@ const EnvironmentManagerFactory = (function(){
       // Add client ready promise to array to wait asynchronously to be resolved
       this._readyPromises.push(client.ready());
       // Encode apiKey to log it without exposing it (like ####1234)
-      const encodedApiKey = apiKey.replace(/.(?=.{4,}$)/g, '#');
+      const encodedApiKey = ofuscate(apiKey);
       // Handle client ready
       client.on(client.Event.SDK_READY, () => {
         console.info(`Client ready for api key ${encodedApiKey}`);
@@ -97,6 +98,10 @@ const EnvironmentManagerFactory = (function(){
           console.info('Timed out client destroyed');
         });
       });
+    }
+
+    getEnvironment(authToken) {
+      return this._environments[authToken];
     }
 
     getFactory(authToken) {
@@ -118,11 +123,14 @@ const EnvironmentManagerFactory = (function(){
 
     getTelemetry(authToken) {
       if (!this.requireAuth) authToken = 'splitToken';
-      const environment = this._environments[authToken];
+      const environment = this.getEnvironment(authToken);
       const telemetry = environment.telemetry;
       const stats = {
-        splits: telemetry ? telemetry.splits.getSplitNames() : [],
-        segments: telemetry ? telemetry.segments.getRegisteredSegments() : [],
+        splitCount: telemetry ? telemetry.splits.getSplitNames().length : undefined,
+        segmentCount: telemetry ? telemetry.segments.getRegisteredSegments().length : undefined,
+        lastSynchronization: telemetry ? telemetry.getLastSynchronization() : undefined,
+        timeUntilReady: telemetry ? telemetry.getTimeUntilReady(): undefined,
+        httpErrors: telemetry ? telemetry.httpErrors: undefined,
         ready: environment.isClientReady,
         impressionsMode: environment.impressionsMode,
         lastEvaluation: environment.lastEvaluation,

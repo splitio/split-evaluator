@@ -1,5 +1,6 @@
 const settings = require('../index');
-const constants = require('../../../environmentManager/__tests__/constants');
+const { core, scheduler, storage, urls, startup, sync, integrations }  = require('../../mocks');
+
 
 describe('getConfigs', () => {
   test('apikey', done => {
@@ -179,29 +180,29 @@ describe('getConfigs', () => {
 
     // Test core property cleanning
     process.env.SPLIT_EVALUATOR_GLOBAL_CONFIG = JSON.stringify({
-      core: constants.core,
-      scheduler: constants.scheduler,
-      urls: constants.urls,
-      storage: constants.storage,
-      startup: constants.startup,
-      sync: constants.sync,
+      core: core,
+      scheduler: scheduler,
+      urls: urls,
+      storage: storage,
+      startup: startup,
+      sync: sync,
       mode: 'consumer',
       debug: true,
       streamingEnabled: false,
-      integrations: constants.integrations,
+      integrations: integrations,
     });
     let config = settings();
 
     // core should be deleted to use environment configurations
     expect(config.core).toEqual({});
-    expect(config.scheduler).toEqual(constants.scheduler);
-    expect(config.urls).toEqual(constants.urls);
+    expect(config.scheduler).toEqual(scheduler);
+    expect(config.urls).toEqual(urls);
     // storage should be deleted to use default in memory
     expect(config.storage).toEqual(undefined);
-    expect(config.startup).toEqual(constants.startup);
+    expect(config.startup).toEqual(startup);
     // should avoid sync.enabled property to use default false
-    constants.sync.enabled = undefined;
-    expect(config.sync).toEqual(constants.sync);
+    sync.enabled = undefined;
+    expect(config.sync).toEqual(sync);
     // should avoid mode property to use default standalone
     expect(config.mode).toEqual(undefined);
     expect(config.debug).toBe(true);
