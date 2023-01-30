@@ -7,23 +7,24 @@ jest.mock('../sdk', () => ({
   getSplitFactory: jest.fn((settings) => {
     const { __dirname } = require('../utils/utils');
     const path = require('path');
+    const { apiKeyMocksMap } = require('../utils/mocks')
 
     // Clients are configured in localhost mode if there is a features file maped to the authorizationKey value in mocksMap
-    const mocksMap = {
-      'localhost': '/parserConfigs/split.yml',
-      'apikey1': '/split1.yml',
-      'apikey2': '/split2.yml',
-    };
 
     let features = '';
     let authorizationKey = settings.core.authorizationKey;
+    let error = { te: { 401: 1 } };
+
+    const mock = apiKeyMocksMap[settings.core.authorizationKey]
 
     // if authorizationKey has a feature file maped in mocksMap
-    if (mocksMap[settings.core.authorizationKey]) {
+    if (mock) {
       // Set feature file
-      features = path.join(__dirname, mocksMap[settings.core.authorizationKey]);
+      features = path.join(__dirname, mock.splitUrl);
       // Set mode to localhost
       authorizationKey = 'localhost'
+      // Set mockError
+      error = {}
     };
 
     const configForMock = {
@@ -46,7 +47,20 @@ jest.mock('../sdk', () => ({
     };
 
     let sdk = jest.requireActual('../sdk');
-    const factory = sdk.getSplitFactory(configForMock);
-    return factory;
+    const { factory, telemetry, impressionsMode } = sdk.getSplitFactory(configForMock);
+
+    const mockedTelemetry = {
+      splits: {
+        getSplitNames: () => mock ? mock.splitNames : []
+      },
+      segments: {
+        getRegisteredSegments: () => mock ? mock.segments : []
+      },
+      getLastSynchronization: () => mock ? mock.lastSynchronization : {},
+      getTimeUntilReady: () => mock ? mock.timeUntilReady : 0,
+      httpErrors: error,
+    }
+
+    return { factory, telemetry: mockedTelemetry, impressionsMode };
   }),
 }));

@@ -1,6 +1,7 @@
 const settings = require('../utils/parserConfigs')();
 const { validEnvironment, validEnvironmentConfig, isString, throwError } = require('../utils/parserConfigs/validators');
 const { getSplitFactory } = require('../sdk');
+const { obfuscate } = require('../utils/utils');
 const SPLIT_EVALUATOR_ENVIRONMENTS = 'SPLIT_EVALUATOR_ENVIRONMENTS';
 const SPLIT_EVALUATOR_AUTH_TOKEN = 'SPLIT_EVALUATOR_AUTH_TOKEN';
 const SPLIT_EVALUATOR_API_KEY = 'SPLIT_EVALUATOR_API_KEY';
@@ -59,37 +60,48 @@ const EnvironmentManagerFactory = (function(){
           throwError(`There are two or more environments with the same authToken '${authToken}' `);
         }
 
+        const { factory, telemetry, impressionsMode} = getSplitFactory(settings);
+
         // Creates an environment for authToken
         this._environments[authToken] = {
           apiKey: apiKey,
-          factory: getSplitFactory(settings),
+          factory: factory,
           isClientReady: false,
+          telemetry: telemetry,
+          impressionsMode: impressionsMode,
+          lastEvaluation: undefined,
         };
 
-        const client = this.getFactory(authToken).client();
-        this._clientReadiness(client, apiKey);
+        this._clientReadiness(authToken, apiKey);
       });
     }
 
-    _clientReadiness(client, apiKey){
+    _clientReadiness(authToken, apiKey){
+      const client = this.getFactory(authToken).client();
       // Add client ready promise to array to wait asynchronously to be resolved
       this._readyPromises.push(client.ready());
       // Encode apiKey to log it without exposing it (like ####1234)
-      const encodedApiKey = apiKey.replace(/.(?=.{4,}$)/g, '#');
+      const encodedApiKey = obfuscate(apiKey);
       // Handle client ready
       client.on(client.Event.SDK_READY, () => {
         console.info(`Client ready for api key ${encodedApiKey}`);
         this._clientsReady = true;
         client.isClientReady = true;
+        this._environments[authToken].isClientReady = true;
       });
       // Handle client timed out
       client.on(client.Event.SDK_READY_TIMED_OUT, () => {
         console.info(`Client timed out for api key ${encodedApiKey}`);
         client.isClientReady = false;
+        this._environments[authToken].isClientReady = false;
         client.destroy().then(() => {
           console.info('Timed out client destroyed');
         });
       });
+    }
+
+    getEnvironment(authToken) {
+      return this._environments[authToken];
     }
 
     getFactory(authToken) {
@@ -107,6 +119,41 @@ const EnvironmentManagerFactory = (function(){
 
     getManager(authToken) {
       return this.getFactory(authToken).manager();
+    }
+
+    getTelemetry(authToken) {
+      if (!this.requireAuth) authToken = 'splitToken';
+      const environment = this.getEnvironment(authToken);
+      const telemetry = environment.telemetry;
+      const stats = {
+        splitCount: telemetry ? telemetry.splits.getSplitNames().length : 0,
+        segmentCount: telemetry ? telemetry.segments.getRegisteredSegments().length : 0,
+        lastSynchronization: telemetry ? this._reword(telemetry.getLastSynchronization()) : {},
+        timeUntilReady: telemetry ? telemetry.getTimeUntilReady() : 0,
+        httpErrors: telemetry && telemetry.httpErrors ? this._reword(telemetry.httpErrors) : {},
+        ready: environment.isClientReady,
+        impressionsMode: environment.impressionsMode,
+        lastEvaluation: environment.lastEvaluation,
+      };
+      return stats;
+    }
+
+    _reword({sp, se, ms, im, ic, ev, te, to}) {
+      return {
+        splits: sp,
+        segments: se,
+        mySegments: ms,
+        impressions: im,
+        impressionCount: ic,
+        events: ev,
+        telemetry: te,
+        token: to,
+      };
+    }
+
+    updateLastEvaluation(authToken) {
+      if (!this.requireAuth) authToken = 'splitToken';
+      this._environments[authToken].lastEvaluation = new Date().toJSON();
     }
 
     validToken(authToken) {

@@ -1,5 +1,5 @@
 
-const constants = require('./constants');
+const { core, scheduler, storage, urls, startup, sync, integrations }  = require('../../utils/mocks');
 
 // Environment configurations
 const environmentsConfig = [
@@ -30,16 +30,16 @@ describe('environmentManager',  () => {
   describe('global config',  () => {
 
     process.env.SPLIT_EVALUATOR_GLOBAL_CONFIG = JSON.stringify({
-      core: constants.core,
-      scheduler: constants.scheduler,
-      storage: constants.storage,
-      urls: constants.urls,
-      startup: constants.startup,
-      sync: constants.sync,
+      core: core,
+      scheduler: scheduler,
+      storage: storage,
+      urls: urls,
+      startup: startup,
+      sync: sync,
       mode: 'consumer',
       debug: false,
       streamingEnabled: false,
-      integrations: constants.integrations,
+      integrations: integrations,
     });
 
     test('', async () => {
