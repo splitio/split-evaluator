@@ -1,3 +1,11 @@
+2.3.0 (Jan 31, 2022)
+  - Improvements on environment input InputValidation.
+  - Improvements on initialization to handle timed out environments.
+  - Created `/admin/stats` endpoint.
+  - Allow to use global sdk configuration.
+  - Added new env variables:
+    - SPLIT_EVALUATOR_GLOBAL_CONFIG
+
 2.2.0 (Oct 31, 2022)
   - Updated SDK version to v10.22.0 which is the latest to the date.
   - Added Multi environment support
