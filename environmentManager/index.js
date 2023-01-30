@@ -1,7 +1,7 @@
 const settings = require('../utils/parserConfigs')();
 const { validEnvironment, validEnvironmentConfig, isString, throwError } = require('../utils/parserConfigs/validators');
 const { getSplitFactory } = require('../sdk');
-const { ofuscate } = require('../utils/utils');
+const { obfuscate } = require('../utils/utils');
 const SPLIT_EVALUATOR_ENVIRONMENTS = 'SPLIT_EVALUATOR_ENVIRONMENTS';
 const SPLIT_EVALUATOR_AUTH_TOKEN = 'SPLIT_EVALUATOR_AUTH_TOKEN';
 const SPLIT_EVALUATOR_API_KEY = 'SPLIT_EVALUATOR_API_KEY';
@@ -81,7 +81,7 @@ const EnvironmentManagerFactory = (function(){
       // Add client ready promise to array to wait asynchronously to be resolved
       this._readyPromises.push(client.ready());
       // Encode apiKey to log it without exposing it (like ####1234)
-      const encodedApiKey = ofuscate(apiKey);
+      const encodedApiKey = obfuscate(apiKey);
       // Handle client ready
       client.on(client.Event.SDK_READY, () => {
         console.info(`Client ready for api key ${encodedApiKey}`);

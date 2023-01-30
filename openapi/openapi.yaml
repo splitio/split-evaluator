@@ -909,4 +909,102 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unauthorized'
+  /admin/stats:
+    get:
+      tags:
+        - admin
+      summary: stats
+      description: Evaluator & environments stats.
+      responses:
+        '200':
+          description: stats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  healthcheck:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                      sdk:
+                        type: string
+                      sdkVersion:
+                        type: string
+                  uptime:
+                    type: string
+                  environments:
+                    type: object
+                    properties:
+                      additionalProperties:
+                        type: object
+                        properties:
+                          splitCount:
+                            type: number
+                          segmentCount:
+                            type: number
+                          lastSynchronization:
+                            type: object
+                            properties:
+                              sp:
+                                type: date
+                              to:
+                                type: date
+                              te:
+                                type: date
+                              im:
+                                type: date
+                          timeUntilReady:
+                            type: number
+                          httpErrors:
+                            type: object
+                            properties:
+                              te:
+                                type: object
+                          ready:
+                            type: boolean
+                          impressionsMode:
+                            type: string
+                          lastEvaluation:
+                            type: dateTime
+                example:
+                  uptime: 10d 2h 1m 4s
+                  healthcheck:
+                    version: 2.0.0
+                    sdk: nodejs
+                    sdkVersion: 10.8.3
+                  environments:
+                    '######tkn1':
+                      splitCount: 20
+                      segmentCount: 5
+                      lastSynchronization:
+                        sp: 1674855033145
+                        to: 1674855033805
+                        te: 1674855034008
+                        im: 1674855034868
+                      timeUntilReady: 833
+                      httpErrors: {}
+                      ready: true
+                      impressionsMode: OPTIMIZED
+                    '######tkn2':
+                      splitCount: 15
+                      segmentCount: 3
+                      lastSynchronization:
+                        sp: 1674858622111
+                        to: 1674858645805
+                        te: 1674858655821
+                        im: 1674858634868
+                      timeUntilReady: 900
+                      httpErrors:
+                        te:
+                          '401': 1
+                      ready: false
+                      impressionsMode: OPTIMIZED
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
 

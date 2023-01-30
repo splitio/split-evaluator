@@ -77,7 +77,7 @@ describe('stats', () => {
         const authToken = environment.AUTH_TOKEN;
         const apiKey = environment.API_KEY;
         const mock = apiKeyMocksMap[apiKey];
-        expect(stats.environments[utils.ofuscate(authToken)]).toEqual({
+        expect(stats.environments[utils.obfuscate(authToken)]).toEqual({
           splitCount: mock.splitNames.length,
           segmentCount: mock.segments.length,
           ready: true,
@@ -126,7 +126,7 @@ describe('stats', () => {
           };
         }
         const environment = environmentManager.getEnvironment(authToken);
-        expect(stats.environments[utils.ofuscate(authToken)]).toEqual({
+        expect(stats.environments[utils.obfuscate(authToken)]).toEqual({
           splitCount: mock.splitNames.length,
           segmentCount: mock.segments.length,
           ready: environment.isClientReady,
@@ -148,7 +148,7 @@ describe('stats', () => {
             .set('Authorization', 'key_blue');
           expect(response.statusCode).toEqual(200);
           stats = response.body;
-          const lastEvaluation = stats.environments[utils.ofuscate('key_blue')].lastEvaluation;
+          const lastEvaluation = stats.environments[utils.obfuscate('key_blue')].lastEvaluation;
           expect(lastEvaluation).not.toBe(undefined);
           expect(lastEvaluation).toBe(environmentManager.getEnvironment('key_blue').lastEvaluation);
           done();
