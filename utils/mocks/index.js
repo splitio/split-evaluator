@@ -10,6 +10,7 @@ const apiKeyMocksMap = {
       im: 1674855034868,
     },
     timeUntilReady: 605,
+    httpErrors: {},
   },
   'apikey1': {
     splitUrl: '/split1.yml',
@@ -21,6 +22,7 @@ const apiKeyMocksMap = {
       te: 1674857487594,
     },
     timeUntilReady: 1000,
+    httpErrors: {},
   },
   'apikey2': {
     splitUrl: '/split2.yml',
@@ -32,6 +34,7 @@ const apiKeyMocksMap = {
       te: 1674857488686,
     },
     timeUntilReady: 860,
+    httpErrors: {},
   },
 };
 

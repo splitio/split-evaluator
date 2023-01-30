@@ -128,14 +128,27 @@ const EnvironmentManagerFactory = (function(){
       const stats = {
         splitCount: telemetry ? telemetry.splits.getSplitNames().length : 0,
         segmentCount: telemetry ? telemetry.segments.getRegisteredSegments().length : 0,
-        lastSynchronization: telemetry ? telemetry.getLastSynchronization() : {},
+        lastSynchronization: telemetry ? this._reword(telemetry.getLastSynchronization()) : {},
         timeUntilReady: telemetry ? telemetry.getTimeUntilReady() : 0,
-        httpErrors: telemetry ? telemetry.httpErrors : {},
+        httpErrors: telemetry && telemetry.httpErrors ? this._reword(telemetry.httpErrors) : {},
         ready: environment.isClientReady,
         impressionsMode: environment.impressionsMode,
         lastEvaluation: environment.lastEvaluation,
       };
       return stats;
+    }
+
+    _reword({sp, se, ms, im, ic, ev, te, to}) {
+      return {
+        splits: sp,
+        segments: se,
+        mySegments: ms,
+        impressions: im,
+        impressionCount: ic,
+        events: ev,
+        telemetry: te,
+        token: to,
+      };
     }
 
     updateLastEvaluation(authToken) {

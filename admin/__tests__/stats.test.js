@@ -67,6 +67,7 @@ describe('stats', () => {
     });
 
     test('ready environment stats', async (done) => {
+      const environmentManager = require('../../environmentManager').getInstance();
       const app = require('../../app');
       const response = await request(app)
         .get('/admin/stats')
@@ -82,8 +83,8 @@ describe('stats', () => {
           segmentCount: mock.segments.length,
           ready: true,
           timeUntilReady: mock.timeUntilReady,
-          lastSynchronization: mock.lastSynchronization,
-          httpErrors: mock.httpErrors,
+          lastSynchronization: environmentManager._reword(mock.lastSynchronization),
+          httpErrors: environmentManager._reword(mock.httpErrors),
           impressionsMode: 'OPTIMIZED',
         });
       });
@@ -120,8 +121,8 @@ describe('stats', () => {
           mock = {
             splitNames: [],
             segments: [],
-            timeUntilReady: undefined,
-            lastSynchronization: undefined,
+            timeUntilReady: 0,
+            lastSynchronization: {},
             httpErrors: { te: { 401: 1 } },
           };
         }
@@ -131,8 +132,8 @@ describe('stats', () => {
           segmentCount: mock.segments.length,
           ready: environment.isClientReady,
           timeUntilReady: mock.timeUntilReady,
-          lastSynchronization: mock.lastSynchronization,
-          httpErrors: mock.httpErrors,
+          lastSynchronization: environmentManager._reword(mock.lastSynchronization),
+          httpErrors: environmentManager._reword(mock.httpErrors),
           impressionsMode: 'NONE',
           lastEvaluation: environment.lastEvaluation,
         });

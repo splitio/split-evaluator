@@ -24,7 +24,7 @@ jest.mock('../sdk', () => ({
       // Set mode to localhost
       authorizationKey = 'localhost'
       // Set mockError
-      error = undefined
+      error = {}
     };
 
     const configForMock = {
@@ -56,8 +56,8 @@ jest.mock('../sdk', () => ({
       segments: {
         getRegisteredSegments: () => mock ? mock.segments : []
       },
-      getLastSynchronization: () => mock ? mock.lastSynchronization : undefined,
-      getTimeUntilReady: () => mock ? mock.timeUntilReady : undefined,
+      getLastSynchronization: () => mock ? mock.lastSynchronization : {},
+      getTimeUntilReady: () => mock ? mock.timeUntilReady : 0,
       httpErrors: error,
     }
 
