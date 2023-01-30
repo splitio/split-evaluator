@@ -947,21 +947,43 @@ paths:
                           lastSynchronization:
                             type: object
                             properties:
-                              sp:
-                                type: date
-                              to:
-                                type: date
-                              te:
-                                type: date
-                              im:
-                                type: date
+                              splits:
+                                type: timestamp
+                              segments:
+                                type: timestamp
+                              mySegments:
+                                type: timestamp
+                              impressions:
+                                type: timestamp
+                              impressionCount:
+                                type: timestamp
+                              events:
+                                type: timestamp
+                              telemetry:
+                                type: timestamp
+                              token:
+                                type: timestamp
                           timeUntilReady:
                             type: number
                           httpErrors:
                             type: object
                             properties:
-                              te:
-                                type: object
+                              splits:
+                                type: Object
+                              segments:
+                                type: Object
+                              mySegments:
+                                type: Object
+                              impressions:
+                                type: Object
+                              impressionCount:
+                                type: Object
+                              events:
+                                type: Object
+                              telemetry:
+                                type: Object
+                              token:
+                                type: Object
                           ready:
                             type: boolean
                           impressionsMode:
@@ -979,10 +1001,14 @@ paths:
                       splitCount: 20
                       segmentCount: 5
                       lastSynchronization:
-                        sp: 1674855033145
-                        to: 1674855033805
-                        te: 1674855034008
-                        im: 1674855034868
+                        splits: 1674855033186
+                        segments: 1674855033286
+                        mySegments: 1674855033386
+                        impressions: 1674855033486
+                        impressionCount: 1674855033586
+                        events: 1674855033686
+                        telemetry: 1674855033786
+                        token: 1674855033886
                       timeUntilReady: 833
                       httpErrors: {}
                       ready: true
@@ -993,7 +1019,7 @@ paths:
                       lastSynchronization: {}
                       timeUntilReady: 0
                       httpErrors:
-                        te:
+                        telemetry:
                           '401': 1
                       ready: false
                       impressionsMode: OPTIMIZED
