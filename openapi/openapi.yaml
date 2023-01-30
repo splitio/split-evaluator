@@ -988,14 +988,10 @@ paths:
                       ready: true
                       impressionsMode: OPTIMIZED
                     '######tkn2':
-                      splitCount: 15
-                      segmentCount: 3
-                      lastSynchronization:
-                        sp: 1674858622111
-                        to: 1674858645805
-                        te: 1674858655821
-                        im: 1674858634868
-                      timeUntilReady: 900
+                      splitCount: 0
+                      segmentCount: 0
+                      lastSynchronization: {}
+                      timeUntilReady: 0
                       httpErrors:
                         te:
                           '401': 1

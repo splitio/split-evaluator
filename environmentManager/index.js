@@ -126,11 +126,11 @@ const EnvironmentManagerFactory = (function(){
       const environment = this.getEnvironment(authToken);
       const telemetry = environment.telemetry;
       const stats = {
-        splitCount: telemetry ? telemetry.splits.getSplitNames().length : undefined,
-        segmentCount: telemetry ? telemetry.segments.getRegisteredSegments().length : undefined,
-        lastSynchronization: telemetry ? telemetry.getLastSynchronization() : undefined,
-        timeUntilReady: telemetry ? telemetry.getTimeUntilReady(): undefined,
-        httpErrors: telemetry ? telemetry.httpErrors: undefined,
+        splitCount: telemetry ? telemetry.splits.getSplitNames().length : 0,
+        segmentCount: telemetry ? telemetry.segments.getRegisteredSegments().length : 0,
+        lastSynchronization: telemetry ? telemetry.getLastSynchronization() : {},
+        timeUntilReady: telemetry ? telemetry.getTimeUntilReady() : 0,
+        httpErrors: telemetry ? telemetry.httpErrors : {},
         ready: environment.isClientReady,
         impressionsMode: environment.impressionsMode,
         lastEvaluation: environment.lastEvaluation,
