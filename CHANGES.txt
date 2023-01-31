@@ -1,6 +1,6 @@
 2.3.0 (Jan 31, 2022)
-  - Added Improvements on environment input InputValidation.
-  - Added Improvements on initialization to handle timed out environments.
+  - Updated environment input validation.
+  - Updated initialization to handle timed out environments.
   - Added `/admin/stats` endpoint.
   - Added global sdk configuration.
   - Added new env variables:
