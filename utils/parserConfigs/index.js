@@ -1,11 +1,27 @@
 const path = require('path');
-const {  parseNumber, validUrl, validLogLevel } = require('./validators');
+const { parseNumber, validUrl, validLogLevel, validGlobalConfig } = require('./validators');
 
 const getConfigs = () => {
-  const configs = {
+  let configs = {
     features: path.join(__dirname, 'split.yml'),
     core: {},
   };
+
+  const nulleableConfigs = {
+    core: undefined,
+    storage: undefined,
+    mode: undefined,
+    integrations: undefined,
+  };
+
+  if (process.env.SPLIT_EVALUATOR_GLOBAL_CONFIG) {
+    console.info('Setting global config');
+    const globalConfig = validGlobalConfig('SPLIT_EVALUATOR_GLOBAL_CONFIG');
+
+    configs = Object.assign(globalConfig, nulleableConfigs, configs);
+    if (configs.sync) Object.assign(configs.sync, {enabled: undefined} );
+
+  }
 
   // LOG LEVEL
   const logLevel = validLogLevel('SPLIT_EVALUATOR_LOG_LEVEL');
@@ -59,12 +75,14 @@ const getConfigs = () => {
 
   if (Object.keys(scheduler).length > 0) {
     console.log('Setting custom SDK scheduler timers.');
-    configs.scheduler = scheduler;
+    // merge global and environment config priorizing environment variables
+    configs.scheduler = configs.scheduler ? Object.assign(configs.scheduler, scheduler) : scheduler;
   }
 
   if (Object.keys(urls).length > 0) {
     console.log('Setting custom urls.');
-    configs.urls = urls;
+    // merge global and environment config priorizing environment variables
+    configs.urls = configs.urls ? Object.assign(configs.urls, urls) : urls;
   }
 
   return configs;

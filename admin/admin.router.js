@@ -7,5 +7,6 @@ router.get('/healthcheck', adminController.healthcheck);
 router.get('/version', adminController.version);
 router.get('/machine', adminController.machine);
 router.get('/uptime', adminController.uptime);
+router.get('/stats', adminController.stats);
 
 module.exports = router;

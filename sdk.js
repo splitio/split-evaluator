@@ -8,18 +8,27 @@ const getSplitFactory = (settings) => {
   const logLevel = settings.logLevel;
   delete settings.logLevel;
 
-  const factory = SplitFactory(settings, ({settings}) => {
+  let impressionsMode;
+  let telemetry;
+  const factory = SplitFactory(settings, (modules) => {
     // Do not try this at home.
-    settings.sdkVersion = settings.version;
-    settings.version = `evaluator-${utils.getVersion()}`;
+    modules.settings.sdkVersion = modules.settings.version;
+    modules.settings.version = `evaluator-${utils.getVersion()}`;
+    impressionsMode = modules.settings.sync.impressionsMode;
+    const originalStorageFactory = modules.storageFactory;
+    modules.storageFactory = (config) => {
+      const storage = originalStorageFactory(config);
+      telemetry = storage.telemetry;
+      return storage;
+    };
   });
-  
+
   if (logLevel) {
     console.log('Setting log level with', logLevel);
     factory.Logger.setLogLevel(logLevel);
   }
-  
-  return factory;
+
+  return { factory, telemetry, impressionsMode };
 };
 
 module.exports = {

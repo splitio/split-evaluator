@@ -45,9 +45,19 @@ const parseValidators = (validators) => {
   return errors;
 };
 
+/**
+ * parseValidators  Replace all characters with '#' leaving last 4
+ * @param {Array} validators
+ */
+const obfuscate = (value) => {
+  return value.replace(/.(?=.{4,}$)/g, '#');
+};
+
+
 module.exports = {
   getVersion,
   uptime,
   parseValidators,
   __dirname,
+  obfuscate,
 };

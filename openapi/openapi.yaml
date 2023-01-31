@@ -909,4 +909,124 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unauthorized'
+  /admin/stats:
+    get:
+      tags:
+        - admin
+      summary: stats
+      description: Evaluator & environments stats.
+      responses:
+        '200':
+          description: stats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  healthcheck:
+                    type: object
+                    properties:
+                      version:
+                        type: string
+                      sdk:
+                        type: string
+                      sdkVersion:
+                        type: string
+                  uptime:
+                    type: string
+                  environments:
+                    type: object
+                    properties:
+                      additionalProperties:
+                        type: object
+                        properties:
+                          splitCount:
+                            type: number
+                          segmentCount:
+                            type: number
+                          lastSynchronization:
+                            type: object
+                            properties:
+                              splits:
+                                type: timestamp
+                              segments:
+                                type: timestamp
+                              mySegments:
+                                type: timestamp
+                              impressions:
+                                type: timestamp
+                              impressionCount:
+                                type: timestamp
+                              events:
+                                type: timestamp
+                              telemetry:
+                                type: timestamp
+                              token:
+                                type: timestamp
+                          timeUntilReady:
+                            type: number
+                          httpErrors:
+                            type: object
+                            properties:
+                              splits:
+                                type: Object
+                              segments:
+                                type: Object
+                              mySegments:
+                                type: Object
+                              impressions:
+                                type: Object
+                              impressionCount:
+                                type: Object
+                              events:
+                                type: Object
+                              telemetry:
+                                type: Object
+                              token:
+                                type: Object
+                          ready:
+                            type: boolean
+                          impressionsMode:
+                            type: string
+                          lastEvaluation:
+                            type: dateTime
+                example:
+                  uptime: 10d 2h 1m 4s
+                  healthcheck:
+                    version: 2.0.0
+                    sdk: nodejs
+                    sdkVersion: 10.8.3
+                  environments:
+                    '######tkn1':
+                      splitCount: 20
+                      segmentCount: 5
+                      lastSynchronization:
+                        splits: 1674855033186
+                        segments: 1674855033286
+                        mySegments: 1674855033386
+                        impressions: 1674855033486
+                        impressionCount: 1674855033586
+                        events: 1674855033686
+                        telemetry: 1674855033786
+                        token: 1674855033886
+                      timeUntilReady: 833
+                      httpErrors: {}
+                      ready: true
+                      impressionsMode: OPTIMIZED
+                    '######tkn2':
+                      splitCount: 0
+                      segmentCount: 0
+                      lastSynchronization: {}
+                      timeUntilReady: 0
+                      httpErrors:
+                        telemetry:
+                          '401': 1
+                      ready: false
+                      impressionsMode: OPTIMIZED
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
 
