@@ -1,4 +1,9 @@
-2.3.0 (Jan 31, 2022)
+
+2.3.1 (Mar 13, 2023)
+  - Updated SDK version to v10.22.4 which is the latest stable to the date and includes vulnerability fixes and improvements. See more here https://github.com/splitio/javascript-client/blob/development/CHANGES.txt
+  - Updated base image to node:18.15.0-alpine3.17
+
+2.3.0 (Jan 31, 2023)
   - Updated environment input validation.
   - Updated initialization to handle timed out environments.
   - Added `/admin/stats` endpoint.
