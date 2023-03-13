@@ -36,7 +36,7 @@ jobs:
           tags: splitio-docker-dev.jfrog.io/${{ github.event.repository.name }}:latest
 
       - name: Scan container using Lacework
-        uses: lacework/lw-scanner-action@v1.0.0
+        uses: lacework/lw-scanner-action@v1.3.0
         with:
           LW_ACCOUNT_NAME: ${{ secrets.LW_ACCOUNT_NAME }}
           LW_ACCESS_TOKEN: ${{ secrets.LW_ACCESS_TOKEN }}
