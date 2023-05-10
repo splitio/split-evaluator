@@ -5,7 +5,7 @@ const app = require('../../app');
 describe('environmentManager - manager endpoints', () => {
 
   // splits
-  test('[/splits] should be 200 if is valid authToken and return splits on split2 yaml file for key_red', async () => {
+  test('[/splits] should be 200 if is valid authToken and return feature flags on split2 yaml file for key_red', async () => {
     const response = await request(app)
       .get('/manager/splits')
       .set('Authorization', 'key_red');
@@ -16,7 +16,7 @@ describe('environmentManager - manager endpoints', () => {
       );
   });
 
-  test('[/splits] should be 200 if is valid authToken and return splits on split1 yaml file for key_blue', async () => {
+  test('[/splits] should be 200 if is valid authToken and return feature flags on split1 yaml file for key_blue', async () => {
     const response = await request(app)
       .get('/manager/splits')
       .set('Authorization', 'key_blue');
@@ -38,7 +38,7 @@ describe('environmentManager - manager endpoints', () => {
 
 
   // split
-  test('[/split] should be 200 if is valid authToken and return split testing_split_red for key_red', async () => {
+  test('[/split] should be 200 if is valid authToken and return feature flag testing_split_red for key_red', async () => {
     const response = await request(app)
       .get('/manager/split?split-name=testing_split_red')
       .set('Authorization', 'key_red');
@@ -46,7 +46,7 @@ describe('environmentManager - manager endpoints', () => {
     expect(response.body.name).toEqual('testing_split_red');
   });
 
-  test('[/split] should be 200 if is valid authToken and return split testing_split_blue for key_blue', async () => {
+  test('[/split] should be 200 if is valid authToken and return feature flag testing_split_blue for key_blue', async () => {
     const response = await request(app)
       .get('/manager/split?split-name=testing_split_blue')
       .set('Authorization', 'key_blue');
@@ -65,7 +65,7 @@ describe('environmentManager - manager endpoints', () => {
 
 
   // names
-  test('[/names] should be 200 if is valid authToken and return splits in split2.yml', async () => {
+  test('[/names] should be 200 if is valid authToken and return feature flags in split2.yml', async () => {
     const response = await request(app)
       .get('/manager/names')
       .set('Authorization', 'key_red');
@@ -76,7 +76,7 @@ describe('environmentManager - manager endpoints', () => {
       );
   });
 
-  test('[/names] should be 200 if is valid authToken and return splits in split1.yml', async () => {
+  test('[/names] should be 200 if is valid authToken and return feature flags in split1.yml', async () => {
     const response = await request(app)
       .get('/manager/names')
       .set('Authorization', 'key_blue');

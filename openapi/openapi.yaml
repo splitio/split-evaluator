@@ -38,7 +38,7 @@ components:
       required: true
       schema:
         type: string
-      description: The name of the splits you want to include in the evaluation.
+      description: The name of the feature flags you want to include in the evaluation.
       example: SPLIT_NAME1,SPLIT_NAME2,SPLIT_NAME3
     bucketing-key:
       in: query
@@ -483,7 +483,7 @@ paths:
     get:
       tags:
         - client
-      summary: matches splits for passed trafficType and evaluates with passed key
+      summary: matches feature flags for passed trafficType and evaluates with passed key
       description: Calls getTreatments method from the SDK once it have all the splitNames for the keys provided.
       parameters:
         - $ref: '#/components/parameters/keys'
@@ -530,7 +530,7 @@ paths:
     post:
       tags:
         - client
-      summary: matches splits for passed trafficType and evaluates with passed key, but receiving the attributes on the request body.
+      summary: matches feature flags for passed trafficType and evaluates with passed key, but receiving the attributes on the request body.
       description: Calls getTreatments method from the SDK once it have all the splitNames for the keys provided.
       parameters:
         - $ref: '#/components/parameters/keys'
@@ -579,7 +579,7 @@ paths:
     get:
       tags:
         - client
-      summary: matches splits for passed trafficType and evaluates with passed key and attaches configs
+      summary: matches feature flags for passed trafficType and evaluates with passed key and attaches configs
       description: Calls getTreatmentsWithConfig method from the SDK once it have all the splitNames for the keys provided.
       parameters:
         - $ref: '#/components/parameters/keys'
@@ -630,7 +630,7 @@ paths:
     post:
       tags:
         - client
-      summary: matches splits for passed trafficType and evaluates with passed key and attaches configs, but receiving the attributes on the request body.
+      summary: matches feature flags for passed trafficType and evaluates with passed key and attaches configs, but receiving the attributes on the request body.
       description: Calls getTreatmentsWithConfig method from the SDK once it have all the splitNames for the keys provided.
       parameters:
         - $ref: '#/components/parameters/keys'

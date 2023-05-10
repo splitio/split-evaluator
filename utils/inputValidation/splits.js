@@ -3,16 +3,16 @@ const okWrapper = require('./wrapper/ok');
 const lang = require('../lang');
 const splitValidator = require('./split');
 
-const validateSplits = (maybeSplits) => {
+const validateSplits = (maybeFeatureFlags) => {
   // eslint-disable-next-line eqeqeq
-  if (maybeSplits == undefined) return errorWrapper('you passed a null or undefined split-names, split-names must be a non-empty array.');
+  if (maybeFeatureFlags == undefined) return errorWrapper('you passed a null or undefined split-names, split-names must be a non-empty array.');
 
-  maybeSplits = maybeSplits.split(',');
+  maybeFeatureFlags = maybeFeatureFlags.split(',');
 
-  if (maybeSplits.length > 0) {
+  if (maybeFeatureFlags.length > 0) {
     let validatedArray = [];
     // Remove invalid values
-    maybeSplits.forEach(maybeSplit => {
+    maybeFeatureFlags.forEach(maybeSplit => {
       const splitValidation = splitValidator(maybeSplit);
       if (splitValidation.valid) validatedArray.push(splitValidation.value);
     });
