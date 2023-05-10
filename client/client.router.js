@@ -21,10 +21,10 @@ const { parseValidators } = require('../utils/utils');
 const treatmentValidation = (req, res, next) => {
   const matchingKeyValidation = keyValidator(req.query.key, 'key');
   const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
-  const splitNameValidation = splitValidator(req.query['split-name']);
+  const featureFlagNameValidation = splitValidator(req.query['split-name']);
   const attributesValidation = attributesValidator(req.query.attributes);
 
-  const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, splitNameValidation, attributesValidation]);
+  const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, featureFlagNameValidation, attributesValidation]);
   if (error.length) {
     return res
       .status(400)
@@ -34,7 +34,7 @@ const treatmentValidation = (req, res, next) => {
   } else {
     req.splitio = {
       matchingKey: matchingKeyValidation.value,
-      splitName: splitNameValidation.value,
+      featureFlagName: featureFlagNameValidation.value,
       attributes: attributesValidation.value,
     };
 
@@ -53,10 +53,10 @@ const treatmentValidation = (req, res, next) => {
 const treatmentsValidation = (req, res, next) => {
   const matchingKeyValidation = keyValidator(req.query.key, 'key');
   const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
-  const splitNamesValidation = splitsValidator(req.query['split-names']);
+  const featureFlagsNameValidation = splitsValidator(req.query['split-names']);
   const attributesValidation = attributesValidator(req.query.attributes);
 
-  const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, splitNamesValidation, attributesValidation]);
+  const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, featureFlagsNameValidation, attributesValidation]);
   if (error.length) {
     return res
       .status(400)
@@ -66,7 +66,7 @@ const treatmentsValidation = (req, res, next) => {
   } else {
     req.splitio = {
       matchingKey: matchingKeyValidation.value,
-      splitNames: splitNamesValidation.value,
+      featureFlagNames: featureFlagsNameValidation.value,
       attributes: attributesValidation.value,
     };
 
