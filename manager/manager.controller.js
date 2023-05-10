@@ -1,18 +1,18 @@
 const environmentManager = require('../environmentManager').getInstance();
 
 /**
- * split returns splitView for a particular split
+ * split returns splitView for a particular feature flag
  * @param {*} req
  * @param {*} res
  */
 const split = async (req, res) => {
-  const splitName = req.splitio.splitName;
+  const featureFlagName = req.splitio.featureFlagName;
 
   try {
     const manager = environmentManager.getManager(req.headers.authorization);
-    const split = await manager.split(splitName);
-    return split ? res.send(split) : res.status(404).send({
-      error: `Split "${splitName}" was not found.`,
+    const featureFlag = await manager.split(featureFlagName);
+    return featureFlag ? res.send(featureFlag) : res.status(404).send({
+      error: `Feature flag "${featureFlagName}" was not found.`,
     });
   } catch (error) {
     res.status(500).send({error});
@@ -20,16 +20,16 @@ const split = async (req, res) => {
 };
 
 /**
- * splits returns splits
+ * splits returns featureFlags
  * @param {*} req
  * @param {*} res
  */
 const splits = async (req, res) => {
   try {
     const manager = environmentManager.getManager(req.headers.authorization);
-    const splits = await manager.splits();
+    const featureFlags = await manager.splits();
     res.send({
-      splits,
+      splits: featureFlags,
     });
   } catch (error) {
     res.status(500).send({error});
@@ -37,16 +37,16 @@ const splits = async (req, res) => {
 };
 
 /**
- * splitNames returns splitNames
+ * splitNames returns featureFlagNames
  * @param {*} req
  * @param {*} res
  */
 const splitNames = async (req, res) => {
   try {
     const manager = environmentManager.getManager(req.headers.authorization);
-    const splitNames = await manager.names();
+    const featureFlagNames = await manager.names();
     res.send({
-      splits: splitNames,
+      splits: featureFlagNames,
     });
   } catch (error) {
     res.status(500).send({error});
