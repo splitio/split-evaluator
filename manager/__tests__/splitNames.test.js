@@ -19,7 +19,7 @@ describe('names', () => {
     done();
   });
 
-  test('should be 200 and retuns the splits defined in YAML', async (done) => {
+  test('should be 200 and retuns the feature flags defined in YAML', async (done) => {
     const response = await request(app)
       .get('/manager/names')
       .set('Authorization', 'test');
