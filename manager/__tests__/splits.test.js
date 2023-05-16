@@ -19,7 +19,7 @@ describe('splits', () => {
     done();
   });
 
-  test('should be 200 and returns the splits added in YAML', async (done) => {
+  test('should be 200 and returns the feature flags added in YAML', async (done) => {
     const response = await request(app)
       .get('/manager/splits')
       .set('Authorization', 'test');

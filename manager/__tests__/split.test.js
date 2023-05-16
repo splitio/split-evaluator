@@ -57,7 +57,7 @@ describe('split', () => {
       .get('/manager/split?split-name=not-found')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(404);
-    expect(response.body).toHaveProperty('error', 'Split "not-found" was not found.');
+    expect(response.body).toHaveProperty('error', 'Feature flag "not-found" was not found.');
     done();
   });
 

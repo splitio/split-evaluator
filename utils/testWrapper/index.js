@@ -10,10 +10,10 @@ const expectErrorContaining = (response, code, message) => {
   expect(response.body.error).toEqual(expect.arrayContaining(message));
 };
 
-const expectOk = (response, code, treatmentResult, split, config) => {
+const expectOk = (response, code, treatmentResult, featureFlag, config) => {
   expect(response.statusCode).toBe(code);
   expect(response.body).toHaveProperty('treatment', treatmentResult);
-  expect(response.body).toHaveProperty('splitName', split);
+  expect(response.body).toHaveProperty('splitName', featureFlag);
   // eslint-disable-next-line eqeqeq
   if (config != undefined) {
     expect(response.body).toHaveProperty('config', config);
@@ -23,19 +23,19 @@ const expectOk = (response, code, treatmentResult, split, config) => {
 const expectOkMultipleResults = (response, code, expectedTreatment, expectedLength) => {
   expect(response.statusCode).toBe(code);
   // Check length
-  const splitNames = Object.keys(response.body);
-  expect(splitNames.length).toEqual(expectedLength);
-  // Iterate over splits
-  const splits = Object.keys(expectedTreatment);
-  splits.forEach(split => {
-    if (response.body[split].treatment) {
-      expect(response.body[split].treatment).toEqual(expectedTreatment[split].treatment);
+  const featureFlagNames = Object.keys(response.body);
+  expect(featureFlagNames.length).toEqual(expectedLength);
+  // Iterate over featureFlags
+  const featureFlags = Object.keys(expectedTreatment);
+  featureFlags.forEach(featureFlag => {
+    if (response.body[featureFlag].treatment) {
+      expect(response.body[featureFlag].treatment).toEqual(expectedTreatment[featureFlag].treatment);
     } else {
-      expect(response.body[split]).toEqual(expectedTreatment[split].treatment);
+      expect(response.body[featureFlag]).toEqual(expectedTreatment[featureFlag].treatment);
     }
     // eslint-disable-next-line no-prototype-builtins
-    if (expectedTreatment[split].hasOwnProperty('config')) {
-      expect(response.body[split].config).toEqual(expectedTreatment[split].config);
+    if (expectedTreatment[featureFlag].hasOwnProperty('config')) {
+      expect(response.body[featureFlag].config).toEqual(expectedTreatment[featureFlag].config);
     }
   });
 };

@@ -5,15 +5,15 @@ const managerController = require('./manager.controller');
 const { parseValidators } = require('../utils/utils');
 
 /**
- * splitValidation  performs input validation for manager call
- * @param {object} req 
- * @param {object} res 
- * @param {function} next 
+ * featureFlagValidation  performs input validation for manager call
+ * @param {object} req
+ * @param {object} res
+ * @param {function} next
  */
-const splitValidation = (req, res, next) => {
-  const splitNameValidation = splitValidator(req.query['split-name']);
+const featureFlagValidation = (req, res, next) => {
+  const featureFlagNameValidation = splitValidator(req.query['split-name']);
 
-  const error = parseValidators([splitNameValidation]);
+  const error = parseValidators([featureFlagNameValidation]);
   if (error.length) {
     return res
       .status(400)
@@ -22,14 +22,14 @@ const splitValidation = (req, res, next) => {
       });
   } else {
     req.splitio = {
-      splitName: splitNameValidation.value,
+      featureFlagName: featureFlagNameValidation.value,
     };
   }
 
   next();
 };
 
-router.get('/split', splitValidation, managerController.split);
+router.get('/split', featureFlagValidation, managerController.split);
 router.get('/splits', managerController.splits);
 router.get('/names', managerController.splitNames);
 
