@@ -1,6 +1,3 @@
-process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'test';
-process.env.SPLIT_EVALUATOR_API_KEY = 'localhost';
-
 const request = require('supertest');
 const app = require('../../app');
 const { expectError, expectErrorContaining } = require('../../utils/testWrapper');
@@ -60,7 +57,7 @@ describe('split', () => {
       .get('/manager/split?split-name=not-found')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(404);
-    expect(response.body).toHaveProperty('error', 'Split "not-found" was not found.');
+    expect(response.body).toHaveProperty('error', 'Feature flag "not-found" was not found.');
     done();
   });
 

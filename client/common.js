@@ -1,10 +1,10 @@
 /**
- * filterSplitsByTT Reduces a collection of split views to a list of names of the splits
+ * filterFeatureFlagsByTT Reduces a collection of featureFlag views to a list of names of the featureFlags
  * corresponding to the given traffic type.
- * @param object splitViews 
- * @param string trafficType 
+ * @param object featureFlagViews
+ * @param string trafficType
  */
-const filterSplitsByTT = (splitViews, trafficType) => splitViews.reduce((acc, view) => {
+const filterFeatureFlagsByTT = (featureFlagViews, trafficType) => featureFlagViews.reduce((acc, view) => {
   if (view.trafficType === trafficType) {
     acc.push(view.name);
   }
@@ -13,8 +13,8 @@ const filterSplitsByTT = (splitViews, trafficType) => splitViews.reduce((acc, vi
 
 /**
  * parseKey  Given a pair of values, make the processing to create the SplitKey value.
- * @param string matchingKey 
- * @param string bucketingKey 
+ * @param string matchingKey
+ * @param string bucketingKey
  */
 const parseKey = (matchingKey, bucketingKey) => !bucketingKey ? matchingKey : {
   matchingKey,
@@ -22,6 +22,6 @@ const parseKey = (matchingKey, bucketingKey) => !bucketingKey ? matchingKey : {
 };
 
 module.exports = {
-  filterSplitsByTT,
+  filterFeatureFlagsByTT,
   parseKey,
 };

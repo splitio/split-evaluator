@@ -1,21 +1,33 @@
 const path = require('path');
-const { nullOrEmpty, parseNumber, validUrl, validLogLevel } = require('./validators');
+const { parseNumber, validUrl, validLogLevel, validGlobalConfig } = require('./validators');
 
 const getConfigs = () => {
-  const configs = {
+  let configs = {
     features: path.join(__dirname, 'split.yml'),
+    core: {},
   };
+
+  const nulleableConfigs = {
+    core: undefined,
+    storage: undefined,
+    mode: undefined,
+    integrations: undefined,
+  };
+
+  if (process.env.SPLIT_EVALUATOR_GLOBAL_CONFIG) {
+    console.info('Setting global config');
+    const globalConfig = validGlobalConfig('SPLIT_EVALUATOR_GLOBAL_CONFIG');
+
+    configs = Object.assign(globalConfig, nulleableConfigs, configs);
+    if (configs.sync) Object.assign(configs.sync, {enabled: undefined} );
+
+  }
 
   // LOG LEVEL
   const logLevel = validLogLevel('SPLIT_EVALUATOR_LOG_LEVEL');
   if (logLevel) {
     configs.logLevel = logLevel;
   }
-
-  // CORE OPTIONS
-  configs.core = {
-    authorizationKey: nullOrEmpty('SPLIT_EVALUATOR_API_KEY'),
-  };
 
   // SCHEDULER OPTIONS
   const scheduler = {};
@@ -46,6 +58,8 @@ const getConfigs = () => {
   if (sdk) urls.sdk = sdk;
   const auth = process.env.SPLIT_EVALUATOR_AUTH_SERVICE_URL;
   if (auth) urls.auth = auth;
+  const telemetry = process.env.SPLIT_EVALUATOR_TELEMETRY_URL;
+  if (telemetry) urls.telemetry = telemetry;
 
   // IMPRESSION LISTENER
   if (process.env.SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT && validUrl('SPLIT_EVALUATOR_IMPRESSION_LISTENER_ENDPOINT')) {
@@ -61,12 +75,14 @@ const getConfigs = () => {
 
   if (Object.keys(scheduler).length > 0) {
     console.log('Setting custom SDK scheduler timers.');
-    configs.scheduler = scheduler;
+    // merge global and environment config priorizing environment variables
+    configs.scheduler = configs.scheduler ? Object.assign(configs.scheduler, scheduler) : scheduler;
   }
 
   if (Object.keys(urls).length > 0) {
     console.log('Setting custom urls.');
-    configs.urls = urls;
+    // merge global and environment config priorizing environment variables
+    configs.urls = configs.urls ? Object.assign(configs.urls, urls) : urls;
   }
 
   return configs;

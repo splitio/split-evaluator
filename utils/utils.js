@@ -9,7 +9,7 @@ const getVersion = () => packageJson && packageJson.version;
 
 /**
  * toHHMMSS parses time
- * @param {Number} ms 
+ * @param {Number} ms
  */
 const toHHMMSS = (ms) => {
   let secNum = ms / 1000; // Transform to seconds for easier numbers, as we expect millis.
@@ -23,7 +23,7 @@ const toHHMMSS = (ms) => {
 
 /**
  * uptime Wether we need to initialize the timer. If it's falsey, return the current uptime.
- * @param {boolean} init 
+ * @param {boolean} init
  */
 const uptime = init => {
   if (init) {
@@ -35,7 +35,7 @@ const uptime = init => {
 
 /**
  * parseValidators  Grabs each validator and merge the message to be displayed.
- * @param {Array} validators 
+ * @param {Array} validators
  */
 const parseValidators = (validators) => {
   const errors = [];
@@ -45,8 +45,19 @@ const parseValidators = (validators) => {
   return errors;
 };
 
+/**
+ * parseValidators  Replace all characters with '#' leaving last 4
+ * @param {Array} validators
+ */
+const obfuscate = (value) => {
+  return value.replace(/.(?=.{4,}$)/g, '#');
+};
+
+
 module.exports = {
   getVersion,
   uptime,
   parseValidators,
+  __dirname,
+  obfuscate,
 };

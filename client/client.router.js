@@ -14,17 +14,17 @@ const { parseValidators } = require('../utils/utils');
 
 /**
  * treatmentValidation  performs input validation for treatment call.
- * @param {object} req 
- * @param {object} res 
- * @param {function} next 
+ * @param {object} req
+ * @param {object} res
+ * @param {function} next
  */
 const treatmentValidation = (req, res, next) => {
   const matchingKeyValidation = keyValidator(req.query.key, 'key');
   const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
-  const splitNameValidation = splitValidator(req.query['split-name']);
+  const featureFlagNameValidation = splitValidator(req.query['split-name']);
   const attributesValidation = attributesValidator(req.query.attributes);
 
-  const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, splitNameValidation, attributesValidation]);
+  const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, featureFlagNameValidation, attributesValidation]);
   if (error.length) {
     return res
       .status(400)
@@ -34,7 +34,7 @@ const treatmentValidation = (req, res, next) => {
   } else {
     req.splitio = {
       matchingKey: matchingKeyValidation.value,
-      splitName: splitNameValidation.value,
+      featureFlagName: featureFlagNameValidation.value,
       attributes: attributesValidation.value,
     };
 
@@ -46,17 +46,17 @@ const treatmentValidation = (req, res, next) => {
 
 /**
  * treatmentsValidation performs input validation for treatments call.
- * @param {object} req 
- * @param {object} res 
- * @param {function} next 
+ * @param {object} req
+ * @param {object} res
+ * @param {function} next
  */
 const treatmentsValidation = (req, res, next) => {
   const matchingKeyValidation = keyValidator(req.query.key, 'key');
   const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
-  const splitNamesValidation = splitsValidator(req.query['split-names']);
+  const featureFlagsNameValidation = splitsValidator(req.query['split-names']);
   const attributesValidation = attributesValidator(req.query.attributes);
 
-  const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, splitNamesValidation, attributesValidation]);
+  const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, featureFlagsNameValidation, attributesValidation]);
   if (error.length) {
     return res
       .status(400)
@@ -66,7 +66,7 @@ const treatmentsValidation = (req, res, next) => {
   } else {
     req.splitio = {
       matchingKey: matchingKeyValidation.value,
-      splitNames: splitNamesValidation.value,
+      featureFlagNames: featureFlagsNameValidation.value,
       attributes: attributesValidation.value,
     };
 
@@ -78,9 +78,9 @@ const treatmentsValidation = (req, res, next) => {
 
 /**
  * trackValidation  performs input validation for event tracking calls.
- * @param {object} req 
- * @param {object} res 
- * @param {function} next 
+ * @param {object} req
+ * @param {object} res
+ * @param {function} next
  */
 const trackValidation = (req, res, next) => {
   const keyValidation = keyValidator(req.query.key, 'key');
@@ -111,9 +111,9 @@ const trackValidation = (req, res, next) => {
 
 /**
  * allTreatmentValidation performs input validation for all treatments call.
- * @param {object} req 
- * @param {object} res 
- * @param {function} next 
+ * @param {object} req
+ * @param {object} res
+ * @param {function} next
  */
 const allTreatmentValidation = (req, res, next) => {
   const keysValidation = keysValidator(req.query.keys);

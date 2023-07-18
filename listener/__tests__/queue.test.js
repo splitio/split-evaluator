@@ -1,6 +1,3 @@
-process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'test';
-process.env.SPLIT_EVALUATOR_API_KEY = 'localhost';
-
 const ImpressionQueue = require('../queue');
 
 const impression1 = {

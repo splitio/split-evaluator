@@ -1,6 +1,3 @@
-process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'test';
-process.env.SPLIT_EVALUATOR_API_KEY = 'localhost';
-
 const request = require('supertest');
 const app = require('../../app');
 const { expectError } = require('../../utils/testWrapper');
@@ -22,7 +19,7 @@ describe('splits', () => {
     done();
   });
 
-  test('should be 200 and returns the splits added in YAML', async (done) => {
+  test('should be 200 and returns the feature flags added in YAML', async (done) => {
     const response = await request(app)
       .get('/manager/splits')
       .set('Authorization', 'test');

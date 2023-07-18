@@ -1,4 +1,6 @@
 const settings = require('../index');
+const { core, scheduler, storage, urls, startup, sync, integrations }  = require('../../mocks');
+
 
 describe('getConfigs', () => {
   test('apikey', done => {
@@ -6,19 +8,18 @@ describe('getConfigs', () => {
     expect(() => settings().toThrow());
 
     // Test empty
-    process.env.SPLIT_EVALUATOR_API_KEY = '';
-    expect(() => settings().toThrow());  
+    process.env.SPLIT_EVALUATOR_ENVIRONMENTS='[{"API_KEY":"","AUTH_TOKEN":"test"}]';
+    expect(() => settings().toThrow());
 
     // Test trim
-    process.env.SPLIT_EVALUATOR_API_KEY = '   ';
-    expect(() => settings().toThrow());  
+    process.env.SPLIT_EVALUATOR_ENVIRONMENTS='[{"API_KEY":"   ","AUTH_TOKEN":"test"}]';
+    expect(() => settings().toThrow());
 
     // Test ok
-    process.env.SPLIT_EVALUATOR_API_KEY = 'something';
+    process.env.SPLIT_EVALUATOR_ENVIRONMENTS='[{"API_KEY":"something","AUTH_TOKEN":"test"}]';
     expect(() => settings().not.toThrow());
 
     const options = settings();
-    expect(options).toHaveProperty('core', { authorizationKey: 'something'});
     expect(options).not.toHaveProperty('impressionListener');
     expect(options).not.toHaveProperty('scheduler');
     expect(options).not.toHaveProperty('urls');
@@ -26,8 +27,6 @@ describe('getConfigs', () => {
   });
 
   test('log level', done => {
-    process.env.SPLIT_EVALUATOR_API_KEY = 'something';
-
     // Test empty
     process.env.SPLIT_EVALUATOR_LOG_LEVEL = '';
     expect(() => settings().toThrow());
@@ -35,6 +34,11 @@ describe('getConfigs', () => {
     // Test wrong level
     process.env.SPLIT_EVALUATOR_LOG_LEVEL = 'WRONG';
     expect(() => settings().toThrow());
+
+    delete process.env.SPLIT_EVALUATOR_LOG_LEVEL;
+    process.env.SPLIT_EVALUATOR_GLOBAL_CONFIG = '{ "DEBUG": true }';
+    const global = settings();
+    expect(global).toHaveProperty('DEBUG', true);
 
     // Test INFO
     process.env.SPLIT_EVALUATOR_LOG_LEVEL = 'INFO';
@@ -71,14 +75,11 @@ describe('getConfigs', () => {
 
   test('ipAddressesEnabled', done => {
     // Test ok
-    process.env.SPLIT_EVALUATOR_API_KEY = 'something';
-    expect(() => settings().not.toThrow());
-
     process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED = 'false';
     expect(() => settings().not.toThrow());
 
     const options = settings();
-    expect(options).toHaveProperty('core', { authorizationKey: 'something', IPAddressesEnabled: false });
+    expect(options).toHaveProperty('core', { IPAddressesEnabled: false });
     expect(options).not.toHaveProperty('impressionListener');
     expect(options).not.toHaveProperty('scheduler');
     expect(options).not.toHaveProperty('urls');
@@ -106,7 +107,6 @@ describe('getConfigs', () => {
     process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED = null;
 
     const options = settings();
-    expect(options).toHaveProperty('core', { authorizationKey: 'something'});
     expect(options).toHaveProperty('impressionListener');
     expect(options).not.toHaveProperty('scheduler');
     expect(options).not.toHaveProperty('urls');
@@ -151,7 +151,6 @@ describe('getConfigs', () => {
     process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED = null;
 
     const options = settings();
-    expect(options).toHaveProperty('core', { authorizationKey: 'something'});
     expect(options).toHaveProperty('impressionListener');
     expect(options).toHaveProperty('scheduler');
     expect(options).toHaveProperty('scheduler.featuresRefreshRate', 1);
@@ -162,4 +161,92 @@ describe('getConfigs', () => {
     expect(options).toHaveProperty('scheduler.eventsQueueSize', 100);
     done();
   });
+
+  test('globalConfig', done => {
+    delete process.env.SPLIT_EVALUATOR_SPLITS_REFRESH_RATE;
+    delete process.env.SPLIT_EVALUATOR_SEGMENTS_REFRESH_RATE;
+    delete process.env.SPLIT_EVALUATOR_METRICS_POST_RATE;
+    delete process.env.SPLIT_EVALUATOR_IMPRESSIONS_POST_RATE;
+    delete process.env.SPLIT_EVALUATOR_EVENTS_POST_RATE;
+    delete process.env.SPLIT_EVALUATOR_EVENTS_QUEUE_SIZE;
+
+    // null or empty
+    process.env.SPLIT_EVALUATOR_GLOBAL_CONFIG = null;
+    expect(() => settings()).toThrow();
+
+    // // is string
+    process.env.SPLIT_EVALUATOR_GLOBAL_CONFIG = {'debug': true};
+    expect(() => settings()).toThrow();
+
+    // Test core property cleanning
+    process.env.SPLIT_EVALUATOR_GLOBAL_CONFIG = JSON.stringify({
+      core: core,
+      scheduler: scheduler,
+      urls: urls,
+      storage: storage,
+      startup: startup,
+      sync: sync,
+      mode: 'consumer',
+      debug: true,
+      streamingEnabled: false,
+      integrations: integrations,
+    });
+    let config = settings();
+
+    // core should be deleted to use environment configurations
+    expect(config.core).toEqual({});
+    expect(config.scheduler).toEqual(scheduler);
+    expect(config.urls).toEqual(urls);
+    // storage should be deleted to use default in memory
+    expect(config.storage).toEqual(undefined);
+    expect(config.startup).toEqual(startup);
+    // should avoid sync.enabled property to use default false
+    sync.enabled = undefined;
+    expect(config.sync).toEqual(sync);
+    // should avoid mode property to use default standalone
+    expect(config.mode).toEqual(undefined);
+    expect(config.debug).toBe(true);
+    expect(config.streamingEnabled).toBe(false);
+    // integrations config should be avoided
+    expect(config.integrations).toEqual(undefined);
+
+    // scheduler evaluator configs should be priorized over global configs
+    process.env.SPLIT_EVALUATOR_SPLITS_REFRESH_RATE = 2;
+    process.env.SPLIT_EVALUATOR_SEGMENTS_REFRESH_RATE = 2;
+    process.env.SPLIT_EVALUATOR_METRICS_POST_RATE = 2;
+    process.env.SPLIT_EVALUATOR_IMPRESSIONS_POST_RATE = 2;
+    process.env.SPLIT_EVALUATOR_EVENTS_POST_RATE = 2;
+    process.env.SPLIT_EVALUATOR_EVENTS_QUEUE_SIZE = 2;
+
+    // url evaluator configs should be priorized over global configs
+    process.env.SPLIT_EVALUATOR_SDK_URL = 'https://sdk.env-split.io/api';
+    process.env.SPLIT_EVALUATOR_EVENTS_URL = 'https://events.env-split.io/api';
+    process.env.SPLIT_EVALUATOR_AUTH_SERVICE_URL = 'https://auth.env-split.io/api';
+    process.env.SPLIT_EVALUATOR_TELEMETRY_URL = 'https://telemetry.env-split.io/api';
+
+    // IP Addresses enabled evaluator configs should be priorized over global configs
+    process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED = 'false';
+
+    config = settings();
+    expect(config.scheduler).toEqual({
+      eventsPushRate: 2,
+      eventsQueueSize: 2,
+      featuresRefreshRate: 2,
+      impressionsQueueSize: 7,
+      impressionsRefreshRate: 2,
+      segmentsRefreshRate: 2,
+      metricsRefreshRate: 2,
+    });
+    expect(config.core.IPAddressesEnabled).toBe(false);
+    expect(config.urls).toEqual({
+      'sdk': process.env.SPLIT_EVALUATOR_SDK_URL,
+      'events': process.env.SPLIT_EVALUATOR_EVENTS_URL,
+      'auth': process.env.SPLIT_EVALUATOR_AUTH_SERVICE_URL,
+      'streaming': config.urls.streaming,
+      'telemetry': process.env.SPLIT_EVALUATOR_TELEMETRY_URL,
+    });
+
+    done();
+  });
+
 });

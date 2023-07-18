@@ -1,7 +1,8 @@
 name: ci
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches-ignore:
+      - none
 
 jobs:
   build-and-test:
@@ -9,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.16.0
+          node-version: 18.15.0
 
       - run: npm ci
       - run: npm run lint
@@ -25,17 +26,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Docker Build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: .
           push: false
           tags: splitio-docker-dev.jfrog.io/${{ github.event.repository.name }}:latest
 
       - name: Scan container using Lacework
-        uses: lacework/lw-scanner-action@v1.0.0
+        uses: lacework/lw-scanner-action@v1.3.0
         with:
           LW_ACCOUNT_NAME: ${{ secrets.LW_ACCOUNT_NAME }}
           LW_ACCESS_TOKEN: ${{ secrets.LW_ACCESS_TOKEN }}
