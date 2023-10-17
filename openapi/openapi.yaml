@@ -40,6 +40,14 @@ components:
         type: string
       description: The name of the feature flags you want to include in the evaluation.
       example: SPLIT_NAME1,SPLIT_NAME2,SPLIT_NAME3
+    set-names:
+      in: query
+      name: set-names
+      required: true
+      schema:
+        type: string
+      description: The name of the flag sets you want to include in the evaluation.
+      example: set_a,set_b,set_c
     bucketing-key:
       in: query
       name: bucketing-key
@@ -114,6 +122,14 @@ components:
           items:
             type: string
           example: ["you passed a null or undefined split-name, split-name must be a non-empty string."]
+    InputValidationSets:
+      type: object
+      properties:
+        error:
+          type: array
+          items:
+            type: string
+          example: ["you passed a null or undefined set-names, set-names must be a non-empty string."]
     Unauthorized:
       type: object
       properties:
@@ -471,6 +487,158 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InputValidation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+  /client/get-treatments-by-sets:
+    get:
+      tags:
+        - client
+      summary: performs multiple evaluation at once by sets
+      description: Calls getTreatmentsByFlagSets method from the SDK.
+      parameters:
+        - $ref: '#/components/parameters/key'
+        - $ref: '#/components/parameters/set-names'
+        - $ref: '#/components/parameters/bucketing-key'
+        - $ref: '#/components/parameters/attributes'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  'split-name':
+                    treatment: on
+                  'split-name-2':
+                    treatment: off
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidationSets'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - client
+      summary: performs multiple evaluation at once by sets, but receiving the attributes on the request body.
+      description: Calls getTreatmentsByFlagSets method from the SDK.
+      parameters:
+        - $ref: '#/components/parameters/key'
+        - $ref: '#/components/parameters/set-names'
+        - $ref: '#/components/parameters/bucketing-key'
+      requestBody:
+        $ref: '#/components/requestBodies/EvaluationRequestBody'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  'split-name':
+                    treatment: on
+                  'split-name-2':
+                    treatment: off
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidationSets'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+  /client/get-treatments-with-config-by-sets:
+    get:
+      tags:
+        - client
+      summary: performs multiple evaluation by sets at once and attachs config
+      description: Calls getTreatmentsWithConfigBySets method from the SDK.
+      parameters:
+        - $ref: '#/components/parameters/key'
+        - $ref: '#/components/parameters/set-names'
+        - $ref: '#/components/parameters/bucketing-key'
+        - $ref: '#/components/parameters/attributes'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  'split-name':
+                    treatment: on
+                    config: "{\"color\": \"on\" }"
+                  'split-name-2':
+                    treatment: off
+                    config: "{\"color\": \"off\" }"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidationSets'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - client
+      summary: performs multiple evaluation by sets at once and attachs config, but receiving the attributes on the request body.
+      description: Calls getTreatmentsWithConfigBySets method from the SDK.
+      parameters:
+        - $ref: '#/components/parameters/key'
+        - $ref: '#/components/parameters/set-names'
+        - $ref: '#/components/parameters/bucketing-key'
+      requestBody:
+        $ref: '#/components/requestBodies/EvaluationRequestBody'
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  'my-split':
+                    treatment: on
+                    config: null
+                  'my-split2':
+                    treatment: off
+                    config: "{\"color\": \"blue\" }"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InputValidationSets'
         '401':
           description: Unauthorized
           content:
