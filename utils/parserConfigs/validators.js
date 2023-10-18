@@ -86,6 +86,15 @@ const validGlobalConfig = (globalParam) => {
   }
 };
 
+const validFlagSets = (maybeFlagSets) => {
+  if (!maybeFlagSets) return;
+  if (!isString(maybeFlagSets)) {
+    throwError('you passed an invalid flag set, flag sets must be comma separated a string list');
+    return;
+  }
+  return [{type: 'bySet', values: maybeFlagSets.split(',')}];
+};
+
 module.exports = {
   throwError,
   validUrl,
@@ -96,4 +105,5 @@ module.exports = {
   validEnvironment,
   validEnvironmentConfig,
   validGlobalConfig,
+  validFlagSets,
 };

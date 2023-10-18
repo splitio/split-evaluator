@@ -74,10 +74,6 @@ const storage = {
 };
 
 const sync = {
-  splitFilters: [{
-    type: 'byName',
-    values: ['split_name_1', 'split_name_2'],
-  }],
   impressionsMode: 'NONE',
   enabled: false,
 };
