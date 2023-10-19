@@ -50,7 +50,7 @@ const EnvironmentManagerFactory = (function(){
       const environmentConfigs = validEnvironmentConfig(SPLIT_EVALUATOR_ENVIRONMENTS);
 
       if (!defaultEnvironment && settings.sync && settings.sync.splitFilters) {
-        throwError('Flag sets must be defined in SPLIT_EVALUATOR_ENVIRONMENTS, ignoring filters in GLOBAL_CONFIG');
+        throwError('Flag sets must be defined in SPLIT_EVALUATOR_ENVIRONMENTS, initialization aborted');
         process.exit(0);
       }
 
