@@ -1,5 +1,5 @@
 const path = require('path');
-const { parseNumber, validUrl, validLogLevel, validGlobalConfig } = require('./validators');
+const { parseNumber, validUrl, validLogLevel, validGlobalConfig, throwError } = require('./validators');
 
 const getConfigs = () => {
   let configs = {
@@ -17,6 +17,12 @@ const getConfigs = () => {
   if (process.env.SPLIT_EVALUATOR_GLOBAL_CONFIG) {
     console.info('Setting global config');
     const globalConfig = validGlobalConfig('SPLIT_EVALUATOR_GLOBAL_CONFIG');
+
+    if (process.env.SPLIT_EVALUATOR_ENVIRONMENTS){
+      if (globalConfig.sync && globalConfig.sync.splitFilters) {
+        throwError('Flag sets must be defined in SPLIT_EVALUATOR_ENVIRONMENTS, initialization aborted');
+      }
+    }
 
     configs = Object.assign(globalConfig, nulleableConfigs, configs);
     if (configs.sync) Object.assign(configs.sync, {enabled: undefined} );

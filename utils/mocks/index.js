@@ -36,6 +36,30 @@ const apiKeyMocksMap = {
     timeUntilReady: 860,
     httpErrors: {},
   },
+  'apikey3': {
+    splitUrl: '/split3.yml',
+    splitNames: ['testing_split_green','testing_split_color','testing_split_green_with_config'],
+    segments: [],
+    lastSynchronization: {
+      sp: 1674857489885,
+      to: 1674857489898,
+      te: 1674857488696,
+    },
+    timeUntilReady: 360,
+    httpErrors: {},
+  },
+  'apikey4': {
+    splitUrl: '/split4.yml',
+    splitNames: ['testing_split_purple','testing_split_color','testing_split_purple_with_config'],
+    segments: [],
+    lastSynchronization: {
+      sp: 1674857489895,
+      to: 1674857489908,
+      te: 1674857488706,
+    },
+    timeUntilReady: 900,
+    httpErrors: {},
+  },
 };
 
 const core = {

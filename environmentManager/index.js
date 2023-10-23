@@ -48,18 +48,11 @@ const EnvironmentManagerFactory = (function(){
       }
 
       const environmentConfigs = validEnvironmentConfig(SPLIT_EVALUATOR_ENVIRONMENTS);
-
-      if (!defaultEnvironment && settings.sync && settings.sync.splitFilters) {
-        throwError('Flag sets must be defined in SPLIT_EVALUATOR_ENVIRONMENTS, initialization aborted');
-        process.exit(0);
-      }
-
       environmentConfigs.forEach(environment => {
 
         validEnvironment(environment);
         const authToken = environment['AUTH_TOKEN'];
         const apiKey = environment['API_KEY'];
-        const maybeFlagSets = environment['FLAG_SET_FILTER'];
         settings.core.authorizationKey = apiKey;
 
         if(!isString(authToken)) {
@@ -71,7 +64,7 @@ const EnvironmentManagerFactory = (function(){
         }
 
         if (!defaultEnvironment) {
-          const flagSets = validFlagSets(maybeFlagSets);
+          const flagSets = validFlagSets(environment['FLAG_SET_FILTER']);
           settings.sync = {
             ...settings.sync,
             splitFilters: flagSets,
