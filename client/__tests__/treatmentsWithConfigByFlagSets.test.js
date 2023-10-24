@@ -212,7 +212,7 @@ describe('get-treatments-with-config-by-sets', () => {
     },
     'test_green_config': {
       treatment: 'on',
-      config: "{\"color\":\"green\"}",
+      config: '{"color":"green"}',
     },
   };
   const expectedPurpleResults = {
@@ -224,7 +224,7 @@ describe('get-treatments-with-config-by-sets', () => {
     },
     'test_purple_config': {
       treatment: 'on',
-      config: "{\"color\":\"purple\"}",
+      config: '{"color":"purple"}',
     },
   };
   const expectedPinkResults = {
@@ -239,11 +239,11 @@ describe('get-treatments-with-config-by-sets', () => {
     },
     'test_purple_config': {
       treatment: 'on',
-      config: "{\"color\":\"purple\"}",
+      config: '{"color":"purple"}',
     },
     'test_green_config': {
       treatment: 'on',
-      config: "{\"color\":\"green\"}",
+      config: '{"color":"green"}',
     },
   };
 
