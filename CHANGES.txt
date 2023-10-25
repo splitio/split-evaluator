@@ -1,4 +1,4 @@
-2.3.2 (Oct XX, 2023)
+2.3.3 (Oct XX, 2023)
   - Updated base image to node:18.18.0-alpine3.18
 
 2.3.2 (May 16, 2023)
