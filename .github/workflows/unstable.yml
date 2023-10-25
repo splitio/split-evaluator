@@ -17,13 +17,13 @@ jobs:
           password: ${{ secrets.ARTIFACTORY_DOCKER_PASS }}
 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Create build version
         run: echo "BUILD_VERSION=$(cat package.json | grep version | head -1 | awk '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')" >> $GITHUB_ENV
 
       - name: Docker Build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
           context: .
           push: true
