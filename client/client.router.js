@@ -3,6 +3,7 @@ const router = express.Router();
 const keyValidator = require('../utils/inputValidation/key');
 const splitValidator = require('../utils/inputValidation/split');
 const flagSetValidator = require('../utils/inputValidation/flagSet');
+const flagSetsValidator = require('../utils/inputValidation/flagSets');
 const splitsValidator = require('../utils/inputValidation/splits');
 const attributesValidator = require('../utils/inputValidation/attributes');
 const trafficTypeValidator = require('../utils/inputValidation/trafficType');
@@ -78,6 +79,38 @@ const treatmentsValidation = (req, res, next) => {
 };
 
 /**
+ * flagSetValidation performs input validation for flag set call.
+ * @param {object} req
+ * @param {object} res
+ * @param {function} next
+ */
+const flagSetValidation = (req, res, next) => {
+  const matchingKeyValidation = keyValidator(req.query.key, 'key');
+  const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
+  const flagSetNameValidation = flagSetValidator(req.query['flag-set']);
+  const attributesValidation = attributesValidator(req.query.attributes);
+
+  const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, flagSetNameValidation, attributesValidation]);
+  if (error.length) {
+    return res
+      .status(400)
+      .send({
+        error,
+      });
+  } else {
+    req.splitio = {
+      matchingKey: matchingKeyValidation.value,
+      flagSetNames: [flagSetNameValidation.value],
+      attributes: attributesValidation.value,
+    };
+
+    if (bucketingKeyValidation && bucketingKeyValidation.valid) req.splitio.bucketingKey = bucketingKeyValidation.value;
+  }
+
+  next();
+};
+
+/**
  * flagSetsValidation performs input validation for flag sets call.
  * @param {object} req
  * @param {object} res
@@ -86,7 +119,7 @@ const treatmentsValidation = (req, res, next) => {
 const flagSetsValidation = (req, res, next) => {
   const matchingKeyValidation = keyValidator(req.query.key, 'key');
   const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
-  const flagSetNameValidation = flagSetValidator(req.query['flag-sets']);
+  const flagSetNameValidation = flagSetsValidator(req.query['flag-sets']);
   const attributesValidation = attributesValidator(req.query.attributes);
 
   const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, flagSetNameValidation, attributesValidation]);
@@ -194,6 +227,8 @@ router.get('/get-treatment', treatmentValidation, clientController.getTreatment)
 router.get('/get-treatment-with-config', treatmentValidation, clientController.getTreatmentWithConfig);
 router.get('/get-treatments', treatmentsValidation, clientController.getTreatments);
 router.get('/get-treatments-with-config', treatmentsValidation, clientController.getTreatmentsWithConfig);
+router.get('/get-treatments-by-set', flagSetValidation, clientController.getTreatmentsByFlagSets);
+router.get('/get-treatments-with-config-by-set', flagSetValidation, clientController.getTreatmentsWithConfigByFlagSets);
 router.get('/get-treatments-by-sets', flagSetsValidation, clientController.getTreatmentsByFlagSets);
 router.get('/get-treatments-with-config-by-sets', flagSetsValidation, clientController.getTreatmentsWithConfigByFlagSets);
 router.get('/get-all-treatments', allTreatmentValidation, clientController.getAllTreatments);
@@ -205,6 +240,8 @@ router.post('/get-treatment',express.json(JSON_PARSE_OPTS), fwdAttributesFromPos
 router.post('/get-treatment-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, handleBodyParserErr, treatmentValidation, clientController.getTreatmentWithConfig);
 router.post('/get-treatments', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, handleBodyParserErr, treatmentsValidation, clientController.getTreatments);
 router.post('/get-treatments-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost,  handleBodyParserErr, treatmentsValidation, clientController.getTreatmentsWithConfig);
+router.post('/get-treatments-by-set', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, handleBodyParserErr, flagSetValidation, clientController.getTreatmentsByFlagSets);
+router.post('/get-treatments-with-config-by-set', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost,  handleBodyParserErr, flagSetValidation, clientController.getTreatmentsWithConfigByFlagSets);
 router.post('/get-treatments-by-sets', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, handleBodyParserErr, flagSetsValidation, clientController.getTreatmentsByFlagSets);
 router.post('/get-treatments-with-config-by-sets', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost,  handleBodyParserErr, flagSetsValidation, clientController.getTreatmentsWithConfigByFlagSets);
 router.post('/get-all-treatments', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, handleBodyParserErr, allTreatmentValidation, clientController.getAllTreatments);
