@@ -86,7 +86,7 @@ const treatmentsValidation = (req, res, next) => {
 const flagSetsValidation = (req, res, next) => {
   const matchingKeyValidation = keyValidator(req.query.key, 'key');
   const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
-  const flagSetNameValidation = flagSetValidator(req.query['set-names']);
+  const flagSetNameValidation = flagSetValidator(req.query['flag-sets']);
   const attributesValidation = attributesValidator(req.query.attributes);
 
   const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, flagSetNameValidation, attributesValidation]);

@@ -40,9 +40,9 @@ components:
         type: string
       description: The name of the feature flags you want to include in the evaluation.
       example: SPLIT_NAME1,SPLIT_NAME2,SPLIT_NAME3
-    set-names:
+    flag-sets:
       in: query
-      name: set-names
+      name: flag-sets
       required: true
       schema:
         type: string
@@ -129,7 +129,7 @@ components:
           type: array
           items:
             type: string
-          example: ["you passed a null or undefined set-names, set-names must be a non-empty string."]
+          example: ["you passed a null or undefined flag-sets, flag-sets must be a non-empty string."]
     Unauthorized:
       type: object
       properties:
@@ -503,7 +503,7 @@ paths:
       description: Calls getTreatmentsByFlagSets method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
-        - $ref: '#/components/parameters/set-names'
+        - $ref: '#/components/parameters/flag-sets'
         - $ref: '#/components/parameters/bucketing-key'
         - $ref: '#/components/parameters/attributes'
       responses:
@@ -539,7 +539,7 @@ paths:
       description: Calls getTreatmentsByFlagSets method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
-        - $ref: '#/components/parameters/set-names'
+        - $ref: '#/components/parameters/flag-sets'
         - $ref: '#/components/parameters/bucketing-key'
       requestBody:
         $ref: '#/components/requestBodies/EvaluationRequestBody'
@@ -577,7 +577,7 @@ paths:
       description: Calls getTreatmentsWithConfigBySets method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
-        - $ref: '#/components/parameters/set-names'
+        - $ref: '#/components/parameters/flag-sets'
         - $ref: '#/components/parameters/bucketing-key'
         - $ref: '#/components/parameters/attributes'
       responses:
@@ -615,7 +615,7 @@ paths:
       description: Calls getTreatmentsWithConfigBySets method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
-        - $ref: '#/components/parameters/set-names'
+        - $ref: '#/components/parameters/flag-sets'
         - $ref: '#/components/parameters/bucketing-key'
       requestBody:
         $ref: '#/components/requestBodies/EvaluationRequestBody'
