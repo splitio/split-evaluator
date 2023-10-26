@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const keyValidator = require('../utils/inputValidation/key');
 const splitValidator = require('../utils/inputValidation/split');
-const flagSetValidator = require('../utils/inputValidation/flagSet');
 const flagSetsValidator = require('../utils/inputValidation/flagSets');
 const splitsValidator = require('../utils/inputValidation/splits');
 const attributesValidator = require('../utils/inputValidation/attributes');
