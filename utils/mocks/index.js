@@ -82,4 +82,70 @@ const integrations = [{
   type: 'GOOGLE_ANALYTICS_TO_SPLIT',
 }];
 
-module.exports = { core, scheduler, urls, startup, storage, sync, integrations, apiKeyMocksMap };
+const expectedGreenResults = {
+  'test_green': {
+    treatment: 'on',
+  },
+  'test_color': {
+    treatment: 'on',
+  },
+  'test_green_config': {
+    treatment: 'on',
+  },
+};
+const expectedPurpleResults = {
+  'test_purple': {
+    treatment: 'on',
+  },
+  'test_color': {
+    treatment: 'on',
+  },
+  'test_purple_config': {
+    treatment: 'on',
+  },
+};
+const expectedPinkResults = {
+  ...expectedGreenResults,
+  ...expectedPurpleResults,
+};
+
+const expectedGreenResultsWithConfig = {
+  'test_green': {
+    treatment: 'on',
+  },
+  'test_color': {
+    treatment: 'on',
+  },
+  'test_green_config': {
+    treatment: 'on',
+    config: '{"color":"green"}',
+  },
+};
+
+const expectedPurpleResultsWithConfig = {
+  'test_purple': {
+    treatment: 'on',
+  },
+  'test_color': {
+    treatment: 'on',
+  },
+  'test_purple_config': {
+    treatment: 'on',
+    config: '{"color":"purple"}',
+  },
+};
+
+const expectedPinkResultsWithConfig = {
+  ...expectedGreenResultsWithConfig,
+  ...expectedPurpleResultsWithConfig,
+};
+
+module.exports = {
+  core, scheduler, urls, startup, storage, sync, integrations, apiKeyMocksMap,
+  expectedGreenResults,
+  expectedPurpleResults,
+  expectedPinkResults,
+  expectedGreenResultsWithConfig,
+  expectedPurpleResultsWithConfig,
+  expectedPinkResultsWithConfig,
+};

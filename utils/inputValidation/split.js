@@ -1,6 +1,6 @@
 const errorWrapper = require('./wrapper/error');
 const okWrapper = require('./wrapper/ok');
-const TRIMMABLE_SPACES_REGEX = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/;
+const { TRIMMABLE_SPACES_REGEX } = require('../constants');
 
 const validateSplit = (maybeSplit) => {
   // eslint-disable-next-line eqeqeq

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const keyValidator = require('../utils/inputValidation/key');
 const splitValidator = require('../utils/inputValidation/split');
-const flagSetValidator = require('../utils/inputValidation/flagSet');
+const flagSetsValidator = require('../utils/inputValidation/flagSets');
 const splitsValidator = require('../utils/inputValidation/splits');
 const attributesValidator = require('../utils/inputValidation/attributes');
 const trafficTypeValidator = require('../utils/inputValidation/trafficType');
@@ -86,7 +86,7 @@ const treatmentsValidation = (req, res, next) => {
 const flagSetsValidation = (req, res, next) => {
   const matchingKeyValidation = keyValidator(req.query.key, 'key');
   const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
-  const flagSetNameValidation = flagSetValidator(req.query['flag-sets']);
+  const flagSetNameValidation = flagSetsValidator(req.query['flag-sets']);
   const attributesValidation = attributesValidator(req.query.attributes);
 
   const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, flagSetNameValidation, attributesValidation]);

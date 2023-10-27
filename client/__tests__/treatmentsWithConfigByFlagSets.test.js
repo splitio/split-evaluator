@@ -2,6 +2,7 @@ const request = require('supertest');
 const app = require('../../app');
 const { expectError, expectErrorContaining, expectOkMultipleResults, getLongKey } = require('../../utils/testWrapper');
 const { NULL_FLAG_SETS, EMPTY_FLAG_SETS } = require('../../utils/constants');
+const { expectedGreenResultsWithConfig, expectedPurpleResultsWithConfig, expectedPinkResultsWithConfig } = require('../../utils/mocks');
 
 jest.mock('node-fetch', () => {
   return jest.fn().mockImplementation((url) => {
@@ -204,55 +205,11 @@ describe('get-treatments-with-config-by-sets', () => {
     done();
   });
 
-  const expectedGreenResults = {
-    'test_green': {
-      treatment: 'on',
-    },
-    'test_color': {
-      treatment: 'on',
-    },
-    'test_green_config': {
-      treatment: 'on',
-      config: '{"color":"green"}',
-    },
-  };
-  const expectedPurpleResults = {
-    'test_purple': {
-      treatment: 'on',
-    },
-    'test_color': {
-      treatment: 'on',
-    },
-    'test_purple_config': {
-      treatment: 'on',
-      config: '{"color":"purple"}',
-    },
-  };
-  const expectedPinkResults = {
-    'test_purple': {
-      treatment: 'on',
-    },
-    'test_green': {
-      treatment: 'on',
-    },
-    'test_color': {
-      treatment: 'on',
-    },
-    'test_purple_config': {
-      treatment: 'on',
-      config: '{"color":"purple"}',
-    },
-    'test_green_config': {
-      treatment: 'on',
-      config: '{"color":"green"}',
-    },
-  };
-
   test('should be 200 if is valid attributes (GET)', async (done) => {
     const response = await request(app)
       .get('/client/get-treatments-with-config-by-sets?key=key_green&flag-sets=set_green&attributes={"test":"test"}')
       .set('Authorization', 'key_green');
-    expectOkMultipleResults(response, 200, expectedGreenResults, 3);
+    expectOkMultipleResults(response, 200, expectedGreenResultsWithConfig, 3);
     done();
   });
 
@@ -260,7 +217,7 @@ describe('get-treatments-with-config-by-sets', () => {
     const response = await request(app)
       .get('/client/get-treatments-with-config-by-sets?key=key_green&flag-sets=set_green')
       .set('Authorization', 'key_green');
-    expectOkMultipleResults(response, 200, expectedGreenResults, 3);
+    expectOkMultipleResults(response, 200, expectedGreenResultsWithConfig, 3);
     done();
   });
 
@@ -269,7 +226,7 @@ describe('get-treatments-with-config-by-sets', () => {
       .post('/client/get-treatments-with-config-by-sets?key=key_green&flag-sets=set_green')
       .send({attributes: { test:'test' }})
       .set('Authorization', 'key_green');
-    expectOkMultipleResults(response, 200, expectedGreenResults, 3);
+    expectOkMultipleResults(response, 200, expectedGreenResultsWithConfig, 3);
     done();
   });
 
@@ -278,7 +235,7 @@ describe('get-treatments-with-config-by-sets', () => {
       .get('/client/get-treatments-with-config-by-sets?key=key_green&flag-sets=set_green&attributes={"test":"test"}')
       .send(JSON.stringify({attributes: { test:'test' }}))
       .set('Authorization', 'key_green');
-    expectOkMultipleResults(response, 200, expectedGreenResults, 3);
+    expectOkMultipleResults(response, 200, expectedGreenResultsWithConfig, 3);
     done();
   });
 
@@ -289,7 +246,7 @@ describe('get-treatments-with-config-by-sets', () => {
         attributes: null,
       })
       .set('Authorization', 'key_green');
-    expectOkMultipleResults(response, 200, expectedGreenResults, 3);
+    expectOkMultipleResults(response, 200, expectedGreenResultsWithConfig, 3);
     done();
   });
 
@@ -297,7 +254,7 @@ describe('get-treatments-with-config-by-sets', () => {
     const response = await request(app)
       .get('/client/get-treatments-with-config-by-sets?key=key_green&flag-sets=set_green,set_purple,nonexistant-experiment')
       .set('Authorization', 'key_green');
-    expectOkMultipleResults(response, 200, expectedGreenResults, 3);
+    expectOkMultipleResults(response, 200, expectedGreenResultsWithConfig, 3);
     done();
   });
 
@@ -305,7 +262,7 @@ describe('get-treatments-with-config-by-sets', () => {
     const response = await request(app)
       .get('/client/get-treatments-with-config-by-sets?key=key_purple&flag-sets=set_green,set_purple,nonexistant-experiment')
       .set('Authorization', 'key_purple');
-    expectOkMultipleResults(response, 200, expectedPurpleResults, 3);
+    expectOkMultipleResults(response, 200, expectedPurpleResultsWithConfig, 3);
     done();
   });
 
@@ -313,7 +270,7 @@ describe('get-treatments-with-config-by-sets', () => {
     const response = await request(app)
       .get('/client/get-treatments-with-config-by-sets?key=key_purple&flag-sets=set_green,set_purple,nonexistant-experiment')
       .set('Authorization', 'key_pink');
-    expectOkMultipleResults(response, 200, expectedPinkResults, 5);
+    expectOkMultipleResults(response, 200, expectedPinkResultsWithConfig, 5);
     done();
   });
 });

@@ -2,6 +2,7 @@ const request = require('supertest');
 const app = require('../../app');
 const { expectError, expectErrorContaining, expectOkMultipleResults, getLongKey } = require('../../utils/testWrapper');
 const { NULL_FLAG_SETS, EMPTY_FLAG_SETS } = require('../../utils/constants');
+const { expectedGreenResults, expectedPurpleResults, expectedPinkResults } = require('../../utils/mocks');
 
 jest.mock('node-fetch', () => {
   return jest.fn().mockImplementation((url) => {
@@ -215,7 +216,7 @@ describe('get-treatments-by-sets', () => {
 
   test('should be 400 if attributes is an invalid json (POST)', async (done) => {
     const response = await request(app)
-      .post('/client/get-treatments-by-sets?key=test&set-name=my-experiment')
+      .post('/client/get-treatments-by-sets?key=test&flag-sets=my-experiment')
       .set('Content-Type', 'application/json')
       // eslint-disable-next-line no-useless-escape
       .send('\|\\\"/regex/i') // Syntax error parsing the JSON.
@@ -224,50 +225,6 @@ describe('get-treatments-by-sets', () => {
     expect(response.body.error.type).toBe('entity.parse.failed'); // validate the error
     done();
   });
-
-  const expectedGreenResults = {
-    'test_green': {
-      treatment: 'on',
-    },
-    'test_color': {
-      treatment: 'on',
-    },
-    'test_green_config': {
-      treatment: 'on',
-      config: undefined,
-    },
-  };
-  const expectedPurpleResults = {
-    'test_purple': {
-      treatment: 'on',
-    },
-    'test_color': {
-      treatment: 'on',
-    },
-    'test_purple_config': {
-      treatment: 'on',
-      config: undefined,
-    },
-  };
-  const expectedPinkResults = {
-    'test_purple': {
-      treatment: 'on',
-    },
-    'test_green': {
-      treatment: 'on',
-    },
-    'test_color': {
-      treatment: 'on',
-    },
-    'test_purple_config': {
-      treatment: 'on',
-      config: undefined,
-    },
-    'test_green_config': {
-      treatment: 'on',
-      config: undefined,
-    },
-  };
 
   test('should be 200 if is valid attributes (GET)', async (done) => {
     const response = await request(app)
