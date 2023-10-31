@@ -1,5 +1,12 @@
 // Environments for testing
-process.env.SPLIT_EVALUATOR_ENVIRONMENTS='[{"API_KEY":"localhost","AUTH_TOKEN":"test"},{"API_KEY":"apikey1","AUTH_TOKEN":"key_blue"},{"API_KEY":"apikey2","AUTH_TOKEN":"key_red"}]'
+process.env.SPLIT_EVALUATOR_ENVIRONMENTS = `[
+  {"API_KEY":"localhost","AUTH_TOKEN":"test"},
+  {"API_KEY":"apikey1","AUTH_TOKEN":"key_blue"},
+  {"API_KEY":"apikey2","AUTH_TOKEN":"key_red"},
+  {"API_KEY":"apikey3","AUTH_TOKEN":"key_green","FLAG_SET_FILTER":"set_green"},
+  {"API_KEY":"apikey4","AUTH_TOKEN":"key_purple","FLAG_SET_FILTER":"set_purple"},
+  {"API_KEY":"apikey5","AUTH_TOKEN":"key_pink","FLAG_SET_FILTER":"set_green,set_purple"}
+]`;
 
 // Before all tests, sdk module is mocked to create a wrapper where a different yaml file is assigned to each environment
 // sdk factory mock to set a different yaml for each apikey and localhost mode
@@ -33,6 +40,13 @@ jest.mock('../sdk', () => ({
         ...settings.core,
         authorizationKey: authorizationKey,
       },
+      urls: {
+        sdk: 'https://sdk.test.io/api',
+        events: 'https://events.test.io/api',
+        auth: 'https://auth.test.io/api',
+        streaming: 'https://streaming.test.io',
+        telemetry: 'https://telemetry.test.io/api',
+      },
       startup: {
         readyTimeout: 1,
       },
@@ -47,7 +61,7 @@ jest.mock('../sdk', () => ({
     };
 
     let sdk = jest.requireActual('../sdk');
-    const { factory, telemetry, impressionsMode } = sdk.getSplitFactory(configForMock);
+    const { factory, impressionsMode } = sdk.getSplitFactory(configForMock);
 
     const mockedTelemetry = {
       splits: {

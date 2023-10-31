@@ -101,6 +101,57 @@ const getTreatmentsWithConfig = async (req, res) => {
 };
 
 /**
+ * getTreatmentsByFlagSets evaluates an array of flag sets and returns configs also
+ * @param {*} req
+ * @param {*} res
+ */
+const getTreatmentsByFlagSets = async (req, res) => {
+  const client = environmentManager.getClient(req.headers.authorization);
+  const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
+  const flagSets = req.splitio.flagSetNames;
+  const attributes = req.splitio.attributes;
+
+  try {
+    const evaluationResults = await client.getTreatmentsByFlagSets(key, flagSets, attributes);
+    environmentManager.updateLastEvaluation(req.headers.authorization);
+
+    const result = {};
+    Object.keys(evaluationResults).forEach(featureFlag => {
+      result[featureFlag] = {
+        treatment: evaluationResults[featureFlag],
+      };
+    });
+
+    res.send(result);
+  } catch (error) {
+    res.status(500).send({error});
+  }
+};
+
+/**
+ * getTreatmentsWithConfigByFlagSets evaluates an array of flag sets
+ * @param {*} req
+ * @param {*} res
+ */
+const getTreatmentsWithConfigByFlagSets = async (req, res) => {
+  const client = environmentManager.getClient(req.headers.authorization);
+  const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
+  const flagSets = req.splitio.flagSetNames;
+  const attributes = req.splitio.attributes;
+
+  try {
+    const evaluationResults = await client.getTreatmentsWithConfigByFlagSets(key, flagSets, attributes);
+    environmentManager.updateLastEvaluation(req.headers.authorization);
+
+    const result = evaluationResults;
+
+    res.send(result);
+  } catch (error) {
+    res.status(500).send({error});
+  }
+};
+
+/**
  * track events tracking
  * @param {*} req
  * @param {*} res
@@ -205,6 +256,8 @@ module.exports = {
   getTreatments,
   getTreatmentWithConfig,
   getTreatmentsWithConfig,
+  getTreatmentsByFlagSets,
+  getTreatmentsWithConfigByFlagSets,
   getAllTreatments,
   getAllTreatmentsWithConfig,
   track,
