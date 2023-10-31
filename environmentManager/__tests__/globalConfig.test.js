@@ -64,6 +64,46 @@ describe('environmentManager',  () => {
         // impressionsMode should be NONE as configured in global config
         expect(factorySettings.sync.impressionsMode).toBe('NONE');
       });
+      await environmentManagerFactory.destroy();
+    });
+  });
+
+  describe('flag sets',  () => {
+    test('Environment manager should initialize for legacy configuration without filters', async () => {
+      delete process.env.SPLIT_EVALUATOR_ENVIRONMENTS;
+      process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'test';
+      process.env.SPLIT_EVALUATOR_API_KEY = 'test';
+      const environmentManagerFactory = require('../');
+      expect(() => environmentManagerFactory.getInstance()).not.toThrow();
+      expect(environmentManagerFactory.hasInstance()).toBe(true);
+      await environmentManagerFactory.destroy();
+    });
+
+    test('Environment manager should throw an error if is initialized with environments and filters on global config', async () => {
+      process.env.SPLIT_EVALUATOR_GLOBAL_CONFIG = JSON.stringify({
+        urls: urls,
+        sync: {
+          splitFilters: [{type: 'bySet', values: ['set_a', 'set_b']}],
+        },
+      });
+      process.env.SPLIT_EVALUATOR_ENVIRONMENTS = JSON.stringify(environmentsConfig);
+      expect(() => require('../')).toThrow();
+    });
+
+    test('Environment manager should initialize for legacy configuration with filters', async () => {
+      delete process.env.SPLIT_EVALUATOR_ENVIRONMENTS;
+      process.env.SPLIT_EVALUATOR_GLOBAL_CONFIG = JSON.stringify({
+        urls: urls,
+        sync: {
+          splitFilters: [{type: 'bySet', values: ['set_a', 'set_b']}],
+        },
+      });
+
+      const environmentManagerFactory = require('../');
+      const environmentManager = environmentManagerFactory.getInstance();
+      const factorySettings = environmentManager.getFactory(process.env.SPLIT_EVALUATOR_AUTH_TOKEN).settings;
+      expect(factorySettings.sync.splitFilters).toEqual([{type: 'bySet', values: ['set_a', 'set_b']}]);
+      await environmentManagerFactory.destroy();
     });
   });
 });

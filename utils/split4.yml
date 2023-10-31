@@ -1,0 +1,9 @@
+# Always purple
+- testing_split_purple:
+    treatment: "purple"
+- testing_split_color:
+    treatment: "purple"
+# All keys with config
+- testing_split_with_config:
+    treatment: "purple"
+    config: "{\"color\": \"purple\"}"

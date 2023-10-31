@@ -1,10 +1,11 @@
 const settings = require('../utils/parserConfigs')();
-const { validEnvironment, validEnvironmentConfig, isString, throwError } = require('../utils/parserConfigs/validators');
+const { validEnvironment, validEnvironmentConfig, isString, throwError, validFlagSets } = require('../utils/parserConfigs/validators');
 const { getSplitFactory } = require('../sdk');
 const { obfuscate } = require('../utils/utils');
 const SPLIT_EVALUATOR_ENVIRONMENTS = 'SPLIT_EVALUATOR_ENVIRONMENTS';
 const SPLIT_EVALUATOR_AUTH_TOKEN = 'SPLIT_EVALUATOR_AUTH_TOKEN';
 const SPLIT_EVALUATOR_API_KEY = 'SPLIT_EVALUATOR_API_KEY';
+const DEFAULT_AUTH_TOKEN = 'DEFAULT_AUTH_TOKEN';
 
 const EnvironmentManagerFactory = (function(){
   /**
@@ -29,13 +30,16 @@ const EnvironmentManagerFactory = (function(){
     }
 
     _initializeEnvironments(){
+
+      let defaultEnvironment = false;
       // If environments envVar is not defined, it creates an environment with auth_token and api_key envVars
       if (!process.env.SPLIT_EVALUATOR_ENVIRONMENTS) {
+        defaultEnvironment = true;
         const AUTH_TOKEN = process.env.SPLIT_EVALUATOR_AUTH_TOKEN;
         // If auth_token envVar is not defined, means that openapi security tag should not be added
         if (!AUTH_TOKEN) {
           this.requireAuth = false;
-          process.env.SPLIT_EVALUATOR_AUTH_TOKEN = 'splitToken';
+          process.env.SPLIT_EVALUATOR_AUTH_TOKEN = DEFAULT_AUTH_TOKEN;
         }
         process.env.SPLIT_EVALUATOR_ENVIRONMENTS = `[{
           "AUTH_TOKEN": "${process.env[SPLIT_EVALUATOR_AUTH_TOKEN]}",
@@ -44,7 +48,6 @@ const EnvironmentManagerFactory = (function(){
       }
 
       const environmentConfigs = validEnvironmentConfig(SPLIT_EVALUATOR_ENVIRONMENTS);
-
       environmentConfigs.forEach(environment => {
 
         validEnvironment(environment);
@@ -58,6 +61,14 @@ const EnvironmentManagerFactory = (function(){
 
         if (this._environments[authToken]) {
           throwError(`There are two or more environments with the same authToken '${authToken}' `);
+        }
+
+        if (!defaultEnvironment) {
+          const flagSets = validFlagSets(environment['FLAG_SET_FILTER']);
+          settings.sync = {
+            ...settings.sync,
+            splitFilters: flagSets,
+          };
         }
 
         const { factory, telemetry, impressionsMode} = getSplitFactory(settings);
@@ -105,7 +116,7 @@ const EnvironmentManagerFactory = (function(){
     }
 
     getFactory(authToken) {
-      if (!this.requireAuth) authToken = 'splitToken';
+      if (!this.requireAuth) authToken = DEFAULT_AUTH_TOKEN;
       return this._environments[authToken].factory;
     }
 
@@ -122,7 +133,7 @@ const EnvironmentManagerFactory = (function(){
     }
 
     getTelemetry(authToken) {
-      if (!this.requireAuth) authToken = 'splitToken';
+      if (!this.requireAuth) authToken = DEFAULT_AUTH_TOKEN;
       const environment = this.getEnvironment(authToken);
       const telemetry = environment.telemetry;
       const stats = {
@@ -152,7 +163,7 @@ const EnvironmentManagerFactory = (function(){
     }
 
     updateLastEvaluation(authToken) {
-      if (!this.requireAuth) authToken = 'splitToken';
+      if (!this.requireAuth) authToken = DEFAULT_AUTH_TOKEN;
       this._environments[authToken].lastEvaluation = new Date().toJSON();
     }
 

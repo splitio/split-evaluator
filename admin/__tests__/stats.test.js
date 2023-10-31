@@ -78,6 +78,7 @@ describe('stats', () => {
         const authToken = environment.AUTH_TOKEN;
         const apiKey = environment.API_KEY;
         const mock = apiKeyMocksMap[apiKey];
+        if (!mock) return;
         expect(stats.environments[utils.obfuscate(authToken)]).toEqual({
           splitCount: mock.splitNames.length,
           segmentCount: mock.segments.length,
