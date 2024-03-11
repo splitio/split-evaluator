@@ -1,4 +1,4 @@
-2.6.0 (Mar 11, 2023)
+2.6.0 (Mar 11, 2024)
   - Updated some transitive dependencies for vulnerability fixes.
   - Updated base image to node:21.7.0-alpine3.19
   - Updated @splitsoftware/splitio package to version 10.25.1 that includes:
