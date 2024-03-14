@@ -1,4 +1,4 @@
-2.5.1 (Mar 13, 2024)
+2.5.1 (Mar 14, 2024)
   - Updated @splitsoftware/splitio package to version 10.25.1 that includes:
     - Updated @splitsoftware/splitio-commons package to version 1.13.1 that includes vulnerability fixes, flag sets support, and other improvements.
   - Updated base image to node:20.11.1-alpine3.19
