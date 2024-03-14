@@ -1,6 +1,6 @@
 {
   "name": "split-evaluator",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "Split-Evaluator",
   "repository": "splitio/split-evaluator",
   "homepage": "https://github.com/splitio/split-evaluator#readme",
@@ -40,11 +40,11 @@
     "test": "NODE_ENV=test jest"
   },
   "dependencies": {
-    "@splitsoftware/splitio": "10.23.2-rc.1",
+    "@splitsoftware/splitio": "10.25.1",
     "config": "^3.3.9",
     "express": "^4.17.1",
     "morgan": "^1.9.1",
-    "npm": "^9.8.0",
+    "npm": "^9.9.0",
     "swagger-ui-express": "^4.3.0"
   },
   "engines": {
@@ -56,7 +56,7 @@
     "babel-jest": "^26.6.3",
     "eslint": "^8.9.0",
     "jest": "^26.6.3",
-    "nodemon": "^2.0.12",
+    "nodemon": "^3.1.0",
     "superagent": "^8.0.9",
     "supertest": "^6.3.1"
   }
