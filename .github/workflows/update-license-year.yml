@@ -24,7 +24,7 @@ jobs:
         run: "echo PREVIOUS=$(($CURRENT-1)) >> $GITHUB_ENV"
 
       - name: Update LICENSE
-        uses: jacobtomlinson/gha-find-replace@v2
+        uses: jacobtomlinson/gha-find-replace@v3
         with:
           find: ${{ env.PREVIOUS }}
           replace: ${{ env.CURRENT }}
