@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18.18.0
 
@@ -48,7 +48,7 @@ jobs:
 
       - name: Save vulnerability report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: vulnerability_report
           path: ${{ github.event.repository.name }}.html
