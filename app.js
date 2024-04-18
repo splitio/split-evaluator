@@ -18,6 +18,9 @@ const adminRouter = require('./admin/admin.router');
 // Utils
 const utils = require('./utils/utils');
 
+var cors = require('cors')
+app.use(cors());
+
 app.use(morgan('tiny'));
 
 // OPENAPI 3.0 Definition
@@ -48,7 +51,7 @@ app.use('/admin', adminRouter);
 app.get('/favicon.ico', (req, res) => res.status(204));
 
 //Route not found -- Set 404
-app.get('*', function (req, res) {
+app.get('*', cors(), function (req, res) {
   console.log('Wrong endpoint called.');
   res.json({
     'route': 'Sorry this page does not exist!',

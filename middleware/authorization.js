@@ -8,7 +8,10 @@ const environmentManager = require('../environmentManager').getInstance();
  * @param {*} next
  */
 const authorization = (req, res, next) => {
-  if (environmentManager.validToken(req.headers.authorization)) {
+  if (req.url == '/admin/ping') {
+    res.status(200).send({ping: 'pong'});
+  }
+  else if (environmentManager.validToken(req.headers.authorization)) {
     next();
   } else {
     console.log('Returning 401 Unauthorized.');
