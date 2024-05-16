@@ -7,7 +7,7 @@ const { expectedGreenResults, expectedPurpleResults, expectedPinkResults } = req
 jest.mock('node-fetch', () => {
   return jest.fn().mockImplementation((url) => {
 
-    const sdkUrl = 'https://sdk.test.io/api/splitChanges?since=-1';
+    const sdkUrl = 'https://sdk.test.io/api/splitChanges?s=1.1&since=-1';
     const splitChange2 = require('../../utils/mocks/splitchanges.since.-1.till.1602796638344.json');
     if (url.startsWith(sdkUrl)) return Promise.resolve({ status: 200, json: () => (splitChange2), ok: true });
 
