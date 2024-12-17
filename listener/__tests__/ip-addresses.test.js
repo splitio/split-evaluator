@@ -28,7 +28,7 @@ describe('ip addresses', () => {
   });
 
   describe('ip addresses default', () => {
-    test('should set hostname and ip when is default', async (done) => {
+    test('should set hostname and ip when is default', async () => {
       const app = require('../../app');
       const os = require('os');
       const localIp = require('@splitsoftware/splitio/cjs/utils/ip');
@@ -40,7 +40,6 @@ describe('ip addresses', () => {
       await new Promise(resolve => setTimeout(resolve, 100));
       expect(ip).toBe(localIp.address());
       expect(hostname).toBe(os.hostname());
-      done();
     });
   });
 
@@ -48,7 +47,7 @@ describe('ip addresses', () => {
     beforeEach(() => {
       process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED = 'false';
     });
-    test('should not set hostname and ip when is false', async (done) => {
+    test('should not set hostname and ip when is false', async () => {
       const app = require('../../app');
 
       mockListener();
@@ -60,7 +59,7 @@ describe('ip addresses', () => {
       await new Promise(resolve => setTimeout(resolve, 100));
       expect(ip).toBe(false);
       expect(hostname).toBe(false);
-      done();
+      await Promise.resolve();
     });
   });
 
@@ -68,7 +67,7 @@ describe('ip addresses', () => {
     beforeEach(() => {
       process.env.SPLIT_EVALUATOR_IP_ADDRESSES_ENABLED = 'true';
     });
-    test('should set hostname and ip when is true', async (done) => {
+    test('should set hostname and ip when is true', async () => {
       const app = require('../../app');
       const os = require('os');
       const localIp = require('@splitsoftware/splitio/cjs/utils/ip');
@@ -81,7 +80,7 @@ describe('ip addresses', () => {
       await new Promise(resolve => setTimeout(resolve, 100));
       expect(ip).toBe(localIp.address());
       expect(hostname).toBe(os.hostname());
-      done();
+      await Promise.resolve();
     });
   });
 });
