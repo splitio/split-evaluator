@@ -58,7 +58,7 @@ describe('track', () => {
     ];
     const key = getLongKey();
     const response = await request(app)
-      .get(`/client/track?key=${key}&event-type=my-event&traffic-type=my-traffic&value=1`)    
+      .get(`/client/track?key=${key}&event-type=my-event&traffic-type=my-traffic&value=1`)
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
   });

@@ -59,7 +59,6 @@ describe('ip addresses', () => {
       await new Promise(resolve => setTimeout(resolve, 100));
       expect(ip).toBe(false);
       expect(hostname).toBe(false);
-      await Promise.resolve();
     });
   });
 
@@ -80,7 +79,6 @@ describe('ip addresses', () => {
       await new Promise(resolve => setTimeout(resolve, 100));
       expect(ip).toBe(localIp.address());
       expect(hostname).toBe(os.hostname());
-      await Promise.resolve();
     });
   });
 });
