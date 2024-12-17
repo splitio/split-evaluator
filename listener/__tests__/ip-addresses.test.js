@@ -31,7 +31,7 @@ describe('ip addresses', () => {
     test('should set hostname and ip when is default', async (done) => {
       const app = require('../../app');
       const os = require('os');
-      const localIp = require('@splitsoftware/splitio/lib/utils/ip');
+      const localIp = require('@splitsoftware/splitio/cjs/utils/ip');
       mockListener();
       const response = await request(app)
         .get('/client/get-treatment?key=test&split-name=my-experiment')
@@ -71,7 +71,7 @@ describe('ip addresses', () => {
     test('should set hostname and ip when is true', async (done) => {
       const app = require('../../app');
       const os = require('os');
-      const localIp = require('@splitsoftware/splitio/lib/utils/ip');
+      const localIp = require('@splitsoftware/splitio/cjs/utils/ip');
       mockListener();
 
       const response = await request(app)
