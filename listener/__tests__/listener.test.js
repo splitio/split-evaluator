@@ -50,7 +50,7 @@ describe('impression-listener', () => {
     server.listen(7546, done);
   });
 
-  test('should have 5 impressions sent by max impressions to post', async (done) => {
+  test('should have 5 impressions sent by max impressions to post', async () => {
     const t0 = new Date().getTime();
     // Generates the max size of impressions to be sent
     let response = await request(app)
@@ -78,10 +78,9 @@ describe('impression-listener', () => {
     body = '';
     const t1 = new Date().getTime();
     expect(t1-t0).toBeLessThanOrEqual(550);
-    done();
   });
 
-  test('should have 1 impressions sent by time schedule', async (done) => {
+  test('should have 1 impressions sent by time schedule', async () => {
     // Generates one impression and just wait until is sent by scheduler (1 second for testing)
     const response = await request(app)
       .get('/client/get-treatment?key=test&split-name=my-experiment')
@@ -93,7 +92,6 @@ describe('impression-listener', () => {
     // Matches the impression in the body of the IL Post Impressions
     matcherIlRequest(body, 1, [{ split: 'my-experiment', length: 1 }]);
     body = '';
-    done();
   });
 
   afterAll(done => {
