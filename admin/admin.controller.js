@@ -1,5 +1,5 @@
 const os = require('os');
-const ip = require('@splitsoftware/splitio/lib/utils/ip');
+const ip = require('@splitsoftware/splitio/cjs/utils/ip');
 
 const utils = require('../utils/utils');
 const environmentManager = require('../environmentManager').getInstance();

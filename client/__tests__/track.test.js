@@ -7,24 +7,22 @@ const { expectError, expectErrorContaining, getLongKey } = require('../../utils/
 
 describe('track', () => {
   // Testing authorization
-  test('should be 401 if auth is not passed', async (done) => {
+  test('should be 401 if auth is not passed', async () => {
     const response = await request(app)
       .get('/client/track?key=test&event-type=my-event&traffic-type=my-traffic&value=1');
     expectError(response, 401, 'Unauthorized');
-    done();
   });
 
-  test('should be 401 if auth does not match', async (done) => {
+  test('should be 401 if auth does not match', async () => {
     const response = await request(app)
       .get('/client/track?key=test&event-type=my-event&traffic-type=my-traffic&value=1')
       .set('Authorization', 'invalid');
     expectError(response, 401, 'Unauthorized');
-    done();
   });
 
   // Testing Input Validation.
   // The following tests are going to check null parameters, wrong types or lengths.
-  test('should be 400 if key is not passed', async (done) => {
+  test('should be 400 if key is not passed', async () => {
     const expected = [
       'you passed a null or undefined key, key must be a non-empty string.'
     ];
@@ -32,10 +30,9 @@ describe('track', () => {
       .get('/client/track?event-type=my-event&traffic-type=my-traffic&value=1')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if key is empty', async (done) => {
+  test('should be 400 if key is empty', async () => {
     const expected = [
       'you passed an empty string, key must be a non-empty string.'
     ];
@@ -43,10 +40,9 @@ describe('track', () => {
       .get('/client/track?key=&event-type=my-event&traffic-type=my-traffic&value=1')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if key is empty trimmed', async (done) => {
+  test('should be 400 if key is empty trimmed', async () => {
     const expected = [
       'you passed an empty string, key must be a non-empty string.'
     ];
@@ -54,22 +50,20 @@ describe('track', () => {
       .get('/client/track?key=     &event-type=my-event&traffic-type=my-traffic&value=1')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if key is too long', async (done) => {
+  test('should be 400 if key is too long', async () => {
     const expected = [
       'key too long, key must be 250 characters or less.'
     ];
     const key = getLongKey();
     const response = await request(app)
-      .get(`/client/track?key=${key}&event-type=my-event&traffic-type=my-traffic&value=1`)    
+      .get(`/client/track?key=${key}&event-type=my-event&traffic-type=my-traffic&value=1`)
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if event-type is not passed', async (done) => {
+  test('should be 400 if event-type is not passed', async () => {
     const expected = [
       'you passed a null or undefined event-type, event-type must be a non-empty string.'
     ];
@@ -77,10 +71,9 @@ describe('track', () => {
       .get('/client/track?key=my-key&traffic-type=my-traffic&value=1')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if event-type is empty', async (done) => {
+  test('should be 400 if event-type is empty', async () => {
     const expected = [
       'you passed an empty event-type, event-type must be a non-empty string.'
     ];
@@ -88,10 +81,9 @@ describe('track', () => {
       .get('/client/track?key=my-key&event-type=&traffic-type=my-traffic&value=1')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if event-type not accomplish regex', async (done) => {
+  test('should be 400 if event-type not accomplish regex', async () => {
     const expected = [
       'you passed "@!test", event-type must adhere to the regular expression /^[a-zA-Z0-9][-_.:a-zA-Z0-9]{0,79}$/g. This means an event_type must be alphanumeric, cannot be more than 80 characters long, and can only include a dash, underscore, period, or colon as separators of alphanumeric characters.'
     ];
@@ -99,10 +91,9 @@ describe('track', () => {
       .get('/client/track?key=my-key&event-type=@!test&traffic-type=my-traffic&value=1')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if traffic-type is not passed', async (done) => {
+  test('should be 400 if traffic-type is not passed', async () => {
     const expected = [
       'you passed a null or undefined traffic-type, traffic-type must be a non-empty string.'
     ];
@@ -110,10 +101,9 @@ describe('track', () => {
       .get('/client/track?key=my-key&event-type=my-event&value=1')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if traffic-type is empty', async (done) => {
+  test('should be 400 if traffic-type is empty', async () => {
     const expected = [
       'you passed an empty traffic-type, traffic-type must be a non-empty string.'
     ];
@@ -121,10 +111,9 @@ describe('track', () => {
       .get('/client/track?key=my-key&event-type=my-event&traffic-type=&value=1')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if value is empty', async (done) => {
+  test('should be 400 if value is empty', async () => {
     const expected = [
       'value must be null or number.'
     ];
@@ -132,10 +121,9 @@ describe('track', () => {
       .get('/client/track?key=my-key&event-type=my-event&traffic-type=my-traffic&value=')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if value is empty', async (done) => {
+  test('should be 400 if value is empty', async () => {
     const expected = [
       'value must be null or number.'
     ];
@@ -143,10 +131,9 @@ describe('track', () => {
       .get('/client/track?key=my-key&event-type=my-event&traffic-type=my-traffic&value=')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if value is NaN', async (done) => {
+  test('should be 400 if value is NaN', async () => {
     const expected = [
       'value must be null or number.'
     ];
@@ -154,10 +141,9 @@ describe('track', () => {
       .get('/client/track?key=my-key&event-type=my-event&traffic-type=my-traffic&value=not-number')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if properties is invalid', async (done) => {
+  test('should be 400 if properties is invalid', async () => {
     const expected = [
       'properties must be a plain object.'
     ];
@@ -165,10 +151,9 @@ describe('track', () => {
       .get('/client/track?key=my-key&event-type=my-event&traffic-type=my-traffic&value=1&properties=lalala')
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if there are multiple errors in every input', async (done) => {
+  test('should be 400 if there are multiple errors in every input', async () => {
     const expected = [
       'key too long, key must be 250 characters or less.',
       'you passed "@!test", event-type must adhere to the regular expression /^[a-zA-Z0-9][-_.:a-zA-Z0-9]{0,79}$/g. This means an event_type must be alphanumeric, cannot be more than 80 characters long, and can only include a dash, underscore, period, or colon as separators of alphanumeric characters.',
@@ -181,38 +166,33 @@ describe('track', () => {
       .get(`/client/track?key=${key}&event-type=@!test&traffic-type=&value=invalid&properties=invalid`)
       .set('Authorization', 'test');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 200 if properties is null', async (done) => {
+  test('should be 200 if properties is null', async () => {
     const response = await request(app)
       .get('/client/track?key=my-key&event-type=my-event&traffic-type=my-traffic&value=1')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(200);
-    done();
   });
 
-  test('should be 200 if value and properties are null', async (done) => {
+  test('should be 200 if value and properties are null', async () => {
     const response = await request(app)
       .get('/client/track?key=my-key&event-type=my-event&traffic-type=my-traffic')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(200);
-    done();
   });
 
-  test('should be 200 if value is null and properties is valid', async (done) => {
+  test('should be 200 if value is null and properties is valid', async () => {
     const response = await request(app)
       .get('/client/track?key=my-key&event-type=my-event&traffic-type=my-traffic&properties={"prop1":3}')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(200);
-    done();
   });
 
-  test('should be 200 if value and and properties are valid', async (done) => {
+  test('should be 200 if value and and properties are valid', async () => {
     const response = await request(app)
       .get('/client/track?key=my-key&event-type=my-event&traffic-type=my-traffic&properties={"prop1":3}&value=3.0')
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(200);
-    done();
   });
 });

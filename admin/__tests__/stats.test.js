@@ -5,7 +5,7 @@ const { apiKeyMocksMap } = require('../../utils/mocks');
 
 jest.mock('node-fetch', () => {
   return jest.fn().mockImplementation(() => {
-    return Promise.reject({ response: { status: 404, response: 'response'}});
+    return Promise.reject({ response: { status: 404, response: 'response' } });
   });
 });
 describe('stats', () => {
@@ -26,24 +26,22 @@ describe('stats', () => {
     const environments = JSON.parse(process.env.SPLIT_EVALUATOR_ENVIRONMENTS);
 
     // Testing authorization
-    test('should be 401 if auth is not passed', async (done) => {
+    test('should be 401 if auth is not passed', async () => {
       const app = require('../../app');
       const response = await request(app)
         .get('/admin/stats');
       expectError(response, 401, 'Unauthorized');
-      done();
     });
 
-    test('should be 401 if auth does not match', async (done) => {
+    test('should be 401 if auth does not match', async () => {
       const app = require('../../app');
       const response = await request(app)
         .get('/admin/stats')
         .set('Authorization', 'invalid');
       expectError(response, 401, 'Unauthorized');
-      done();
     });
 
-    test('uptime and healthcheck', async (done) => {
+    test('uptime and healthcheck', async () => {
       const app = require('../../app');
       const version = utils.getVersion();
       const environmentManager = require('../../environmentManager').getInstance();
@@ -62,11 +60,9 @@ describe('stats', () => {
         sdk: sdkLanguage,
         sdkVersion: sdkVersion,
       });
-
-      done();
     });
 
-    test('ready environment stats', async (done) => {
+    test('ready environment stats', async () => {
       const environmentManager = require('../../environmentManager').getInstance();
       const app = require('../../app');
       const response = await request(app)
@@ -89,10 +85,9 @@ describe('stats', () => {
           impressionsMode: 'OPTIMIZED',
         });
       });
-      done();
     });
 
-    test('stats for two environments where one is timed out', async (done) => {
+    test('stats for two environments where one is timed out', async () => {
       // Environment configurations
       const environmentsConfig = [
         { API_KEY: 'test1', AUTH_TOKEN: 'timedout' },
@@ -142,19 +137,18 @@ describe('stats', () => {
       });
       response = await request(app)
         .get('/client/get-treatment?key=test&split-name=testing_split_blue')
-        .set('Authorization', 'key_blue')
-        .then(async () => {
-          expect(response.statusCode).toEqual(200);
-          response = await request(app)
-            .get('/admin/stats')
-            .set('Authorization', 'key_blue');
-          expect(response.statusCode).toEqual(200);
-          stats = response.body;
-          const lastEvaluation = stats.environments[utils.obfuscate('key_blue')].lastEvaluation;
-          expect(lastEvaluation).not.toBe(undefined);
-          expect(lastEvaluation).toBe(environmentManager.getEnvironment('key_blue').lastEvaluation);
-          done();
-        });
+        .set('Authorization', 'key_blue');
+
+      expect(response.statusCode).toEqual(200);
+      response = await request(app)
+        .get('/admin/stats')
+        .set('Authorization', 'key_blue');
+      expect(response.statusCode).toEqual(200);
+      stats = response.body;
+      const lastEvaluation = stats.environments[utils.obfuscate('key_blue')].lastEvaluation;
+      expect(lastEvaluation).not.toBe(undefined);
+      expect(lastEvaluation).toBe(environmentManager.getEnvironment('key_blue').lastEvaluation);
+
     });
   });
 });

@@ -28,24 +28,22 @@ describe('get-treatments-by-sets', () => {
   });
 
   // Testing authorization
-  test('should be 401 if auth is not passed', async (done) => {
+  test('should be 401 if auth is not passed', async () => {
     const response = await request(app)
       .get('/client/get-treatments-by-sets?key=test&flag-sets=my-experiment');
     expectError(response, 401, 'Unauthorized');
-    done();
   });
 
-  test('should be 401 if auth does not match', async (done) => {
+  test('should be 401 if auth does not match', async () => {
     const response = await request(app)
       .get('/client/get-treatments-by-sets?key=test&flag-sets=my-experiment')
       .set('Authorization', 'invalid');
     expectError(response, 401, 'Unauthorized');
-    done();
   });
 
   // Testing Input Validation.
   // The following tests are going to check null parameters, wrong types or lengths.
-  test('should be 400 if key is not passed', async (done) => {
+  test('should be 400 if key is not passed', async () => {
     const expected = [
       'you passed a null or undefined key, key must be a non-empty string.'
     ];
@@ -53,10 +51,9 @@ describe('get-treatments-by-sets', () => {
       .get('/client/get-treatments-by-sets?flag-sets=test')
       .set('Authorization', 'key_green');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if key is empty', async (done) => {
+  test('should be 400 if key is empty', async () => {
     const expected = [
       'you passed an empty string, key must be a non-empty string.'
     ];
@@ -64,10 +61,9 @@ describe('get-treatments-by-sets', () => {
       .get('/client/get-treatments-by-sets?key=&flag-sets=test')
       .set('Authorization', 'key_green');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if key is empty trimmed', async (done) => {
+  test('should be 400 if key is empty trimmed', async () => {
     const expected = [
       'you passed an empty string, key must be a non-empty string.'
     ];
@@ -75,10 +71,9 @@ describe('get-treatments-by-sets', () => {
       .get('/client/get-treatments-by-sets?key=     &flag-sets=test')
       .set('Authorization', 'key_green');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if key is too long', async (done) => {
+  test('should be 400 if key is too long', async () => {
     const expected = [
       'key too long, key must be 250 characters or less.'
     ];
@@ -90,10 +85,9 @@ describe('get-treatments-by-sets', () => {
       .get(`/client/get-treatments-by-sets?key=${key}&flag-sets=test`)
       .set('Authorization', 'key_green');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if bucketing-key is empty', async (done) => {
+  test('should be 400 if bucketing-key is empty', async () => {
     const expected = [
       'you passed an empty string, bucketing-key must be a non-empty string.'
     ];
@@ -101,10 +95,9 @@ describe('get-treatments-by-sets', () => {
       .get('/client/get-treatments-by-sets?key=key&bucketing-key=&flag-sets=test')
       .set('Authorization', 'key_green');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if bucketing-key is empty trimmed', async (done) => {
+  test('should be 400 if bucketing-key is empty trimmed', async () => {
     const expected = [
       'you passed an empty string, bucketing-key must be a non-empty string.'
     ];
@@ -112,10 +105,9 @@ describe('get-treatments-by-sets', () => {
       .get('/client/get-treatments-by-sets?key=key&bucketing-key=    &flag-sets=test')
       .set('Authorization', 'key_green');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if bucketing-key is too long', async (done) => {
+  test('should be 400 if bucketing-key is too long', async () => {
     const expected = [
       'bucketing-key too long, bucketing-key must be 250 characters or less.'
     ];
@@ -127,10 +119,9 @@ describe('get-treatments-by-sets', () => {
       .get(`/client/get-treatments-by-sets?key=key&bucketing-key=${key}&flag-sets=test`)
       .set('Authorization', 'key_green');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if flag-sets is not passed', async (done) => {
+  test('should be 400 if flag-sets is not passed', async () => {
     const expected = [
       NULL_FLAG_SETS
     ];
@@ -138,10 +129,9 @@ describe('get-treatments-by-sets', () => {
       .get('/client/get-treatments-by-sets?key=test')
       .set('Authorization', 'key_green');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if flag-sets is empty', async (done) => {
+  test('should be 400 if flag-sets is empty', async () => {
     const expected = [
       EMPTY_FLAG_SETS
     ];
@@ -149,10 +139,9 @@ describe('get-treatments-by-sets', () => {
       .get('/client/get-treatments-by-sets?key=test&flag-sets=')
       .set('Authorization', 'key_green');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if flag-sets is empty trimmed', async (done) => {
+  test('should be 400 if flag-sets is empty trimmed', async () => {
     const expected = [
       EMPTY_FLAG_SETS
     ];
@@ -160,10 +149,9 @@ describe('get-treatments-by-sets', () => {
       .get('/client/get-treatments-by-sets?key=test&flag-sets=    ')
       .set('Authorization', 'key_green');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if there are errors in key and flag-sets', async (done) => {
+  test('should be 400 if there are errors in key and flag-sets', async () => {
     const expected = [
       'you passed an empty string, key must be a non-empty string.',
       EMPTY_FLAG_SETS
@@ -172,10 +160,9 @@ describe('get-treatments-by-sets', () => {
       .get('/client/get-treatments-by-sets?key=&flag-sets=    ')
       .set('Authorization', 'key_green');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if attributes is invalid', async (done) => {
+  test('should be 400 if attributes is invalid', async () => {
     const expected = [
       'attributes must be a plain object.'
     ];
@@ -183,10 +170,9 @@ describe('get-treatments-by-sets', () => {
       .get('/client/get-treatments-by-sets?key=test&flag-sets=my-experiment&attributes=lalala')
       .set('Authorization', 'key_green');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if there are multiple errors', async (done) => {
+  test('should be 400 if there are multiple errors', async () => {
     const expected = [
       'you passed an empty string, key must be a non-empty string.',
       EMPTY_FLAG_SETS,
@@ -196,10 +182,9 @@ describe('get-treatments-by-sets', () => {
       .get('/client/get-treatments-by-sets?key=     &flag-sets=&attributes="lalala"')
       .set('Authorization', 'key_green');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if there are multiple errors in every input', async (done) => {
+  test('should be 400 if there are multiple errors in every input', async () => {
     const expected = [
       'you passed an empty string, key must be a non-empty string.',
       EMPTY_FLAG_SETS,
@@ -211,10 +196,9 @@ describe('get-treatments-by-sets', () => {
       .get(`/client/get-treatments-by-sets?bucketing-key=${key}&key=     &flag-sets=&attributes="lalala"`)
       .set('Authorization', 'key_green');
     expectErrorContaining(response, 400, expected);
-    done();
   });
 
-  test('should be 400 if attributes is an invalid json (POST)', async (done) => {
+  test('should be 400 if attributes is an invalid json (POST)', async () => {
     const response = await request(app)
       .post('/client/get-treatments-by-sets?key=test&flag-sets=my-experiment')
       .set('Content-Type', 'application/json')
@@ -223,26 +207,23 @@ describe('get-treatments-by-sets', () => {
       .set('Authorization', 'key_green');
     expectError(response, 400);
     expect(response.body.error.type).toBe('entity.parse.failed'); // validate the error
-    done();
   });
 
-  test('should be 200 if is valid attributes (GET)', async (done) => {
+  test('should be 200 if is valid attributes (GET)', async () => {
     const response = await request(app)
       .get('/client/get-treatments-by-sets?key=key_green&flag-sets=set_green&attributes={"test":"test"}')
       .set('Authorization', 'key_green');
     expectOkMultipleResults(response, 200, expectedGreenResults, 3);
-    done();
   });
 
-  test('should be 200 when attributes is null (GET)', async (done) => {
+  test('should be 200 when attributes is null (GET)', async () => {
     const response = await request(app)
       .get('/client/get-treatments-by-sets?key=key_green&flag-sets=set_green')
       .set('Authorization', 'key_green');
     expectOkMultipleResults(response, 200, expectedGreenResults, 3);
-    done();
   });
 
-  test('should be 200 if is valid attributes (POST)', async (done) => {
+  test('should be 200 if is valid attributes (POST)', async () => {
     const response = await request(app)
       .post('/client/get-treatments-by-sets?key=key_green&flag-sets=set_green')
       .set('Authorization', 'key_green')
@@ -250,10 +231,9 @@ describe('get-treatments-by-sets', () => {
         attributes: {test:'test'},
       });
     expectOkMultipleResults(response, 200, expectedGreenResults, 3);
-    done();
   });
 
-  test('should be 200 if is valid attributes as string (POST)', async (done) => {
+  test('should be 200 if is valid attributes as string (POST)', async () => {
     const response = await request(app)
       .post('/client/get-treatments-by-sets?key=key_green&flag-sets=set_green')
       .send(JSON.stringify({
@@ -261,10 +241,9 @@ describe('get-treatments-by-sets', () => {
       }))
       .set('Authorization', 'key_green');
     expectOkMultipleResults(response, 200, expectedGreenResults, 3);
-    done();
   });
 
-  test('should be 200 if attributes is null (POST)', async (done) => {
+  test('should be 200 if attributes is null (POST)', async () => {
     const response = await request(app)
       .post('/client/get-treatments-by-sets?key=key_green&flag-sets=set_green')
       .send({
@@ -272,30 +251,26 @@ describe('get-treatments-by-sets', () => {
       })
       .set('Authorization', 'key_green');
     expectOkMultipleResults(response, 200, expectedGreenResults, 3);
-    done();
   });
 
-  test('should be 200 with multiple evaluation but evualuate configured flag sets', async (done) => {
+  test('should be 200 with multiple evaluation but evualuate configured flag sets', async () => {
     const response = await request(app)
       .get('/client/get-treatments-by-sets?key=key_green&flag-sets=set_green,set_purple,nonexistant-experiment')
       .set('Authorization', 'key_green');
     expectOkMultipleResults(response, 200, expectedGreenResults, 3);
-    done();
   });
 
-  test('should be 200 with multiple evaluation but evualuate configured flag sets', async (done) => {
+  test('should be 200 with multiple evaluation but evualuate configured flag sets', async () => {
     const response = await request(app)
       .get('/client/get-treatments-by-sets?key=key_purple&flag-sets=set_green,set_purple,nonexistant-experiment')
       .set('Authorization', 'key_purple');
     expectOkMultipleResults(response, 200, expectedPurpleResults, 3);
-    done();
   });
 
-  test('should be 200 with multiple evaluation but evualuate configured flag sets', async (done) => {
+  test('should be 200 with multiple evaluation but evualuate configured flag sets', async () => {
     const response = await request(app)
       .get('/client/get-treatments-by-sets?key=key_purple&flag-sets=set_green,set_purple,nonexistant-experiment')
       .set('Authorization', 'key_pink');
     expectOkMultipleResults(response, 200, expectedPinkResults, 5);
-    done();
   });
 });

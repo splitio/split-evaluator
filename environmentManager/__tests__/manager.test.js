@@ -56,7 +56,7 @@ describe('environmentManager - manager endpoints', () => {
     expect(response.body).toEqual({'error':'Unauthorized'});
   });
 
-  test('[/splits] should be 200 if is valid authToken and return feature flags on set set_green for key_green', async (done) => {
+  test('[/splits] should be 200 if is valid authToken and return feature flags on set set_green for key_green', async () => {
     const response = await request(app)
       .get('/manager/splits')
       .set('Authorization', 'key_green');
@@ -65,10 +65,9 @@ describe('environmentManager - manager endpoints', () => {
       .toEqual(
         ['test_green', 'test_color', 'test_green_config']
       );
-    done();
   });
 
-  test('[/splits] should be 200 if is valid authToken and return feature flags on set set_purple for key_purple', async (done) => {
+  test('[/splits] should be 200 if is valid authToken and return feature flags on set set_purple for key_purple', async () => {
     const response = await request(app)
       .get('/manager/splits')
       .set('Authorization', 'key_purple');
@@ -77,10 +76,9 @@ describe('environmentManager - manager endpoints', () => {
       .toEqual(
         ['test_color', 'test_purple', 'test_purple_config']
       );
-    done();
   });
 
-  test('[/splits] should be 200 if is valid authToken and return feature flags on sets set_green & set_purple file for key_pink', async (done) => {
+  test('[/splits] should be 200 if is valid authToken and return feature flags on sets set_green & set_purple file for key_pink', async () => {
     const response = await request(app)
       .get('/manager/splits')
       .set('Authorization', 'key_pink');
@@ -89,7 +87,6 @@ describe('environmentManager - manager endpoints', () => {
       .toEqual(
         ['test_green', 'test_color', 'test_green_config', 'test_purple', 'test_purple_config']
       );
-    done();
   });
 
   // split
@@ -193,7 +190,7 @@ describe('environmentManager - manager endpoints', () => {
     expect(response.body).toEqual({'error':'Unauthorized'});
   });
 
-  test('[/names] should be 200 if is valid authToken and return feature flags on set set_green for key_green', async (done) => {
+  test('[/names] should be 200 if is valid authToken and return feature flags on set set_green for key_green', async () => {
     const response = await request(app)
       .get('/manager/names')
       .set('Authorization', 'key_green');
@@ -202,10 +199,9 @@ describe('environmentManager - manager endpoints', () => {
       .toEqual(
         ['test_green', 'test_color', 'test_green_config']
       );
-    done();
   });
 
-  test('[/names] should be 200 if is valid authToken and return feature flags on set set_purple for key_purple', async (done) => {
+  test('[/names] should be 200 if is valid authToken and return feature flags on set set_purple for key_purple', async () => {
     const response = await request(app)
       .get('/manager/names')
       .set('Authorization', 'key_purple');
@@ -214,10 +210,9 @@ describe('environmentManager - manager endpoints', () => {
       .toEqual(
         ['test_color', 'test_purple', 'test_purple_config']
       );
-    done();
   });
 
-  test('[/names] should be 200 if is valid authToken and return feature flags on sets set_green & set_purple file for key_pink', async (done) => {
+  test('[/names] should be 200 if is valid authToken and return feature flags on sets set_green & set_purple file for key_pink', async () => {
     const response = await request(app)
       .get('/manager/names')
       .set('Authorization', 'key_pink');
@@ -226,7 +221,6 @@ describe('environmentManager - manager endpoints', () => {
       .toEqual(
         ['test_green', 'test_color', 'test_green_config', 'test_purple', 'test_purple_config']
       );
-    done();
   });
 
 });
