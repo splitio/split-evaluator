@@ -1,4 +1,4 @@
-2.6.1 (Dec 17, 2024)
+2.6.1 (Dec 20, 2024)
   - Updated base image to node:20.13.1-alpine3.20
   - Updated @splitsoftware/splitio package to version 11.0.3 that includes vulnerability fixes and other improvements.
 
