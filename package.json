@@ -1,6 +1,6 @@
 {
   "name": "split-evaluator",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "Split-Evaluator",
   "repository": "splitio/split-evaluator",
   "homepage": "https://github.com/splitio/split-evaluator#readme",
@@ -40,7 +40,7 @@
     "test": "NODE_ENV=test jest"
   },
   "dependencies": {
-    "@splitsoftware/splitio": "10.26.0",
+    "@splitsoftware/splitio": "11.0.3",
     "config": "^3.3.9",
     "express": "^4.17.1",
     "morgan": "^1.9.1",
@@ -52,9 +52,9 @@
   "devDependencies": {
     "@babel/core": "^7.15.5",
     "@babel/preset-env": "^7.15.6",
-    "babel-jest": "^26.6.3",
+    "babel-jest": "^29.7.0",
     "eslint": "^8.9.0",
-    "jest": "^26.6.3",
+    "jest": "^29.7.0",
     "nodemon": "^3.1.0",
     "superagent": "^8.0.9",
     "supertest": "^6.3.1"
