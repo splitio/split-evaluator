@@ -69,7 +69,7 @@ jobs:
             ARTIFACTORY_TOKEN=${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Scan container using Lacework
-        uses: lacework/lw-scanner-action@v1.4.1
+        uses: lacework/lw-scanner-action@v1.4.5
         with:
           LW_ACCOUNT_NAME: ${{ secrets.LW_ACCOUNT_NAME }}
           LW_ACCESS_TOKEN: ${{ secrets.LW_ACCESS_TOKEN }}
