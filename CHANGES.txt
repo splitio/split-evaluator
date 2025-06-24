@@ -1,5 +1,7 @@
 2.x.x (coming soon)
   - Fixed OpenAPI spec fot /manager/splits
+  - Updated base image to node:24.2.0-alpine3.22
+  - Updated @splitsoftware/splitio package to version 11.4.1 that includes:
 
 2.7.0 (Dec 20, 2024)
   - Added support to arm64 images.
