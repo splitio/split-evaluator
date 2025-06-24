@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@splitsoftware/splitio": "11.0.3",
-    "config": "^3.3.9",
+    "config": "^3.3.12",
     "express": "^4.17.1",
     "morgan": "^1.9.1",
     "swagger-ui-express": "^4.3.0"
