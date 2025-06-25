@@ -169,9 +169,12 @@ components:
           on: "{\"color\": \"blue\"}"
           off: "{\"color\": \"black\"}"
     Splits:
-      type: array
-      items:
-        $ref: '#/components/schemas/Split'
+      type: object
+      properties:
+        splits:
+          type: array
+          items:
+            $ref: '#/components/schemas/Split'
 
 security:
   - Authorization: []

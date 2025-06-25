@@ -1,3 +1,7 @@
+2.7.1 (Jun 25, 2025)
+  - Fixed OpenAPI spec fot /manager/splits
+  - Updated base image to node:24.2.0-alpine3.22
+
 2.7.0 (Dec 20, 2024)
   - Added support to arm64 images.
   - Updated base image to node:20.13.1-alpine3.20
