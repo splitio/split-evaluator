@@ -1,3 +1,6 @@
+2.7.2 (Jul 4, 2025)
+  - Updated base image to node:24.3.0-alpine3.21
+
 2.7.1 (Jun 25, 2025)
   - Fixed OpenAPI spec fot /manager/splits
   - Updated base image to node:24.2.0-alpine3.22
