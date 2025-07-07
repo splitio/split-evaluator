@@ -5,6 +5,10 @@ on:
     branches-ignore:
       - main
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   push-docker-image:
     name: Build and Push Docker Image
