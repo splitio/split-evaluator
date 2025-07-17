@@ -41,6 +41,10 @@
           ],
           "label": "default rule"
         }
+      ],
+      "prerequisites": [
+        { "n": "flag1", "ts": ["on","v1"] }, 
+        { "n": "flag2", "ts": ["off"] }
       ]
     },
     {
@@ -84,7 +88,8 @@
           ],
           "label": "default rule"
         }
-      ]
+      ],
+      "prerequisites": []
     },
     {
       "trafficTypeName": "client",
@@ -129,6 +134,11 @@
           ],
           "label": "default rule"
         }
+      ],
+      "prerequisites": [
+        { "n": "flag3", "ts": ["on","v2"] }, 
+        { "n": "flag4", "ts": ["off"] },
+        { "n": "flag5", "ts": ["off"] }
       ]
     },
     {
@@ -172,7 +182,8 @@
           ],
           "label": "default rule"
         }
-      ]
+      ],
+      "prerequisites": []
     },
     {
       "trafficTypeName": "client",
@@ -217,7 +228,8 @@
           ],
           "label": "default rule"
         }
-      ]
+      ],
+      "prerequisites": []
     }
   ],
   "since": -1,

@@ -61,9 +61,13 @@ describe('environmentManager - manager endpoints', () => {
       .get('/manager/splits')
       .set('Authorization', 'key_green');
     expect(response.statusCode).toBe(200);
-    expect(response.body.splits.map(flag => {return flag.name;}))
+    expect(response.body.splits.map(flag => {return {name: flag.name, prerequisites: flag.prerequisites};}))
       .toEqual(
-        ['test_green', 'test_color', 'test_green_config']
+        [
+          {name: 'test_green', prerequisites: [{flagName: 'flag1', treatments: ['on', 'v1']}, {flagName: 'flag2', treatments: ['off']}]},
+          {name: 'test_color', prerequisites: []},
+          {name: 'test_green_config', prerequisites: [{flagName: 'flag3', treatments: ['on', 'v2']}, {flagName: 'flag4', treatments: ['off']}, {flagName: 'flag5', treatments: ['off']}]}
+        ]
       );
   });
 
@@ -72,9 +76,13 @@ describe('environmentManager - manager endpoints', () => {
       .get('/manager/splits')
       .set('Authorization', 'key_purple');
     expect(response.statusCode).toBe(200);
-    expect(response.body.splits.map(flag => {return flag.name;}))
+    expect(response.body.splits.map(flag => {return {name: flag.name, prerequisites: flag.prerequisites};}))
       .toEqual(
-        ['test_color', 'test_purple', 'test_purple_config']
+        [
+          {name: 'test_color', prerequisites: []},
+          {name: 'test_purple', prerequisites: []},
+          {name: 'test_purple_config', prerequisites: []}
+        ]
       );
   });
 
@@ -121,6 +129,7 @@ describe('environmentManager - manager endpoints', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toEqual('test_green');
     expect(response.body.sets).toEqual(['set_green']);
+    expect(response.body.prerequisites).toEqual([{flagName: 'flag1', treatments: ['on', 'v1']}, {flagName: 'flag2', treatments: ['off']}]);
   });
 
   test('[/split] should be 200 if is valid authToken and return feature flag test_purple for key_purple', async () => {
@@ -130,6 +139,7 @@ describe('environmentManager - manager endpoints', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toEqual('test_purple');
     expect(response.body.sets).toEqual(['set_purple']);
+    expect(response.body.prerequisites).toEqual([]);
   });
 
   test('[/split] should be 404 if is valid authToken and return 404 for test_green using key_purple', async () => {
@@ -146,6 +156,7 @@ describe('environmentManager - manager endpoints', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toEqual('test_green');
     expect(response.body.sets).toEqual(['set_green']);
+    expect(response.body.prerequisites).toEqual([{flagName: 'flag1', treatments: ['on', 'v1']}, {flagName: 'flag2', treatments: ['off']}]);
   });
 
   test('[/split] should be 200 if is valid authToken and return feature flag test_purple for key_pink', async () => {
@@ -155,6 +166,7 @@ describe('environmentManager - manager endpoints', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toEqual('test_purple');
     expect(response.body.sets).toEqual(['set_purple']);
+    expect(response.body.prerequisites).toEqual([]);
   });
 
 
