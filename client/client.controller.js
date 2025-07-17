@@ -226,7 +226,6 @@ const getAllTreatmentsWithConfig = async (req, res) => {
 
   try {
     const treatments = await allTreatments(req.headers.authorization, keys, attributes, evaluationOptions);
-    console.log('options', evaluationOptions);
     environmentManager.updateLastEvaluation(req.headers.authorization);
     res.send(treatments);
   } catch (error) {
