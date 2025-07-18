@@ -43,6 +43,7 @@
             "label": "default rule"
           }
         ],
+        "impressionsDisabled": true,
         "prerequisites": [
           { "n": "flag1", "ts": ["on","v1"] }, 
           { "n": "flag2", "ts": ["off"] }
@@ -90,6 +91,7 @@
             "label": "default rule"
           }
         ],
+        "impressionsDisabled": false,
         "prerequisites": []
       },
       {
@@ -136,6 +138,7 @@
             "label": "default rule"
           }
         ],
+        "impressionsDisabled": true,
         "prerequisites": [
           { "n": "flag3", "ts": ["on","v2"] }, 
           { "n": "flag4", "ts": ["off"] },
@@ -184,6 +187,7 @@
             "label": "default rule"
           }
         ],
+        "impressionsDisabled": false,
         "prerequisites": []
       },
       {
@@ -230,6 +234,7 @@
             "label": "default rule"
           }
         ],
+        "impressionsDisabled": true,
         "prerequisites": []
       }
     ],
