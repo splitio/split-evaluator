@@ -2,7 +2,7 @@ const { validateProperties, validateEvaluationOptions } = require('../properties
 
 describe('validateProperties', () => {
   test('should return error on invalid properties', done => {
-    const expected = 'properties must be a plain object.';
+    const expected = 'properties must be a plain object  with only boolean, string, number or null values..';
     const result = validateProperties('test');
     expect(result).toHaveProperty('valid', false);
     expect(result).toHaveProperty('error', expected);
@@ -11,7 +11,7 @@ describe('validateProperties', () => {
   });
 
   test('should return error on invalid properties 2', done => {
-    const expected = 'properties must be a plain object.';
+    const expected = 'properties must be a plain object  with only boolean, string, number or null values..';
     const result = validateProperties('[]');
     expect(result).toHaveProperty('valid', false);
     expect(result).toHaveProperty('error', expected);
@@ -20,7 +20,7 @@ describe('validateProperties', () => {
   });
 
   test('should return error on invalid properties 3', done => {
-    const expected = 'properties must be a plain object.';
+    const expected = 'properties must be a plain object  with only boolean, string, number or null values..';
     const result = validateProperties('true');
     expect(result).toHaveProperty('valid', false);
     expect(result).toHaveProperty('error', expected);
@@ -108,7 +108,7 @@ describe('validateEvaluationOptions', () => {
   });
 
   test('should return error if options.properties is not valid', done => {
-    const expected = 'properties must be a plain object.';
+    const expected = 'properties must be a plain object  with only boolean, string, number or null values..';
     const result = validateEvaluationOptions('{"properties": "not-an-object"}');
     expect(result).toHaveProperty('valid', false);
     expect(result).toHaveProperty('error', expected);

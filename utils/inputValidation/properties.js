@@ -10,11 +10,11 @@ function validateProperties(maybeProperties) {
   try {
     properties = isString(maybeProperties) ? JSON.parse(maybeProperties) : maybeProperties;
     if (!isObject(properties)) {
-      return errorWrapper('properties must be a plain object.');
+      return errorWrapper('properties must be a plain object  with only boolean, string, number or null values..');
     }
     return okWrapper(properties);
   } catch (e) {
-    return errorWrapper('properties must be a plain object.');
+    return errorWrapper('properties must be a plain object  with only boolean, string, number or null values..');
   }
 }
 
