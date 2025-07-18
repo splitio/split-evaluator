@@ -145,7 +145,7 @@ describe('track', () => {
 
   test('should be 400 if properties is invalid', async () => {
     const expected = [
-      'properties must be a plain object.'
+      'properties must be a plain object with only boolean, string, number or null values.'
     ];
     const response = await request(app)
       .get('/client/track?key=my-key&event-type=my-event&traffic-type=my-traffic&value=1&properties=lalala')
@@ -158,7 +158,7 @@ describe('track', () => {
       'key too long, key must be 250 characters or less.',
       'you passed "@!test", event-type must adhere to the regular expression /^[a-zA-Z0-9][-_.:a-zA-Z0-9]{0,79}$/g. This means an event_type must be alphanumeric, cannot be more than 80 characters long, and can only include a dash, underscore, period, or colon as separators of alphanumeric characters.',
       'you passed an empty traffic-type, traffic-type must be a non-empty string.',
-      'properties must be a plain object.',
+      'properties must be a plain object with only boolean, string, number or null values.',
       'value must be null or number.'
     ];
     const key = getLongKey();

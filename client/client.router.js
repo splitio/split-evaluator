@@ -8,7 +8,7 @@ const attributesValidator = require('../utils/inputValidation/attributes');
 const trafficTypeValidator = require('../utils/inputValidation/trafficType');
 const eventTypeValidator = require('../utils/inputValidation/eventType');
 const valueValidator = require('../utils/inputValidation/value');
-const propertiesValidator = require('../utils/inputValidation/properties');
+const { validateProperties, validateEvaluationOptions } = require('../utils/inputValidation/properties');
 const keysValidator = require('../utils/inputValidation/keys');
 const clientController = require('./client.controller');
 const { parseValidators } = require('../utils/utils');
@@ -24,8 +24,9 @@ const treatmentValidation = (req, res, next) => {
   const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
   const featureFlagNameValidation = splitValidator(req.query['split-name']);
   const attributesValidation = attributesValidator(req.query.attributes);
+  const optionsValidation = validateEvaluationOptions(req.query.options);
 
-  const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, featureFlagNameValidation, attributesValidation]);
+  const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, featureFlagNameValidation, attributesValidation, optionsValidation]);
   if (error.length) {
     return res
       .status(400)
@@ -37,6 +38,7 @@ const treatmentValidation = (req, res, next) => {
       matchingKey: matchingKeyValidation.value,
       featureFlagName: featureFlagNameValidation.value,
       attributes: attributesValidation.value,
+      options: optionsValidation.value,
     };
 
     if (bucketingKeyValidation && bucketingKeyValidation.valid) req.splitio.bucketingKey = bucketingKeyValidation.value;
@@ -56,8 +58,9 @@ const treatmentsValidation = (req, res, next) => {
   const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
   const featureFlagsNameValidation = splitsValidator(req.query['split-names']);
   const attributesValidation = attributesValidator(req.query.attributes);
+  const optionsValidation = validateEvaluationOptions(req.query.options);
 
-  const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, featureFlagsNameValidation, attributesValidation]);
+  const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, featureFlagsNameValidation, attributesValidation, optionsValidation]);
   if (error.length) {
     return res
       .status(400)
@@ -69,6 +72,7 @@ const treatmentsValidation = (req, res, next) => {
       matchingKey: matchingKeyValidation.value,
       featureFlagNames: featureFlagsNameValidation.value,
       attributes: attributesValidation.value,
+      options: optionsValidation.value,
     };
 
     if (bucketingKeyValidation && bucketingKeyValidation.valid) req.splitio.bucketingKey = bucketingKeyValidation.value;
@@ -88,8 +92,9 @@ const flagSetsValidation = (req, res, next) => {
   const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
   const flagSetNameValidation = flagSetsValidator(req.query['flag-sets']);
   const attributesValidation = attributesValidator(req.query.attributes);
+  const optionsValidation = validateEvaluationOptions(req.query.options);
 
-  const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, flagSetNameValidation, attributesValidation]);
+  const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, flagSetNameValidation, attributesValidation, optionsValidation]);
   if (error.length) {
     return res
       .status(400)
@@ -101,6 +106,7 @@ const flagSetsValidation = (req, res, next) => {
       matchingKey: matchingKeyValidation.value,
       flagSetNames: flagSetNameValidation.value,
       attributes: attributesValidation.value,
+      options: optionsValidation.value,
     };
 
     if (bucketingKeyValidation && bucketingKeyValidation.valid) req.splitio.bucketingKey = bucketingKeyValidation.value;
@@ -120,7 +126,7 @@ const trackValidation = (req, res, next) => {
   const trafficTypeValidation = trafficTypeValidator(req.query['traffic-type']);
   const eventTypeValidation = eventTypeValidator(req.query['event-type']);
   const valueValidation = valueValidator(req.query.value);
-  const propertiesValidation = propertiesValidator(req.query.properties);
+  const propertiesValidation = validateProperties(req.query.properties);
 
   const error = parseValidators([keyValidation, trafficTypeValidation, eventTypeValidation, valueValidation, propertiesValidation]);
   if (error.length) {
@@ -151,8 +157,9 @@ const trackValidation = (req, res, next) => {
 const allTreatmentValidation = (req, res, next) => {
   const keysValidation = keysValidator(req.query.keys);
   const attributesValidation = attributesValidator(req.query.attributes);
+  const optionsValidation = validateEvaluationOptions(req.query.options);
 
-  const error = parseValidators([keysValidation, attributesValidation]);
+  const error = parseValidators([keysValidation, attributesValidation, optionsValidation]);
   if (error.length) {
     return res
       .status(400)
@@ -163,6 +170,7 @@ const allTreatmentValidation = (req, res, next) => {
     req.splitio = {
       keys: keysValidation.value,
       attributes: attributesValidation.value,
+      options: optionsValidation.value,
     };
   }
 
@@ -173,6 +181,12 @@ const allTreatmentValidation = (req, res, next) => {
 // by just connecting the json payload parsed on the right spot.
 const fwdAttributesFromPost = function parseAttributesMiddleware(req, res, next) {
   req.query.attributes = req.body.attributes;
+
+  next();
+};
+
+const fwdEvaluationOptionsFromPost = function parseOptionsMiddleware(req, res, next) {
+  req.query.options = req.body.options;
 
   next();
 };
@@ -201,14 +215,14 @@ router.get('/get-all-treatments-with-config', allTreatmentValidation, clientCont
 
 // Getting treatments as POST's for big attribute sets
 const JSON_PARSE_OPTS = { limit: '300kb' };
-router.post('/get-treatment',express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, handleBodyParserErr, treatmentValidation, clientController.getTreatment);
-router.post('/get-treatment-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, handleBodyParserErr, treatmentValidation, clientController.getTreatmentWithConfig);
-router.post('/get-treatments', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, handleBodyParserErr, treatmentsValidation, clientController.getTreatments);
-router.post('/get-treatments-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost,  handleBodyParserErr, treatmentsValidation, clientController.getTreatmentsWithConfig);
-router.post('/get-treatments-by-sets', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, handleBodyParserErr, flagSetsValidation, clientController.getTreatmentsByFlagSets);
-router.post('/get-treatments-with-config-by-sets', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost,  handleBodyParserErr, flagSetsValidation, clientController.getTreatmentsWithConfigByFlagSets);
-router.post('/get-all-treatments', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, handleBodyParserErr, allTreatmentValidation, clientController.getAllTreatments);
-router.post('/get-all-treatments-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, handleBodyParserErr, allTreatmentValidation, clientController.getAllTreatmentsWithConfig);
+router.post('/get-treatment',express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdEvaluationOptionsFromPost, handleBodyParserErr, treatmentValidation, clientController.getTreatment);
+router.post('/get-treatment-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdEvaluationOptionsFromPost, handleBodyParserErr, treatmentValidation, clientController.getTreatmentWithConfig);
+router.post('/get-treatments', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdEvaluationOptionsFromPost, handleBodyParserErr, treatmentsValidation, clientController.getTreatments);
+router.post('/get-treatments-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdEvaluationOptionsFromPost, handleBodyParserErr, treatmentsValidation, clientController.getTreatmentsWithConfig);
+router.post('/get-treatments-by-sets', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdEvaluationOptionsFromPost, handleBodyParserErr, flagSetsValidation, clientController.getTreatmentsByFlagSets);
+router.post('/get-treatments-with-config-by-sets', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdEvaluationOptionsFromPost, handleBodyParserErr, flagSetsValidation, clientController.getTreatmentsWithConfigByFlagSets);
+router.post('/get-all-treatments', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdEvaluationOptionsFromPost, handleBodyParserErr, allTreatmentValidation, clientController.getAllTreatments);
+router.post('/get-all-treatments-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdEvaluationOptionsFromPost, handleBodyParserErr, allTreatmentValidation, clientController.getAllTreatmentsWithConfig);
 
 // Other methods
 router.get('/track', trackValidation, clientController.track);

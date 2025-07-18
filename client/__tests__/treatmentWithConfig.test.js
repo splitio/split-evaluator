@@ -229,4 +229,21 @@ describe('get-treatment-with-config', () => {
       .set('Authorization', 'test');
     expectOk(response, 200, 'control', 'nonexistant-experiment', null);
   });
+
+  test('should be 200 if options.properties is valid (GET)', async () => {
+    const response = await request(app)
+      .get('/client/get-treatment-with-config?key=test&split-name=my-experiment&options={"properties":{"package":"premium","admin":true,"discount":50}}')
+      .set('Authorization', 'test');
+    expectOk(response, 200, 'on', 'my-experiment', '{"desc" : "this applies only to ON treatment"}');
+  });
+
+  test('should be 200 if options.properties is valid (POST)', async () => {
+    const response = await request(app)
+      .post('/client/get-treatment-with-config?key=test&split-name=my-experiment')
+      .send({
+        options: { properties: { package: 'premium', admin: true, discount: 50 } },
+      })
+      .set('Authorization', 'test');
+    expectOk(response, 200, 'on', 'my-experiment', '{"desc" : "this applies only to ON treatment"}');
+  });
 });

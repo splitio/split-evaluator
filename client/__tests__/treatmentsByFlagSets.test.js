@@ -7,7 +7,7 @@ const { expectedGreenResults, expectedPurpleResults, expectedPinkResults } = req
 jest.mock('node-fetch', () => {
   return jest.fn().mockImplementation((url) => {
 
-    const sdkUrl = 'https://sdk.test.io/api/splitChanges?s=1.1&since=-1';
+    const sdkUrl = 'https://sdk.test.io/api/splitChanges?s=1.3&since=-1';
     const splitChange2 = require('../../utils/mocks/splitchanges.since.-1.till.1602796638344.json');
     if (url.startsWith(sdkUrl)) return Promise.resolve({ status: 200, json: () => (splitChange2), ok: true });
 
@@ -272,5 +272,22 @@ describe('get-treatments-by-sets', () => {
       .get('/client/get-treatments-by-sets?key=key_purple&flag-sets=set_green,set_purple,nonexistant-experiment')
       .set('Authorization', 'key_pink');
     expectOkMultipleResults(response, 200, expectedPinkResults, 5);
+  });
+  
+  test('should be 200 if options.properties is valid (GET)', async () => {
+    const response = await request(app)
+      .get('/client/get-treatments-by-sets?key=test&flag-sets=set_green&options={"properties":{"package":"premium","admin":true,"discount":50}}')
+      .set('Authorization', 'key_green');
+    expect(response.status).toBe(200);
+  });
+
+  test('should be 200 if options.properties is valid (POST)', async () => {
+    const response = await request(app)
+      .post('/client/get-treatments-by-sets?key=test&flag-sets=set_green')
+      .send({
+        options: { properties: { package: 'premium', admin: true, discount: 50 } },
+      })
+      .set('Authorization', 'key_green');
+    expect(response.status).toBe(200);
   });
 });
