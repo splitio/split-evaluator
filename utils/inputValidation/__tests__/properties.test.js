@@ -2,7 +2,7 @@ const propertiesValidator = require('../properties');
 
 describe('properties validator', () => {
   test('should return error on invalid properties', done => {
-    const expected = 'properties must be a plain object.';
+    const expected = 'Input must be a plain object.';
 
     const result = propertiesValidator('test');
     
@@ -13,7 +13,7 @@ describe('properties validator', () => {
   });
 
   test('should return error on invalid properties 2', done => {
-    const expected = 'properties must be a plain object.';
+    const expected = 'Input must be a plain object.';
 
     const result = propertiesValidator('[]');
     
@@ -24,7 +24,7 @@ describe('properties validator', () => {
   });
 
   test('should return error on invalid properties 3', done => {
-    const expected = 'properties must be a plain object.';
+    const expected = 'Input must be a plain object.';
 
     const result = propertiesValidator('true');
     
