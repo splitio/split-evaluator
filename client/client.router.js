@@ -8,7 +8,7 @@ const attributesValidator = require('../utils/inputValidation/attributes');
 const trafficTypeValidator = require('../utils/inputValidation/trafficType');
 const eventTypeValidator = require('../utils/inputValidation/eventType');
 const valueValidator = require('../utils/inputValidation/value');
-const propertiesValidator = require('../utils/inputValidation/properties');
+const { validateProperties, validateEvaluationOptions } = require('../utils/inputValidation/properties');
 const keysValidator = require('../utils/inputValidation/keys');
 const clientController = require('./client.controller');
 const { parseValidators } = require('../utils/utils');
@@ -24,7 +24,7 @@ const treatmentValidation = (req, res, next) => {
   const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
   const featureFlagNameValidation = splitValidator(req.query['split-name']);
   const attributesValidation = attributesValidator(req.query.attributes);
-  const optionsValidation = propertiesValidator(req.query.options);
+  const optionsValidation = validateEvaluationOptions(req.query.options);
 
   const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, featureFlagNameValidation, attributesValidation, optionsValidation]);
   if (error.length) {
@@ -58,7 +58,7 @@ const treatmentsValidation = (req, res, next) => {
   const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
   const featureFlagsNameValidation = splitsValidator(req.query['split-names']);
   const attributesValidation = attributesValidator(req.query.attributes);
-  const optionsValidation = propertiesValidator(req.query.options);
+  const optionsValidation = validateEvaluationOptions(req.query.options);
 
   const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, featureFlagsNameValidation, attributesValidation, optionsValidation]);
   if (error.length) {
@@ -92,7 +92,7 @@ const flagSetsValidation = (req, res, next) => {
   const bucketingKeyValidation = req.query['bucketing-key'] !== undefined ? keyValidator(req.query['bucketing-key'], 'bucketing-key') : null;
   const flagSetNameValidation = flagSetsValidator(req.query['flag-sets']);
   const attributesValidation = attributesValidator(req.query.attributes);
-  const optionsValidation = propertiesValidator(req.query.options);
+  const optionsValidation = validateEvaluationOptions(req.query.options);
 
   const error = parseValidators([matchingKeyValidation, bucketingKeyValidation, flagSetNameValidation, attributesValidation, optionsValidation]);
   if (error.length) {
@@ -126,7 +126,7 @@ const trackValidation = (req, res, next) => {
   const trafficTypeValidation = trafficTypeValidator(req.query['traffic-type']);
   const eventTypeValidation = eventTypeValidator(req.query['event-type']);
   const valueValidation = valueValidator(req.query.value);
-  const propertiesValidation = propertiesValidator(req.query.properties);
+  const propertiesValidation = validateProperties(req.query.properties);
 
   const error = parseValidators([keyValidation, trafficTypeValidation, eventTypeValidation, valueValidation, propertiesValidation]);
   if (error.length) {
@@ -157,7 +157,7 @@ const trackValidation = (req, res, next) => {
 const allTreatmentValidation = (req, res, next) => {
   const keysValidation = keysValidator(req.query.keys);
   const attributesValidation = attributesValidator(req.query.attributes);
-  const optionsValidation = propertiesValidator(req.query.options);
+  const optionsValidation = validateEvaluationOptions(req.query.options);
 
   const error = parseValidators([keysValidation, attributesValidation, optionsValidation]);
   if (error.length) {

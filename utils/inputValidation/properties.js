@@ -2,39 +2,41 @@ const { isObject, isString } = require('../lang');
 const errorWrapper = require('./wrapper/error');
 const okWrapper = require('./wrapper/ok');
 
-const allowedTypes = ['boolean', 'string', 'number'];
-
-function validatePropertiesObject(obj) {
-  if (!isObject(obj)) return false;
-  return Object.values(obj).every(v => allowedTypes.includes(typeof v));
+function validateProperties(maybeProperties) {
+  // @TODO make the validation more specific
+  // eslint-disable-next-line eqeqeq
+  if (maybeProperties == undefined) return okWrapper(null);
+  let properties;
+  try {
+    properties = isString(maybeProperties) ? JSON.parse(maybeProperties) : maybeProperties;
+    if (!isObject(properties)) {
+      return errorWrapper('properties must be a plain object.');
+    }
+    return okWrapper(properties);
+  } catch (e) {
+    return errorWrapper('properties must be a plain object.');
+  }
 }
 
-const validateOptionsOrProperties = (maybeInput) => {
+function validateEvaluationOptions(maybeOptions) {
   // eslint-disable-next-line eqeqeq
-  if (maybeInput == undefined) return okWrapper(null);
-
-  let input;
+  if (maybeOptions == undefined) return okWrapper(null);
+  let options;
   try {
-    input = isString(maybeInput) ? JSON.parse(maybeInput) : maybeInput;
-    if (!isObject(input)) {
-      return errorWrapper('Input must be a plain object.');
+    options = isString(maybeOptions) ? JSON.parse(maybeOptions) : maybeOptions;
+    if (!isObject(options)) {
+      return errorWrapper('options must be a plain object.');
     }
-
-    if (input.properties !== undefined) {
-      if (!validatePropertiesObject(input.properties)) {
-        return errorWrapper('options.properties must only contain boolean, string, or number values.');
-      }
-      return okWrapper(input);
+    if ('properties' in options) {
+      return validateProperties(options.properties);
     }
-
-    if (validatePropertiesObject(input)) {
-      return okWrapper(input);
-    }
-
-    return errorWrapper('Input must be a plain object.');
+    return okWrapper(options);
   } catch (e) {
-    return errorWrapper('Input must be a plain object.');
+    return errorWrapper('options must be a plain object.');
   }
-};
+}
 
-module.exports = validateOptionsOrProperties;
+module.exports = {
+  validateProperties,
+  validateEvaluationOptions,
+};
