@@ -67,7 +67,7 @@ components:
       schema:
         type: string
       description:  A JSON string of the properties to include in the evaluation. Must be a flat object with up to 15 keys for GET requests. Values must be boolean, string, number, or null.
-      example: '{"package":"premium","admin":true,"discount":50}'
+      example: "{\"package\": \"premium\", \"admin\": true, \"discount\": 50 }"
     keys:
       in: query
       name: keys
@@ -122,7 +122,7 @@ components:
           type: object
         properties:
           type: object
-      example: { attributes: { myattr1: 'test' }, properties: {"package":"premium","admin":true,"discount":50}}
+      example: { attributes: { myattr1: "test" }, properties: { package: "premium", admin: true, discount: 50 }}
     InputValidation:
       type: object
       properties:
@@ -295,7 +295,7 @@ paths:
     get:
       tags:
         - client
-      summary: performs single evaluation and attachs config
+      summary: performs single evaluation and attaches config
       description: Calls getTreatmentWithConfig method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
@@ -338,7 +338,7 @@ paths:
     post:
       tags:
         - client
-      summary: performs single evaluation and attachs config, but receiving the attributes and properties on the request body.
+      summary: performs single evaluation and attaches config, but receiving the attributes and properties on the request body.
       description: Calls getTreatmentWithConfig method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
@@ -457,7 +457,7 @@ paths:
     get:
       tags:
         - client
-      summary: performs multiple evaluation at once and attachs config
+      summary: performs multiple evaluation at once and attaches config
       description: Calls getTreatmentsWithConfig method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
@@ -496,7 +496,7 @@ paths:
     post:
       tags:
         - client
-      summary: performs multiple evaluation at once and attachs config, but receiving the attributes and properties on the request body.
+      summary: performs multiple evaluation at once and attaches config, but receiving the attributes and properties on the request body.
       description: Calls getTreatmentsWithConfig method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
@@ -611,7 +611,7 @@ paths:
     get:
       tags:
         - client
-      summary: performs multiple evaluation by sets at once and attachs config
+      summary: performs multiple evaluation by sets at once and attaches config
       description: Calls getTreatmentsWithConfigBySets method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
@@ -650,7 +650,7 @@ paths:
     post:
       tags:
         - client
-      summary: performs multiple evaluation by sets at once and attachs config, but receiving the attributes and properties on the request body.
+      summary: performs multiple evaluation by sets at once and attaches config, but receiving the attributes and properties on the request body.
       description: Calls getTreatmentsWithConfigBySets method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
@@ -1238,4 +1238,3 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unauthorized'
-
