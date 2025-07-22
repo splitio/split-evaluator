@@ -1,225 +1,244 @@
 {
-  "splits": [
-    {
-      "trafficTypeName": "client",
-      "name": "test_green",
-      "trafficAllocation": 100,
-      "trafficAllocationSeed": 147392224,
-      "seed": 524417105,
-      "status": "ACTIVE",
-      "killed": false,
-      "defaultTreatment": "on",
-      "changeNumber": 1602796638344,
-      "algo": 2,
-      "configurations": {},
-      "sets": ["set_green"],
-      "conditions": [
-        {
-          "conditionType": "ROLLOUT",
-          "matcherGroup": {
-            "combiner": "AND",
-            "matchers": [
-              {
-                "keySelector": { "trafficType": "client", "attribute": null },
-                "matcherType": "ALL_KEYS",
-                "negate": false,
-                "userDefinedSegmentMatcherData": null,
-                "whitelistMatcherData": null,
-                "unaryNumericMatcherData": null,
-                "betweenMatcherData": null,
-                "booleanMatcherData": null,
-                "dependencyMatcherData": null,
-                "stringMatcherData": null
-              }
-            ]
-          },
-          "partitions": [
-            { "treatment": "on", "size": 100 },
-            { "treatment": "off", "size": 0 },
-            { "treatment": "free", "size": 0 },
-            { "treatment": "conta", "size": 0 }
-          ],
-          "label": "default rule"
-        }
-      ]
-    },
-    {
-      "trafficTypeName": "client",
-      "name": "test_color",
-      "trafficAllocation": 100,
-      "trafficAllocationSeed": 147392224,
-      "seed": 524417105,
-      "status": "ACTIVE",
-      "killed": false,
-      "defaultTreatment": "on",
-      "changeNumber": 1602796638344,
-      "algo": 2,
-      "configurations": {},
-      "sets": ["set_green", "set_purple"],
-      "conditions": [
-        {
-          "conditionType": "ROLLOUT",
-          "matcherGroup": {
-            "combiner": "AND",
-            "matchers": [
-              {
-                "keySelector": { "trafficType": "client", "attribute": null },
-                "matcherType": "ALL_KEYS",
-                "negate": false,
-                "userDefinedSegmentMatcherData": null,
-                "whitelistMatcherData": null,
-                "unaryNumericMatcherData": null,
-                "betweenMatcherData": null,
-                "booleanMatcherData": null,
-                "dependencyMatcherData": null,
-                "stringMatcherData": null
-              }
-            ]
-          },
-          "partitions": [
-            { "treatment": "on", "size": 100 },
-            { "treatment": "off", "size": 0 },
-            { "treatment": "free", "size": 0 },
-            { "treatment": "conta", "size": 0 }
-          ],
-          "label": "default rule"
-        }
-      ]
-    },
-    {
-      "trafficTypeName": "client",
-      "name": "test_green_config",
-      "trafficAllocation": 100,
-      "trafficAllocationSeed": 147392224,
-      "seed": 524417105,
-      "status": "ACTIVE",
-      "killed": false,
-      "defaultTreatment": "on",
-      "changeNumber": 1602796638344,
-      "algo": 2,
-      "configurations": {
-        "on": "{\"color\":\"green\"}"
+  "ff": {
+    "d": [
+      {
+        "trafficTypeName": "client",
+        "name": "test_green",
+        "trafficAllocation": 100,
+        "trafficAllocationSeed": 147392224,
+        "seed": 524417105,
+        "status": "ACTIVE",
+        "killed": false,
+        "defaultTreatment": "on",
+        "changeNumber": 1602796638344,
+        "algo": 2,
+        "configurations": {},
+        "sets": ["set_green"],
+        "conditions": [
+          {
+            "conditionType": "ROLLOUT",
+            "matcherGroup": {
+              "combiner": "AND",
+              "matchers": [
+                {
+                  "keySelector": { "trafficType": "client", "attribute": null },
+                  "matcherType": "ALL_KEYS",
+                  "negate": false,
+                  "userDefinedSegmentMatcherData": null,
+                  "whitelistMatcherData": null,
+                  "unaryNumericMatcherData": null,
+                  "betweenMatcherData": null,
+                  "booleanMatcherData": null,
+                  "dependencyMatcherData": null,
+                  "stringMatcherData": null
+                }
+              ]
+            },
+            "partitions": [
+              { "treatment": "on", "size": 100 },
+              { "treatment": "off", "size": 0 },
+              { "treatment": "free", "size": 0 },
+              { "treatment": "conta", "size": 0 }
+            ],
+            "label": "default rule"
+          }
+        ],
+        "impressionsDisabled": true,
+        "prerequisites": [
+          { "n": "flag1", "ts": ["on","v1"] }, 
+          { "n": "flag2", "ts": ["off"] }
+        ]
       },
-      "sets": ["set_green"],
-      "conditions": [
-        {
-          "conditionType": "ROLLOUT",
-          "matcherGroup": {
-            "combiner": "AND",
-            "matchers": [
-              {
-                "keySelector": { "trafficType": "client", "attribute": null },
-                "matcherType": "ALL_KEYS",
-                "negate": false,
-                "userDefinedSegmentMatcherData": null,
-                "whitelistMatcherData": null,
-                "unaryNumericMatcherData": null,
-                "betweenMatcherData": null,
-                "booleanMatcherData": null,
-                "dependencyMatcherData": null,
-                "stringMatcherData": null
-              }
-            ]
-          },
-          "partitions": [
-            { "treatment": "on", "size": 100 },
-            { "treatment": "off", "size": 0 },
-            { "treatment": "free", "size": 0 },
-            { "treatment": "conta", "size": 0 }
-          ],
-          "label": "default rule"
-        }
-      ]
-    },
-    {
-      "trafficTypeName": "client",
-      "name": "test_purple",
-      "trafficAllocation": 100,
-      "trafficAllocationSeed": 147392224,
-      "seed": 524417105,
-      "status": "ACTIVE",
-      "killed": false,
-      "defaultTreatment": "on",
-      "changeNumber": 1602796638344,
-      "algo": 2,
-      "configurations": {},
-      "sets": ["set_purple"],
-      "conditions": [
-        {
-          "conditionType": "ROLLOUT",
-          "matcherGroup": {
-            "combiner": "AND",
-            "matchers": [
-              {
-                "keySelector": { "trafficType": "client", "attribute": null },
-                "matcherType": "ALL_KEYS",
-                "negate": false,
-                "userDefinedSegmentMatcherData": null,
-                "whitelistMatcherData": null,
-                "unaryNumericMatcherData": null,
-                "betweenMatcherData": null,
-                "booleanMatcherData": null,
-                "dependencyMatcherData": null,
-                "stringMatcherData": null
-              }
-            ]
-          },
-          "partitions": [
-            { "treatment": "on", "size": 100 },
-            { "treatment": "off", "size": 0 },
-            { "treatment": "free", "size": 0 },
-            { "treatment": "conta", "size": 0 }
-          ],
-          "label": "default rule"
-        }
-      ]
-    },
-    {
-      "trafficTypeName": "client",
-      "name": "test_purple_config",
-      "trafficAllocation": 100,
-      "trafficAllocationSeed": 147392224,
-      "seed": 524417105,
-      "status": "ACTIVE",
-      "killed": false,
-      "defaultTreatment": "on",
-      "changeNumber": 1602796638344,
-      "algo": 2,
-      "configurations": {
-        "on": "{\"color\":\"purple\"}"
+      {
+        "trafficTypeName": "client",
+        "name": "test_color",
+        "trafficAllocation": 100,
+        "trafficAllocationSeed": 147392224,
+        "seed": 524417105,
+        "status": "ACTIVE",
+        "killed": false,
+        "defaultTreatment": "on",
+        "changeNumber": 1602796638344,
+        "algo": 2,
+        "configurations": {},
+        "sets": ["set_green", "set_purple"],
+        "conditions": [
+          {
+            "conditionType": "ROLLOUT",
+            "matcherGroup": {
+              "combiner": "AND",
+              "matchers": [
+                {
+                  "keySelector": { "trafficType": "client", "attribute": null },
+                  "matcherType": "ALL_KEYS",
+                  "negate": false,
+                  "userDefinedSegmentMatcherData": null,
+                  "whitelistMatcherData": null,
+                  "unaryNumericMatcherData": null,
+                  "betweenMatcherData": null,
+                  "booleanMatcherData": null,
+                  "dependencyMatcherData": null,
+                  "stringMatcherData": null
+                }
+              ]
+            },
+            "partitions": [
+              { "treatment": "on", "size": 100 },
+              { "treatment": "off", "size": 0 },
+              { "treatment": "free", "size": 0 },
+              { "treatment": "conta", "size": 0 }
+            ],
+            "label": "default rule"
+          }
+        ],
+        "impressionsDisabled": false,
+        "prerequisites": []
       },
-      "sets": ["set_purple"],
-      "conditions": [
-        {
-          "conditionType": "ROLLOUT",
-          "matcherGroup": {
-            "combiner": "AND",
-            "matchers": [
-              {
-                "keySelector": { "trafficType": "client", "attribute": null },
-                "matcherType": "ALL_KEYS",
-                "negate": false,
-                "userDefinedSegmentMatcherData": null,
-                "whitelistMatcherData": null,
-                "unaryNumericMatcherData": null,
-                "betweenMatcherData": null,
-                "booleanMatcherData": null,
-                "dependencyMatcherData": null,
-                "stringMatcherData": null
-              }
-            ]
-          },
-          "partitions": [
-            { "treatment": "on", "size": 100 },
-            { "treatment": "off", "size": 0 },
-            { "treatment": "free", "size": 0 },
-            { "treatment": "conta", "size": 0 }
-          ],
-          "label": "default rule"
-        }
-      ]
-    }
-  ],
-  "since": -1,
-  "till": 1602796638344
+      {
+        "trafficTypeName": "client",
+        "name": "test_green_config",
+        "trafficAllocation": 100,
+        "trafficAllocationSeed": 147392224,
+        "seed": 524417105,
+        "status": "ACTIVE",
+        "killed": false,
+        "defaultTreatment": "on",
+        "changeNumber": 1602796638344,
+        "algo": 2,
+        "configurations": {
+          "on": "{\"color\":\"green\"}"
+        },
+        "sets": ["set_green"],
+        "conditions": [
+          {
+            "conditionType": "ROLLOUT",
+            "matcherGroup": {
+              "combiner": "AND",
+              "matchers": [
+                {
+                  "keySelector": { "trafficType": "client", "attribute": null },
+                  "matcherType": "ALL_KEYS",
+                  "negate": false,
+                  "userDefinedSegmentMatcherData": null,
+                  "whitelistMatcherData": null,
+                  "unaryNumericMatcherData": null,
+                  "betweenMatcherData": null,
+                  "booleanMatcherData": null,
+                  "dependencyMatcherData": null,
+                  "stringMatcherData": null
+                }
+              ]
+            },
+            "partitions": [
+              { "treatment": "on", "size": 100 },
+              { "treatment": "off", "size": 0 },
+              { "treatment": "free", "size": 0 },
+              { "treatment": "conta", "size": 0 }
+            ],
+            "label": "default rule"
+          }
+        ],
+        "impressionsDisabled": true,
+        "prerequisites": [
+          { "n": "flag3", "ts": ["on","v2"] }, 
+          { "n": "flag4", "ts": ["off"] },
+          { "n": "flag5", "ts": ["off"] }
+        ]
+      },
+      {
+        "trafficTypeName": "client",
+        "name": "test_purple",
+        "trafficAllocation": 100,
+        "trafficAllocationSeed": 147392224,
+        "seed": 524417105,
+        "status": "ACTIVE",
+        "killed": false,
+        "defaultTreatment": "on",
+        "changeNumber": 1602796638344,
+        "algo": 2,
+        "configurations": {},
+        "sets": ["set_purple"],
+        "conditions": [
+          {
+            "conditionType": "ROLLOUT",
+            "matcherGroup": {
+              "combiner": "AND",
+              "matchers": [
+                {
+                  "keySelector": { "trafficType": "client", "attribute": null },
+                  "matcherType": "ALL_KEYS",
+                  "negate": false,
+                  "userDefinedSegmentMatcherData": null,
+                  "whitelistMatcherData": null,
+                  "unaryNumericMatcherData": null,
+                  "betweenMatcherData": null,
+                  "booleanMatcherData": null,
+                  "dependencyMatcherData": null,
+                  "stringMatcherData": null
+                }
+              ]
+            },
+            "partitions": [
+              { "treatment": "on", "size": 100 },
+              { "treatment": "off", "size": 0 },
+              { "treatment": "free", "size": 0 },
+              { "treatment": "conta", "size": 0 }
+            ],
+            "label": "default rule"
+          }
+        ],
+        "impressionsDisabled": false,
+        "prerequisites": []
+      },
+      {
+        "trafficTypeName": "client",
+        "name": "test_purple_config",
+        "trafficAllocation": 100,
+        "trafficAllocationSeed": 147392224,
+        "seed": 524417105,
+        "status": "ACTIVE",
+        "killed": false,
+        "defaultTreatment": "on",
+        "changeNumber": 1602796638344,
+        "algo": 2,
+        "configurations": {
+          "on": "{\"color\":\"purple\"}"
+        },
+        "sets": ["set_purple"],
+        "conditions": [
+          {
+            "conditionType": "ROLLOUT",
+            "matcherGroup": {
+              "combiner": "AND",
+              "matchers": [
+                {
+                  "keySelector": { "trafficType": "client", "attribute": null },
+                  "matcherType": "ALL_KEYS",
+                  "negate": false,
+                  "userDefinedSegmentMatcherData": null,
+                  "whitelistMatcherData": null,
+                  "unaryNumericMatcherData": null,
+                  "betweenMatcherData": null,
+                  "booleanMatcherData": null,
+                  "dependencyMatcherData": null,
+                  "stringMatcherData": null
+                }
+              ]
+            },
+            "partitions": [
+              { "treatment": "on", "size": 100 },
+              { "treatment": "off", "size": 0 },
+              { "treatment": "free", "size": 0 },
+              { "treatment": "conta", "size": 0 }
+            ],
+            "label": "default rule"
+          }
+        ],
+        "impressionsDisabled": true,
+        "prerequisites": []
+      }
+    ],
+    "s": -1,
+    "t": 1602796638344
+  }
 }

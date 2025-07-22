@@ -4,7 +4,7 @@ const app = require('../../app');
 jest.mock('node-fetch', () => {
   return jest.fn().mockImplementation((url) => {
 
-    const sdkUrl = 'https://sdk.test.io/api/splitChanges?s=1.1&since=-1';
+    const sdkUrl = 'https://sdk.test.io/api/splitChanges?s=1.3&since=-1';
     const splitChange2 = require('../../utils/mocks/splitchanges.since.-1.till.1602796638344.json');
     if (url.startsWith(sdkUrl)) return Promise.resolve({ status: 200, json: () => (splitChange2), ok: true });
 
@@ -61,9 +61,13 @@ describe('environmentManager - manager endpoints', () => {
       .get('/manager/splits')
       .set('Authorization', 'key_green');
     expect(response.statusCode).toBe(200);
-    expect(response.body.splits.map(flag => {return flag.name;}))
+    expect(response.body.splits.map(flag => {return {name: flag.name, prerequisites: flag.prerequisites, impressionsDisabled: flag.impressionsDisabled};}))
       .toEqual(
-        ['test_green', 'test_color', 'test_green_config']
+        [
+          {name: 'test_green', prerequisites: [{flagName: 'flag1', treatments: ['on', 'v1']}, {flagName: 'flag2', treatments: ['off']}], impressionsDisabled: true},
+          {name: 'test_color', prerequisites: [], impressionsDisabled: false},
+          {name: 'test_green_config', prerequisites: [{flagName: 'flag3', treatments: ['on', 'v2']}, {flagName: 'flag4', treatments: ['off']}, {flagName: 'flag5', treatments: ['off']}], impressionsDisabled: true}
+        ]
       );
   });
 
@@ -72,9 +76,13 @@ describe('environmentManager - manager endpoints', () => {
       .get('/manager/splits')
       .set('Authorization', 'key_purple');
     expect(response.statusCode).toBe(200);
-    expect(response.body.splits.map(flag => {return flag.name;}))
+    expect(response.body.splits.map(flag => {return {name: flag.name, prerequisites: flag.prerequisites, impressionsDisabled: flag.impressionsDisabled};}))
       .toEqual(
-        ['test_color', 'test_purple', 'test_purple_config']
+        [
+          {name: 'test_color', prerequisites: [], impressionsDisabled: false},
+          {name: 'test_purple', prerequisites: [], impressionsDisabled: false},
+          {name: 'test_purple_config', prerequisites: [], impressionsDisabled: true}
+        ]
       );
   });
 
@@ -121,6 +129,8 @@ describe('environmentManager - manager endpoints', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toEqual('test_green');
     expect(response.body.sets).toEqual(['set_green']);
+    expect(response.body.prerequisites).toEqual([{flagName: 'flag1', treatments: ['on', 'v1']}, {flagName: 'flag2', treatments: ['off']}]);
+    expect(response.body.impressionsDisabled).toEqual(true);
   });
 
   test('[/split] should be 200 if is valid authToken and return feature flag test_purple for key_purple', async () => {
@@ -130,6 +140,8 @@ describe('environmentManager - manager endpoints', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toEqual('test_purple');
     expect(response.body.sets).toEqual(['set_purple']);
+    expect(response.body.prerequisites).toEqual([]);
+    expect(response.body.impressionsDisabled).toEqual(false);
   });
 
   test('[/split] should be 404 if is valid authToken and return 404 for test_green using key_purple', async () => {
@@ -146,6 +158,8 @@ describe('environmentManager - manager endpoints', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toEqual('test_green');
     expect(response.body.sets).toEqual(['set_green']);
+    expect(response.body.prerequisites).toEqual([{flagName: 'flag1', treatments: ['on', 'v1']}, {flagName: 'flag2', treatments: ['off']}]);
+    expect(response.body.impressionsDisabled).toEqual(true);
   });
 
   test('[/split] should be 200 if is valid authToken and return feature flag test_purple for key_pink', async () => {
@@ -155,6 +169,8 @@ describe('environmentManager - manager endpoints', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toEqual('test_purple');
     expect(response.body.sets).toEqual(['set_purple']);
+    expect(response.body.prerequisites).toEqual([]);
+    expect(response.body.impressionsDisabled).toEqual(false);
   });
 
 
