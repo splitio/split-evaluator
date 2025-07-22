@@ -249,4 +249,38 @@ describe('get-treatments-with-config-by-sets', () => {
       .set('Authorization', 'key_pink');
     expectOkMultipleResults(response, 200, expectedPinkResultsWithConfig, 5);
   });
+
+  test('should be 200 if properties is valid (GET)', async () => {
+    const response = await request(app)
+      .get('/client/get-treatments-with-config-by-sets?key=test&flag-sets=set_green&properties={"package":"premium","admin":true,"discount":50}')
+      .set('Authorization', 'key_green');
+    expect(response.status).toBe(200);
+  });
+
+  test('should be 200 if properties is valid (POST)', async () => {
+    const response = await request(app)
+      .post('/client/get-treatments-with-config-by-sets?key=test&flag-sets=set_green')
+      .send({
+        properties: { package: 'premium', admin: true, discount: 50 },
+      })
+      .set('Authorization', 'key_green');
+    expect(response.status).toBe(200);
+  });
+
+  test('should be 200 if properties is invalid (GET)', async () => {
+    const response = await request(app)
+      .get('/client/get-treatments-with-config-by-sets?key=test&flag-sets=set_green&properties={"foo": {"bar": 1}}')
+      .set('Authorization', 'key_green');
+    expect(response.status).toBe(200);
+  });
+
+  test('should be 200 if properties is invalid (POST)', async () => {
+    const response = await request(app)
+      .post('/client/get-treatments-with-config-by-sets?key=test&flag-sets=set_green')
+      .send({
+        properties: { foo: { bar: 1 } },
+      })
+      .set('Authorization', 'key_green');
+    expect(response.status).toBe(200);
+  });
 });

@@ -1,30 +1,45 @@
-const { validateProperties, validateEvaluationOptions } = require('../properties');
+const { validateProperties } = require('../properties');
+const { PROPERTIES_WARNING, PROPERTIES_KEY_LIMIT_WARNING } = require('../../constants');
 
 describe('validateProperties', () => {
+  let logSpy;
+  beforeEach(() => {
+    logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+  });
+  afterEach(() => {
+    logSpy.mockRestore();
+  });
+
+  const invalidObj = (() => {
+    const obj = {};
+    for (let i = 0; i < 16; i++) obj['k' + i] = i;
+    return obj;
+  })();
+
   test('should return error on invalid properties', done => {
-    const expected = 'properties must be a plain object with only boolean, string, number or null values.';
     const result = validateProperties('test');
-    expect(result).toHaveProperty('valid', false);
-    expect(result).toHaveProperty('error', expected);
-    expect(result).not.toHaveProperty('value');
+    expect(result).toHaveProperty('valid', true);
+    expect(result).toHaveProperty('value', null);
+    expect(result).not.toHaveProperty('error');
+    expect(logSpy).toHaveBeenCalledWith(PROPERTIES_WARNING);
     done();
   });
 
   test('should return error on invalid properties 2', done => {
-    const expected = 'properties must be a plain object with only boolean, string, number or null values.';
     const result = validateProperties('[]');
-    expect(result).toHaveProperty('valid', false);
-    expect(result).toHaveProperty('error', expected);
-    expect(result).not.toHaveProperty('value');
+    expect(result).toHaveProperty('valid', true );
+    expect(result).toHaveProperty('value', null);
+    expect(result).not.toHaveProperty('error');
+    expect(logSpy).toHaveBeenCalledWith(PROPERTIES_WARNING);
     done();
   });
 
   test('should return error on invalid properties 3', done => {
-    const expected = 'properties must be a plain object with only boolean, string, number or null values.';
     const result = validateProperties('true');
-    expect(result).toHaveProperty('valid', false);
-    expect(result).toHaveProperty('error', expected);
-    expect(result).not.toHaveProperty('value');
+    expect(result).toHaveProperty('valid', true);
+    expect(result).toHaveProperty('value', null);
+    expect(result).not.toHaveProperty('error');
+    expect(logSpy).toHaveBeenCalledWith(PROPERTIES_WARNING);
     done();
   });
 
@@ -53,75 +68,21 @@ describe('validateProperties', () => {
     expect(result).not.toHaveProperty('error');
     done();
   });
-});
 
-describe('validateEvaluationOptions', () => {
-  test('should return error on invalid options', done => {
-    const expected = 'options must be a plain object.';
-    const result = validateEvaluationOptions('test');
-    expect(result).toHaveProperty('valid', false);
-    expect(result).toHaveProperty('error', expected);
-    expect(result).not.toHaveProperty('value');
-    done();
-  });
-
-  test('should return error on invalid options 2', done => {
-    const expected = 'options must be a plain object.';
-    const result = validateEvaluationOptions('[]');
-    expect(result).toHaveProperty('valid', false);
-    expect(result).toHaveProperty('error', expected);
-    expect(result).not.toHaveProperty('value');
-    done();
-  });
-
-  test('should return error on invalid options 3', done => {
-    const expected = 'options must be a plain object.';
-    const result = validateEvaluationOptions('true');
-    expect(result).toHaveProperty('valid', false);
-    expect(result).toHaveProperty('error', expected);
-    expect(result).not.toHaveProperty('value');
-    done();
-  });
-
-  test('should be valid when options is an object', done => {
-    const result = validateEvaluationOptions('{"foo":1}');
-    expect(result).toHaveProperty('valid', true);
-    expect(result).toHaveProperty('value', { foo: 1 });
-    expect(result).not.toHaveProperty('error');
-    done();
-  });
-
-  test('should be valid when options is empty object', done => {
-    const result = validateEvaluationOptions('{}');
-    expect(result).toHaveProperty('valid', true);
-    expect(result).toHaveProperty('value', {});
-    expect(result).not.toHaveProperty('error');
-    done();
-  });
-
-  test('should be valid when options is null', done => {
-    const result = validateEvaluationOptions();
+  test('should not return error if properties has more than 15 keys (enforced)', done => {
+    const result = validateProperties(invalidObj, true);
     expect(result).toHaveProperty('valid', true);
     expect(result).toHaveProperty('value', null);
     expect(result).not.toHaveProperty('error');
+    expect(logSpy).toHaveBeenCalledWith(PROPERTIES_KEY_LIMIT_WARNING);
     done();
   });
 
-  test('should return error if options.properties is not valid', done => {
-    const expected = 'properties must be a plain object with only boolean, string, number or null values.';
-    const result = validateEvaluationOptions('{"properties": "not-an-object"}');
-    expect(result).toHaveProperty('valid', false);
-    expect(result).toHaveProperty('error', expected);
-    expect(result).not.toHaveProperty('value');
-    done();
-  });
-
-  test('should be valid if options.properties is valid', done => {
-    const result = validateEvaluationOptions('{"properties": {"foo": 1, "bar": "baz", "baz": true}}');
+  test('should be valid if properties has more than 15 keys (not enforced)', done => {
+    const result = validateProperties(invalidObj, false);
     expect(result).toHaveProperty('valid', true);
-    expect(result).toHaveProperty('value', { foo: 1, bar: 'baz', baz: true });
+    expect(result).toHaveProperty('value', invalidObj);
     expect(result).not.toHaveProperty('error');
     done();
   });
-
 });

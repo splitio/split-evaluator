@@ -61,6 +61,13 @@ components:
         type: string
       description:  A JSON string of the attributes to include in the evaluation.
       example: "{\"my-attr1\": \"test\"}"
+    evaluation-properties:
+      in: query
+      name: properties
+      schema:
+        type: string
+      description:  A JSON string of the properties to include in the evaluation. Must be a flat object with up to 15 keys for GET requests. Values must be boolean, string, number, or null.
+      example: "{\"package\": \"premium\", \"admin\": true, \"discount\": 50 }"
     keys:
       in: query
       name: keys
@@ -101,7 +108,7 @@ components:
       example: "{\"prop1\": 1}"
   requestBodies:
     EvaluationRequestBody:
-      description: A JSON of the attributes to include in the evaluation.
+      description: A JSON of the attributes and properties to include in the evaluation.
       required: false
       content:
         application/json:
@@ -113,7 +120,9 @@ components:
       properties:
         attributes:
           type: object
-      example: { attributes: { myattr1: 'test' }}
+        properties:
+          type: object
+      example: { attributes: { myattr1: "test" }, properties: { package: "premium", admin: true, discount: 50 }}
     InputValidation:
       type: object
       properties:
@@ -159,6 +168,21 @@ components:
             type: string
         configs:
           type: object
+        impressionsDisabled:
+          type: boolean
+          description: Indicates if impressions are disabled for this split.
+        prerequisites:
+          type: array
+          description: List of prerequisites for this split.
+          items:
+            type: object
+            properties:
+              flagName:
+                type: string
+              treatments:
+                type: array
+                items:
+                  type: string
       example:
         name: my-split
         trafficType: my-traffic-type
@@ -168,6 +192,12 @@ components:
         config:
           on: "{\"color\": \"blue\"}"
           off: "{\"color\": \"black\"}"
+        impressionsDisabled: false
+        prerequisites:
+          - flagName: flag1
+            treatments: ["on", "v1"]
+          - flagName: flag2
+            treatments: ["off"]
     Splits:
       type: object
       properties:
@@ -191,6 +221,7 @@ paths:
         - $ref: '#/components/parameters/split-name'
         - $ref: '#/components/parameters/bucketing-key'
         - $ref: '#/components/parameters/attributes'
+        - $ref: '#/components/parameters/evaluation-properties'
       responses:
         '200':
           description: Evaluation result
@@ -198,7 +229,7 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
+                evaluation-properties:
                   splitName:
                     type: string
                   treatment:
@@ -223,7 +254,7 @@ paths:
     post:
       tags:
         - client
-      summary: performs single evaluation but receiving the attributes on the request body.
+      summary: performs single evaluation but receiving the attributes and properties on the request body.
       description: Calls getTreatment method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
@@ -264,13 +295,14 @@ paths:
     get:
       tags:
         - client
-      summary: performs single evaluation and attachs config
+      summary: performs single evaluation and attaches config
       description: Calls getTreatmentWithConfig method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
         - $ref: '#/components/parameters/split-name'
         - $ref: '#/components/parameters/bucketing-key'
         - $ref: '#/components/parameters/attributes'
+        - $ref: '#/components/parameters/evaluation-properties'
       responses:
         '200':
           description: Evaluation result
@@ -306,7 +338,7 @@ paths:
     post:
       tags:
         - client
-      summary: performs single evaluation and attachs config, but receiving the attributes on the request body.
+      summary: performs single evaluation and attaches config, but receiving the attributes and properties on the request body.
       description: Calls getTreatmentWithConfig method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
@@ -357,6 +389,7 @@ paths:
         - $ref: '#/components/parameters/split-names'
         - $ref: '#/components/parameters/bucketing-key'
         - $ref: '#/components/parameters/attributes'
+        - $ref: '#/components/parameters/evaluation-properties'
       responses:
         '200':
           description: Evaluation result
@@ -386,7 +419,7 @@ paths:
     post:
       tags:
         - client
-      summary: performs multiple evaluation at once, but receiving the attributes on the request body.
+      summary: performs multiple evaluation at once, but receiving the attributes and properties on the request body.
       description: Calls getTreatments method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
@@ -424,13 +457,14 @@ paths:
     get:
       tags:
         - client
-      summary: performs multiple evaluation at once and attachs config
+      summary: performs multiple evaluation at once and attaches config
       description: Calls getTreatmentsWithConfig method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
         - $ref: '#/components/parameters/split-names'
         - $ref: '#/components/parameters/bucketing-key'
         - $ref: '#/components/parameters/attributes'
+        - $ref: '#/components/parameters/evaluation-properties'
       responses:
         '200':
           description: Evaluation result
@@ -462,7 +496,7 @@ paths:
     post:
       tags:
         - client
-      summary: performs multiple evaluation at once and attachs config, but receiving the attributes on the request body.
+      summary: performs multiple evaluation at once and attaches config, but receiving the attributes and properties on the request body.
       description: Calls getTreatmentsWithConfig method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
@@ -509,6 +543,7 @@ paths:
         - $ref: '#/components/parameters/flag-sets'
         - $ref: '#/components/parameters/bucketing-key'
         - $ref: '#/components/parameters/attributes'
+        - $ref: '#/components/parameters/evaluation-properties'
       responses:
         '200':
           description: Evaluation result
@@ -538,7 +573,7 @@ paths:
     post:
       tags:
         - client
-      summary: performs multiple evaluation at once by sets, but receiving the attributes on the request body.
+      summary: performs multiple evaluation at once by sets, but receiving the attributes and properties on the request body.
       description: Calls getTreatmentsByFlagSets method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
@@ -576,13 +611,14 @@ paths:
     get:
       tags:
         - client
-      summary: performs multiple evaluation by sets at once and attachs config
+      summary: performs multiple evaluation by sets at once and attaches config
       description: Calls getTreatmentsWithConfigBySets method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
         - $ref: '#/components/parameters/flag-sets'
         - $ref: '#/components/parameters/bucketing-key'
         - $ref: '#/components/parameters/attributes'
+        - $ref: '#/components/parameters/evaluation-properties'
       responses:
         '200':
           description: Evaluation result
@@ -614,7 +650,7 @@ paths:
     post:
       tags:
         - client
-      summary: performs multiple evaluation by sets at once and attachs config, but receiving the attributes on the request body.
+      summary: performs multiple evaluation by sets at once and attaches config, but receiving the attributes and properties on the request body.
       description: Calls getTreatmentsWithConfigBySets method from the SDK.
       parameters:
         - $ref: '#/components/parameters/key'
@@ -659,6 +695,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/keys'
         - $ref: '#/components/parameters/attributes'
+        - $ref: '#/components/parameters/evaluation-properties'
       responses:
         '200':
           description: Evaluation result
@@ -701,7 +738,7 @@ paths:
     post:
       tags:
         - client
-      summary: matches feature flags for passed trafficType and evaluates with passed key, but receiving the attributes on the request body.
+      summary: matches feature flags for passed trafficType and evaluates with passed key, but receiving the attributes and properties on the request body.
       description: Calls getTreatments method from the SDK once it have all the splitNames for the keys provided.
       parameters:
         - $ref: '#/components/parameters/keys'
@@ -755,6 +792,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/keys'
         - $ref: '#/components/parameters/attributes'
+        - $ref: '#/components/parameters/evaluation-properties'
       responses:
         '200':
           description: Evaluation result
@@ -801,7 +839,7 @@ paths:
     post:
       tags:
         - client
-      summary: matches feature flags for passed trafficType and evaluates with passed key and attaches configs, but receiving the attributes on the request body.
+      summary: matches feature flags for passed trafficType and evaluates with passed key and attaches configs, but receiving the attributes and properties on the request body.
       description: Calls getTreatmentsWithConfig method from the SDK once it have all the splitNames for the keys provided.
       parameters:
         - $ref: '#/components/parameters/keys'
@@ -1200,4 +1238,3 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Unauthorized'
-
