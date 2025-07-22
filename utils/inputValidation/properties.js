@@ -1,17 +1,30 @@
-const errorWrapper = require('./wrapper/error');
+const { isObject, isString } = require('../lang');
 const okWrapper = require('./wrapper/ok');
-const lang = require('../lang');
+const { PROPERTIES_WARNING, PROPERTIES_KEY_LIMIT_WARNING } = require('../constants');
 
-const validateProperties = (maybeProperties) => {
+function validateProperties(maybeProperties, enforceKeyLimit = false) {
+  // @TODO make the validation more specific
   // eslint-disable-next-line eqeqeq
   if (maybeProperties == undefined) return okWrapper(null);
-
+  let properties;
   try {
-    const properties = JSON.parse(maybeProperties);
-    return (lang.isObject(properties)) ? okWrapper(properties) : errorWrapper('properties must be a plain object.');
+    properties = isString(maybeProperties) ? JSON.parse(maybeProperties) : maybeProperties;
+    if (!isObject(properties)) {
+      console.log(PROPERTIES_WARNING);
+      properties = null;
+    }
+    const keys = Object.keys(properties);
+    if (enforceKeyLimit && keys.length > 15) {
+      console.log(PROPERTIES_KEY_LIMIT_WARNING);
+      properties = null;
+    }
+    return okWrapper(properties);
   } catch (e) {
-    return errorWrapper('properties must be a plain object.');
+    console.log(PROPERTIES_WARNING);
+    return okWrapper(null);
   }
-};
+}
 
-module.exports = validateProperties;
+module.exports = {
+  validateProperties,
+};
