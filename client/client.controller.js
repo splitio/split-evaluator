@@ -12,10 +12,10 @@ const getTreatment = async (req, res) => {
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const featureFlag = req.splitio.featureFlagName;
   const attributes = req.splitio.attributes;
-  const evaluationOptions = req.splitio.options;
+  const properties = req.splitio.properties;
 
   try {
-    const evaluationResult = await client.getTreatment(key, featureFlag, attributes, evaluationOptions);
+    const evaluationResult = await client.getTreatment(key, featureFlag, attributes, { properties });
     environmentManager.updateLastEvaluation(req.headers.authorization);
 
     res.send({
@@ -37,11 +37,11 @@ const getTreatmentWithConfig = async (req, res) => {
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const featureFlag = req.splitio.featureFlagName;
   const attributes = req.splitio.attributes;
-  const evaluationOptions = req.splitio.options;
+  const properties = req.splitio.properties;
 
 
   try {
-    const evaluationResult = await client.getTreatmentWithConfig(key, featureFlag, attributes, evaluationOptions);
+    const evaluationResult = await client.getTreatmentWithConfig(key, featureFlag, attributes, { properties });
     environmentManager.updateLastEvaluation(req.headers.authorization);
 
     res.send({
@@ -64,10 +64,10 @@ const getTreatments = async (req, res) => {
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const featureFlags = req.splitio.featureFlagNames;
   const attributes = req.splitio.attributes;
-  const evaluationOptions = req.splitio.options;
+  const properties = req.splitio.properties;
 
   try {
-    const evaluationResults = await client.getTreatments(key, featureFlags, attributes, evaluationOptions);
+    const evaluationResults = await client.getTreatments(key, featureFlags, attributes, { properties });
     environmentManager.updateLastEvaluation(req.headers.authorization);
 
     const result = {};
@@ -93,10 +93,10 @@ const getTreatmentsWithConfig = async (req, res) => {
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const featureFlags = req.splitio.featureFlagNames;
   const attributes = req.splitio.attributes;
-  const evaluationOptions = req.splitio.options;
+  const properties = req.splitio.properties;
 
   try {
-    const evaluationResults = await client.getTreatmentsWithConfig(key, featureFlags, attributes, evaluationOptions);
+    const evaluationResults = await client.getTreatmentsWithConfig(key, featureFlags, attributes, { properties });
     environmentManager.updateLastEvaluation(req.headers.authorization);
 
     res.send(evaluationResults);
@@ -115,10 +115,10 @@ const getTreatmentsByFlagSets = async (req, res) => {
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const flagSets = req.splitio.flagSetNames;
   const attributes = req.splitio.attributes;
-  const evaluationOptions = req.splitio.options;
+  const properties = req.splitio.properties;
 
   try {
-    const evaluationResults = await client.getTreatmentsByFlagSets(key, flagSets, attributes, evaluationOptions);
+    const evaluationResults = await client.getTreatmentsByFlagSets(key, flagSets, attributes, { properties });
     environmentManager.updateLastEvaluation(req.headers.authorization);
 
     const result = {};
@@ -144,10 +144,10 @@ const getTreatmentsWithConfigByFlagSets = async (req, res) => {
   const key = parseKey(req.splitio.matchingKey, req.splitio.bucketingKey);
   const flagSets = req.splitio.flagSetNames;
   const attributes = req.splitio.attributes;
-  const evaluationOptions = req.splitio.options;
+  const properties = req.splitio.properties;
 
   try {
-    const evaluationResults = await client.getTreatmentsWithConfigByFlagSets(key, flagSets, attributes, evaluationOptions);
+    const evaluationResults = await client.getTreatmentsWithConfigByFlagSets(key, flagSets, attributes, { properties });
     environmentManager.updateLastEvaluation(req.headers.authorization);
 
     const result = evaluationResults;
@@ -185,7 +185,7 @@ const track = async (req, res) => {
  * @param {Object} attributes
  * @param {Object} evaluationOptions
  */
-const allTreatments = async (authorization, keys, attributes, evaluationOptions) => {
+const allTreatments = async (authorization, keys, attributes, properties) => {
   const manager = environmentManager.getManager(authorization);
   const client = environmentManager.getClient(authorization);
   try {
@@ -201,7 +201,7 @@ const allTreatments = async (authorization, keys, attributes, evaluationOptions)
         parseKey(key.matchingKey, key.bucketingKey),
         featureFlagNames,
         attributes,
-        evaluationOptions
+        { properties }
       );
       // Saves result for each trafficType
       evaluations[key.trafficType] = evaluation;
@@ -222,10 +222,10 @@ const allTreatments = async (authorization, keys, attributes, evaluationOptions)
 const getAllTreatmentsWithConfig = async (req, res) => {
   const keys = req.splitio.keys;
   const attributes = req.splitio.attributes;
-  const evaluationOptions = req.splitio.options;
+  const properties = req.splitio.properties;
 
   try {
-    const treatments = await allTreatments(req.headers.authorization, keys, attributes, evaluationOptions);
+    const treatments = await allTreatments(req.headers.authorization, keys, attributes, properties);
     environmentManager.updateLastEvaluation(req.headers.authorization);
     res.send(treatments);
   } catch (error) {
@@ -241,10 +241,10 @@ const getAllTreatmentsWithConfig = async (req, res) => {
 const getAllTreatments = async (req, res) => {
   const keys = req.splitio.keys;
   const attributes = req.splitio.attributes;
-  const evaluationOptions = req.splitio.options;
+  const properties = req.splitio.properties;
 
   try {
-    const treatments = await allTreatments(req.headers.authorization, keys, attributes, evaluationOptions);
+    const treatments = await allTreatments(req.headers.authorization, keys, attributes, properties);
     // Erases the config property for treatments
     const trafficTypes = Object.keys(treatments);
     trafficTypes.forEach(trafficType => {

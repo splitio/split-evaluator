@@ -268,18 +268,35 @@ describe('get-all-treatments-with-config', () => {
     expectOkAllTreatments(response, 200, expected, 2);
   });
 
-  test('should be 200 if options.properties is valid (GET)', async () => {
+  test('should be 200 if properties is valid (GET)', async () => {
     const response = await request(app)
-      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"}]&options={"properties":{"package":"premium","admin":true,"discount":50}}')
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"}]&properties={"package":"premium","admin":true,"discount":50}')
       .set('Authorization', 'test');
     expect(response.status).toBe(200);
   });
 
-  test('should be 200 if options.properties is valid (POST)', async () => {
+  test('should be 200 if properties is valid (POST)', async () => {
     const response = await request(app)
       .post('/client/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"}]')
       .send({
-        options: { properties: { package: 'premium', admin: true, discount: 50 } },
+        properties: { package: 'premium', admin: true, discount: 50 },
+      })
+      .set('Authorization', 'test');
+    expect(response.status).toBe(200);
+  });
+
+  test('should be 200 if properties is invalid (GET)', async () => {
+    const response = await request(app)
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"}]&properties={"foo": {"bar": 1}}')
+      .set('Authorization', 'test');
+    expect(response.status).toBe(200);
+  });
+
+  test('should be 200 if properties is invalid (POST)', async () => {
+    const response = await request(app)
+      .post('/client/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"}]')
+      .send({
+        properties: { foo: { bar: 1 } },
       })
       .set('Authorization', 'test');
     expect(response.status).toBe(200);

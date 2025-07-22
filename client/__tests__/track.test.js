@@ -4,6 +4,7 @@ process.env.SPLIT_EVALUATOR_API_KEY = 'localhost';
 const request = require('supertest');
 const app = require('../../app');
 const { expectError, expectErrorContaining, getLongKey } = require('../../utils/testWrapper');
+const { PROPERTIES_WARNING } = require('../../utils/constants');
 
 describe('track', () => {
   // Testing authorization
@@ -143,14 +144,14 @@ describe('track', () => {
     expectErrorContaining(response, 400, expected);
   });
 
-  test('should be 400 if properties is invalid', async () => {
-    const expected = [
-      'properties must be a plain object with only boolean, string, number or null values.'
-    ];
+  test('should be 200 if properties is invalid', async () => {
+    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
     const response = await request(app)
       .get('/client/track?key=my-key&event-type=my-event&traffic-type=my-traffic&value=1&properties=lalala')
       .set('Authorization', 'test');
-    expectErrorContaining(response, 400, expected);
+    expect(response.statusCode).toBe(200);
+    expect(logSpy).toHaveBeenCalledWith(PROPERTIES_WARNING);
+    logSpy.mockRestore();
   });
 
   test('should be 400 if there are multiple errors in every input', async () => {
@@ -158,7 +159,6 @@ describe('track', () => {
       'key too long, key must be 250 characters or less.',
       'you passed "@!test", event-type must adhere to the regular expression /^[a-zA-Z0-9][-_.:a-zA-Z0-9]{0,79}$/g. This means an event_type must be alphanumeric, cannot be more than 80 characters long, and can only include a dash, underscore, period, or colon as separators of alphanumeric characters.',
       'you passed an empty traffic-type, traffic-type must be a non-empty string.',
-      'properties must be a plain object with only boolean, string, number or null values.',
       'value must be null or number.'
     ];
     const key = getLongKey();

@@ -268,9 +268,9 @@ describe('get-treatments', () => {
     }, 3);
   });
 
-  test('should be 200 if options.properties is valid (GET)', async () => {
+  test('should be 200 if properties is valid (GET)', async () => {
     const response = await request(app)
-      .get('/client/get-treatments?key=test&split-names=my-experiment&options={"properties":{"package":"premium","admin":true,"discount":50}}')
+      .get('/client/get-treatments?key=test&split-names=my-experiment&properties={"package":"premium","admin":true,"discount":50}')
       .set('Authorization', 'test');
     expectOkMultipleResults(response, 200, {
       'my-experiment': {
@@ -279,11 +279,36 @@ describe('get-treatments', () => {
     }, 1);
   });
 
-  test('should be 200 if options.properties is valid (POST)', async () => {
+  test('should be 200 if properties is valid (POST)', async () => {
     const response = await request(app)
       .post('/client/get-treatments?key=test&split-names=my-experiment')
       .send({
-        options: { properties: { package: 'premium', admin: true, discount: 50 } },
+        properties: { package: 'premium', admin: true, discount: 50 },
+      })
+      .set('Authorization', 'test');
+    expectOkMultipleResults(response, 200, {
+      'my-experiment': {
+        treatment: 'on',
+      },
+    }, 1);
+  });
+
+  test('should be 200 if properties is invalid (GET)', async () => {
+    const response = await request(app)
+      .get('/client/get-treatments?key=test&split-names=my-experiment&properties={"foo": {"bar": 1}}')
+      .set('Authorization', 'test');
+    expectOkMultipleResults(response, 200, {
+      'my-experiment': {
+        treatment: 'on',
+      },
+    }, 1);
+  });
+
+  test('should be 200 if properties is invalid (POST)', async () => {
+    const response = await request(app)
+      .post('/client/get-treatments?key=test&split-names=my-experiment')
+      .send({
+        properties: { foo: { bar: 1 } },
       })
       .set('Authorization', 'test');
     expectOkMultipleResults(response, 200, {
