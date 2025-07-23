@@ -1,4 +1,5 @@
-2.8.0 (Jul XX, 2025)
+2.8.0 (Jul 23, 2025)
+  - Updated base image to node:24.3.0-alpine3.22
   - Updated @splitsoftware/splitio package to version 11.4.1 that includes:
     - Added support for rule-based segments. These segments determine membership at runtime by evaluating their configured rules against the user attributes provided to the SDK.
     - Added support for feature flag prerequisites. This allows customers to define dependency conditions between flags, which are evaluated before any allowlists or targeting rules.
