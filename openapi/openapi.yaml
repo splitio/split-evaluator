@@ -170,10 +170,10 @@ components:
           type: object
         impressionsDisabled:
           type: boolean
-          description: Indicates if impressions are disabled for this split.
+          description: Indicates if impressions are disabled for this feature flag.
         prerequisites:
           type: array
-          description: List of prerequisites for this split.
+          description: List of prerequisites for this feature flag.
           items:
             type: object
             properties:
@@ -229,7 +229,7 @@ paths:
             application/json:
               schema:
                 type: object
-                evaluation-properties:
+                properties:
                   splitName:
                     type: string
                   treatment:
