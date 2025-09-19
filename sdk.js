@@ -19,6 +19,7 @@ const getSplitFactory = (settings) => {
     sync: {
       ...settings.sync,
       requestOptions: {
+        ...(settings.sync && settings.sync.requestOptions ? settings.sync.requestOptions : {}),
         agent: proxyAgent
       }
     }
