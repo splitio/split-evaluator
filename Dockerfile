@@ -1,12 +1,23 @@
-FROM splitsoftware/split-evaluator:2.8.0
+# Builder stage
+FROM node:24.3.0-alpine3.22 AS builder
 
-RUN apk add shadow curl \
-&& groupadd --gid 14001 cnapp && useradd --no-create-home --gid 14001 --uid 14000 --shell /bin/false cnapp \
-&& npm install --prefix /usr/src/split-evaluator global-agent@^2 https-proxy-agent@^7.0.2 \
-&& chown cnapp:cnapp -R /usr/src/split-evaluator
+WORKDIR /usr/src/split-evaluator
 
-# Copy our modified sdk.js with proxy support
-COPY sdk.js /usr/src/split-evaluator/sdk.js
+COPY package.json package-lock.json ./
 
-USER cnapp
-ENTRYPOINT ["node", "server.js"]
+RUN npm install --only=production
+
+# Runner stage
+FROM node:24.3.0-alpine3.22 AS runner
+
+WORKDIR /usr/src/split-evaluator
+
+COPY --from=builder /usr/src/split-evaluator/node_modules ./node_modules
+
+COPY . .
+
+EXPOSE 7548
+
+ENV SPLIT_EVALUATOR_SERVER_PORT=7548
+
+ENTRYPOINT ["npm", "start"]
