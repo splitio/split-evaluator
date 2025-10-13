@@ -8,7 +8,7 @@ This services exposes a set of APIs to produce server side evaluation of flags b
 [![Twitter Follow](https://img.shields.io/twitter/follow/splitsoftware.svg?style=social&label=Follow&maxAge=1529000)](https://twitter.com/intent/follow?screen_name=splitsoftware)
 
 ## Compatibility
-Split Evaluator supports Node version 8 or higher.
+Split Evaluator supports Node version 16 or higher.
 
 ## Getting started
 Below is a simple example that describes the instantiation of Split Evaluator:
