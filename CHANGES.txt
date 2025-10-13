@@ -1,5 +1,5 @@
-2.8.1 (Oct 9, 2025)
-  - Updated base image to node:24.9.0-alpine3.22
+2.8.1 (Oct 13, 2025)
+  - Updated base image to node:24.10.0-alpine3.22
 
 2.8.0 (Jul 23, 2025)
   - Updated base image to node:24.3.0-alpine3.22
