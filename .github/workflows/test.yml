@@ -9,14 +9,21 @@ jobs:
   build-and-test:
     name: Build and test
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - '18.18'
+          - '22.20'
+          - '24.10'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
+      - name: Install Node.js v${{ matrix.version }}
+        uses: actions/setup-node@v5
         with:
-          node-version: 18.18.0
+          node-version: ${{ matrix.version }}
 
       - run: npm ci
       - run: npm run lint
