@@ -6,13 +6,6 @@ inputSet:
   projectIdentifier: Harness_Split
   pipeline:
     identifier: deploy_qos_v3
-    properties:
-      ci:
-        codebase:
-          build:
-            type: branch
-            spec:
-              branch: <+trigger.branch>
     stages:
       - parallel:
           - stage:
@@ -38,6 +31,8 @@ inputSet:
                             - latest
                           dockerfile: ""
                           context: ""
+                          envVariables:
+                            PLUGIN_PLATFORM: linux/amd64,linux/arm64
               strategy:
                 matrix:
                   service:
@@ -65,61 +60,16 @@ inputSet:
                             - latest
                           dockerfile: ""
                           context: ""
+                          envVariables:
+                            PLUGIN_PLATFORM: linux/amd64,linux/arm64
               strategy:
                 matrix:
                   service:
                     - <+trigger.payload.repository.name>
-          - stage:
-              identifier: CI_Multi_Arch
-              type: CI
-              spec:
-                execution:
-                  steps:
-                    - step:
-                        identifier: custom_tag
-                        type: Run
-                        spec:
-                          command: VERSION="$(cat package.json | grep version | head -1 | awk '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')"
-                        when:
-                          condition: "true"
-                    - step:
-                        identifier: BuildAndPush
-                        type: BuildAndPushDockerRegistry
-                        spec:
-                          repo: <+trigger.payload.repository.name>
-                          tags:
-                            - <+pipeline.stages.CI_Multi_Arch_split_evaluator.spec.execution.steps.custom_tag.output.outputVariables.VERSION>
-                            - latest
-              when:
-                condition: "true"
-              strategy:
-                matrix:
-                  service:
-                    - <+trigger.payload.repository.name>
-          - stage:
-              identifier: ECR_Multi_Arch
-              type: CI
-              spec:
-                execution:
-                  steps:
-                    - step:
-                        identifier: custom_tag
-                        type: Run
-                        spec:
-                          command: VERSION="$(cat package.json | grep version | head -1 | awk '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')"
-                        when:
-                          condition: "true"
-                    - step:
-                        identifier: BuildAndPushECR
-                        type: BuildAndPushECR
-                        spec:
-                          imageName: <+trigger.payload.repository.name>
-                          tags:
-                            - <+pipeline.stages.ECR_Multi_Arch_split_evaluator.spec.execution.steps.custom_tag.output.outputVariables.VERSION>
-                            - latest
-              when:
-                condition: "true"
-              strategy:
-                matrix:
-                  service:
-                    - <+trigger.payload.repository.name>
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: <+trigger.branch>
