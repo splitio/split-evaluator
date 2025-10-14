@@ -61,7 +61,7 @@ inputSet:
                         spec:
                           imageName: <+trigger.payload.repository.name>
                           tags:
-                            - <+pipeline.stages.CI_split_evaluator.spec.execution.steps.custom_tag.output.outputVariables.VERSION>
+                            - <+pipeline.stages.ECR_split_evaluator.spec.execution.steps.custom_tag.output.outputVariables.VERSION>
                             - latest
                           dockerfile: ""
                           context: ""
@@ -115,7 +115,7 @@ inputSet:
                         spec:
                           imageName: <+trigger.payload.repository.name>
                           tags:
-                            - $VERSION
+                            - <+pipeline.stages.ECR_Multi_Arch_split_evaluator.spec.execution.steps.custom_tag.output.outputVariables.VERSION>
                             - latest
               when:
                 condition: "true"
