@@ -1,5 +1,6 @@
 inputSet:
   name: split_evaluator
+  tags: {}
   identifier: split_evaluator
   orgIdentifier: PROD
   projectIdentifier: Harness_Split
@@ -33,7 +34,7 @@ inputSet:
                         spec:
                           repo: <+trigger.payload.repository.name>
                           tags:
-                            - $VERSION
+                            - <+pipeline.stages.CI_split_evaluator.spec.execution.steps.custom_tag.output.outputVariables.VERSION>
                             - latest
                           dockerfile: ""
                           context: ""
@@ -60,7 +61,7 @@ inputSet:
                         spec:
                           imageName: <+trigger.payload.repository.name>
                           tags:
-                            - $VERSION
+                            - <+pipeline.stages.CI_split_evaluator.spec.execution.steps.custom_tag.output.outputVariables.VERSION>
                             - latest
                           dockerfile: ""
                           context: ""
@@ -87,7 +88,7 @@ inputSet:
                         spec:
                           repo: <+trigger.payload.repository.name>
                           tags:
-                            - $VERSION
+                            - <+pipeline.stages.CI_Multi_Arch_split_evaluator.spec.execution.steps.custom_tag.output.outputVariables.VERSION>
                             - latest
               when:
                 condition: "true"
