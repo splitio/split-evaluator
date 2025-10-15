@@ -1,5 +1,6 @@
 inputSet:
   name: split_evaluator_unstable
+  tags: {}
   identifier: split_evaluator_unstable
   orgIdentifier: PROD
   projectIdentifier: Harness_Split
@@ -34,7 +35,6 @@ inputSet:
                             CODEARTIFACT_AUTH_TOKEN: <+secrets.getValue("codeartifact-token")>
                             GH_TOKEN: <+secrets.getValue("fme-github-netrc-token")>
                           envVariables:
-                            PLUGIN_NO_PUSH: <+<+trigger.payload.ref>!="refs/heads/main"?"true":"false">
                             PLUGIN_PLATFORM: linux/amd64,linux/arm64
               strategy:
                 matrix:
@@ -67,7 +67,6 @@ inputSet:
                             CODEARTIFACT_AUTH_TOKEN: <+secrets.getValue("codeartifact-token")>
                             GH_TOKEN: <+secrets.getValue("fme-github-netrc-token")>
                           envVariables:
-                            PLUGIN_NO_PUSH: <+<+trigger.payload.ref>!="refs/heads/main"?"true":"false">
                             PLUGIN_PLATFORM: linux/amd64,linux/arm64
               strategy:
                 matrix:
