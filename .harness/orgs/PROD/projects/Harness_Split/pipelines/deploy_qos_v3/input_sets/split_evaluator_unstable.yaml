@@ -1,5 +1,6 @@
 inputSet:
   name: split_evaluator_unstable
+  tags: {}
   identifier: split_evaluator_unstable
   orgIdentifier: PROD
   projectIdentifier: Harness_Split
@@ -33,6 +34,7 @@ inputSet:
                           envVariables:
                             PLUGIN_NO_PUSH: <+<+trigger.payload.ref>!="refs/heads/main"?"true":"false">
                             PLUGIN_PLATFORM: linux/amd64,linux/arm64
+                          buildArgs: {}
               strategy:
                 matrix:
                   service:
@@ -63,6 +65,7 @@ inputSet:
                           envVariables:
                             PLUGIN_NO_PUSH: <+<+trigger.payload.ref>!="refs/heads/main"?"true":"false">
                             PLUGIN_PLATFORM: linux/amd64,linux/arm64
+                          buildArgs: {}
               strategy:
                 matrix:
                   service:
