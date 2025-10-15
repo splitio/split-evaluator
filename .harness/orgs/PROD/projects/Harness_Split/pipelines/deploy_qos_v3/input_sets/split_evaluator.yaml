@@ -32,7 +32,8 @@ inputSet:
                           dockerfile: ""
                           context: ""
                           envVariables:
-                            PLUGIN_PLATFORM: linux/amd64,linux/arm64
+                            PLUGIN_NO_PUSH: <+<+trigger.payload.ref>!="refs/heads/main"?"true":"false">
+                            PLUGIN_PLATFORM: ""
               strategy:
                 matrix:
                   service:
@@ -61,6 +62,7 @@ inputSet:
                           dockerfile: ""
                           context: ""
                           envVariables:
+                            PLUGIN_NO_PUSH: <+<+trigger.payload.ref>!="refs/heads/main"?"true":"false">
                             PLUGIN_PLATFORM: linux/amd64,linux/arm64
               strategy:
                 matrix:
