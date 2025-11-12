@@ -20,8 +20,15 @@ inputSet:
                         spec:
                           command: |-
                             VERSION="$(cat package.json | grep version | head -1 | awk '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')"
+
+                            # Logging to DockeHub
+                            echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
                             # Install the necessary QEMU binaries for multi-platform builds
                             docker run --privileged --rm tonistiigi/binfmt --install all
+                          envVariables:
+                            DOCKERHUB_USERNAME: infrasplit
+                            DOCKERHUB_TOKEN: <+secrets.getValue("dockerhub-infrasplit-token")>
                         when:
                           condition: "true"
                     - step:
@@ -56,8 +63,15 @@ inputSet:
                         spec:
                           command: |-
                             VERSION="$(cat package.json | grep version | head -1 | awk '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')"
+
+                            # Logging to DockeHub
+                            echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
                             # Install the necessary QEMU binaries for multi-platform builds
                             docker run --privileged --rm tonistiigi/binfmt --install all
+                          envVariables:
+                            DOCKERHUB_USERNAME: infrasplit
+                            DOCKERHUB_TOKEN: <+secrets.getValue("dockerhub-infrasplit-token")>
                         when:
                           condition: "true"
                     - step:
