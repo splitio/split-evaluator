@@ -263,4 +263,40 @@ describe('get-treatment-with-config', () => {
       .set('Authorization', 'test');
     expectOk(response, 200, 'on', 'my-experiment', '{"desc" : "this applies only to ON treatment"}');
   });
+
+  test('should be 200 if impressionsDisabled is valid (GET)', async () => {
+    const response = await request(app)
+      .get('/client/get-treatment-with-config?key=test&split-name=my-experiment&properties={"package":"premium","admin":true,"discount":50}&impressionsDisabled=true')
+      .set('Authorization', 'test');
+    expectOk(response, 200, 'on', 'my-experiment', '{"desc" : "this applies only to ON treatment"}');
+  });
+
+  test('should be 200 if impressionsDisabled is valid (POST)', async () => {
+    const response = await request(app)
+      .post('/client/get-treatment-with-config?key=test&split-name=my-experiment')
+      .send({
+        properties: { package: 'premium', admin: true, discount: 50 },
+        impressionsDisabled: true,
+      })
+      .set('Authorization', 'test');
+    expectOk(response, 200, 'on', 'my-experiment', '{"desc" : "this applies only to ON treatment"}');
+  });
+
+  test('should be 200 if impressionsDisabled is invalid (GET)', async () => {
+    const response = await request(app)
+      .get('/client/get-treatment-with-config?key=test&split-name=my-experiment&properties={"foo": {"bar": 1}}&impressionsDisabled=lalala')
+      .set('Authorization', 'test');
+    expectOk(response, 200, 'on', 'my-experiment', '{"desc" : "this applies only to ON treatment"}');
+  });
+
+  test('should be 200 if impressionsDisabled is invalid (POST)', async () => {
+    const response = await request(app)
+      .post('/client/get-treatment-with-config?key=test&split-name=my-experiment')
+      .send({
+        properties: { foo: { bar: 1 } },
+        impressionsDisabled: 'lalala',
+      })
+      .set('Authorization', 'test');
+    expectOk(response, 200, 'on', 'my-experiment', '{"desc" : "this applies only to ON treatment"}');
+  });
 });

@@ -82,15 +82,25 @@ describe('impression-listener', () => {
 
   test('should have 1 impressions sent by time schedule', async () => {
     // Generates one impression and just wait until is sent by scheduler (1 second for testing)
-    const response = await request(app)
+    let response = await request(app)
       .get('/client/get-treatment?key=test&split-name=my-experiment')
       .set('Authorization', 'test');
     expectOk(response, 200, 'on', 'my-experiment');
-
+    // should generate new impression even with impressionsDisabled property
+    response = await request(app)
+      .get('/client/get-treatment?key=test&split-name=other-experiment-4&properties={"impressionsDisabled":true}')
+      .set('Authorization', 'test');
+    expectOk(response, 200, 'on', 'other-experiment-4');
+    response = await request(app)
+      .get('/client/get-treatments?key=test&split-names=other-experiment-4')
+      .set('Authorization', 'test');
+    expectOkMultipleResults(response, 200, {
+      'other-experiment-4': { treatment: 'on' },
+    }, 1);
     // Wait for impression sender task
     await new Promise(resolve => setTimeout(resolve, 700));
     // Matches the impression in the body of the IL Post Impressions
-    matcherIlRequest(body, 1, [{ split: 'my-experiment', length: 1 }]);
+    matcherIlRequest(body, 2, [{ split: 'my-experiment', length: 1 }, { split: 'other-experiment-4', length: 2 }]);
     body = '';
   });
 

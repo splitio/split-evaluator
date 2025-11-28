@@ -227,6 +227,9 @@ describe('get-all-treatments', () => {
         'other-experiment-2': {
           treatment: 'on',
         },
+        'other-experiment-4': {
+          treatment: 'on',
+        },
       },
     };
     const response = await request(app)
@@ -240,6 +243,9 @@ describe('get-all-treatments', () => {
     const expected = {
       localhost: {
         'my-experiment': {
+          treatment: 'on',
+        },
+        'other-experiment-4': {
           treatment: 'on',
         },
         'other-experiment-3': {
@@ -272,6 +278,42 @@ describe('get-all-treatments', () => {
       .post('/client/get-all-treatments?keys=[{"matchingKey":"test","trafficType":"localhost"}]')
       .send({
         properties: { package: 'premium', admin: true, discount: 50 },
+      })
+      .set('Authorization', 'test');
+    expect(response.status).toBe(200);
+  });
+
+  test('should be 200 if impressionsDisabled parameter is valid (GET)', async () => {
+    const response = await request(app)
+      .get('/client/get-all-treatments?keys=[{"matchingKey":"test","trafficType":"localhost"}]&properties={"foo": {"bar": 1}}&impressionsDisabled=true')
+      .set('Authorization', 'test');
+    expect(response.status).toBe(200);
+  });
+
+  test('should be 200 if impressionsDisabled parameter is valid (POST)', async () => {
+    const response = await request(app)
+      .post('/client/get-all-treatments?keys=[{"matchingKey":"test","trafficType":"localhost"}]')
+      .send({
+        properties: { package: 'premium', admin: true, discount: 50 },
+        impressionsDisabled: true,
+      })
+      .set('Authorization', 'test');
+    expect(response.status).toBe(200);
+  });
+
+  test('should be 200 if impressionsDisabled parameter is invalid (GET)', async () => {
+    const response = await request(app)
+      .get('/client/get-all-treatments?keys=[{"matchingKey":"test","trafficType":"localhost"}]&properties={"foo": {"bar": 1}}&impressionsDisabled={"a":1}')
+      .set('Authorization', 'test');
+    expect(response.status).toBe(200);
+  });
+
+  test('should be 200 if impressionsDisabled parameter is invalid (POST)', async () => {
+    const response = await request(app)
+      .post('/client/get-all-treatments?keys=[{"matchingKey":"test","trafficType":"localhost"}]')
+      .send({
+        properties: { package: 'premium', admin: true, discount: 50 },
+        impressionsDisabled: { a: 1 },
       })
       .set('Authorization', 'test');
     expect(response.status).toBe(200);
