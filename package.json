@@ -40,7 +40,7 @@
     "test": "NODE_ENV=test jest"
   },
   "dependencies": {
-    "@splitsoftware/splitio": "11.4.1",
+    "@splitsoftware/splitio": "11.8.1-rc.1",
     "config": "^3.3.9",
     "express": "^4.17.1",
     "morgan": "^1.10.1",

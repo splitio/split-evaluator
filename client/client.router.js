@@ -171,6 +171,7 @@ const allTreatmentValidation = (req, res, next) => {
       keys: keysValidation.value,
       attributes: attributesValidation.value,
       properties: propertiesValidation.value,
+      impressionsDisabled: req.query.impressionsDisabled === 'true',
     };
   }
 
