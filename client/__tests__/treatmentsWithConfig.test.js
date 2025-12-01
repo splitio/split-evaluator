@@ -309,7 +309,7 @@ describe('get-treatments-with-config', () => {
 
   test('should be 200 if impressionsDisabled is valid (GET)', async () => {
     const response = await request(app)
-      .get('/client/get-treatments-with-config?key=test&split-names=my-experiment&properties={"package":"premium","admin":true,"discount":50}&impressionsDisabled=true')
+      .get('/client/get-treatments-with-config?key=test&split-names=my-experiment&properties={"package":"premium","admin":true,"discount":50}&impressions-disabled=true')
       .set('Authorization', 'test');
     expectOkMultipleResults(response, 200, {
       'my-experiment': {
@@ -337,7 +337,7 @@ describe('get-treatments-with-config', () => {
 
   test('should be 200 if impressionsDisabled is invalid (GET)', async () => {
     const response = await request(app)
-      .get('/client/get-treatments-with-config?key=test&split-names=my-experiment&properties={"foo": {"bar": 1}}&impressionsDisabled=lalala')
+      .get('/client/get-treatments-with-config?key=test&split-names=my-experiment&properties={"foo": {"bar": 1}}&impressions-disabled=lalala')
       .set('Authorization', 'test');
     expectOkMultipleResults(response, 200, {
       'my-experiment': {

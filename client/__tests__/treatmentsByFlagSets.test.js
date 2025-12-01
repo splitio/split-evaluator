@@ -310,7 +310,7 @@ describe('get-treatments-by-sets', () => {
 
   test('should be 200 if impressionsDisabled is valid (GET)', async () => {
     const response = await request(app)
-      .get('/client/get-treatments-by-sets?key=test&flag-sets=set_green&properties={"package":"premium","admin":true,"discount":50}&impressionsDisabled=true')
+      .get('/client/get-treatments-by-sets?key=test&flag-sets=set_green&properties={"package":"premium","admin":true,"discount":50}&impressions-disabled=true')
       .set('Authorization', 'key_green');
     expect(response.status).toBe(200);
   });
@@ -328,7 +328,7 @@ describe('get-treatments-by-sets', () => {
 
   test('should be 200 if impressionsDisabled is invalid (GET)', async () => {
     const response = await request(app)
-      .get('/client/get-treatments-by-sets?key=test&flag-sets=set_green&properties={"foo": {"bar": 1}}&impressionsDisabled=lalala')
+      .get('/client/get-treatments-by-sets?key=test&flag-sets=set_green&properties={"foo": {"bar": 1}}&impressions-disabled=lalala')
       .set('Authorization', 'key_green');
     expect(response.status).toBe(200);
   });

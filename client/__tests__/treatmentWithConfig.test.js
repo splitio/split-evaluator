@@ -266,7 +266,7 @@ describe('get-treatment-with-config', () => {
 
   test('should be 200 if impressionsDisabled is valid (GET)', async () => {
     const response = await request(app)
-      .get('/client/get-treatment-with-config?key=test&split-name=my-experiment&properties={"package":"premium","admin":true,"discount":50}&impressionsDisabled=true')
+      .get('/client/get-treatment-with-config?key=test&split-name=my-experiment&properties={"package":"premium","admin":true,"discount":50}&impressions-disabled=true')
       .set('Authorization', 'test');
     expectOk(response, 200, 'on', 'my-experiment', '{"desc" : "this applies only to ON treatment"}');
   });
@@ -284,7 +284,7 @@ describe('get-treatment-with-config', () => {
 
   test('should be 200 if impressionsDisabled is invalid (GET)', async () => {
     const response = await request(app)
-      .get('/client/get-treatment-with-config?key=test&split-name=my-experiment&properties={"foo": {"bar": 1}}&impressionsDisabled=lalala')
+      .get('/client/get-treatment-with-config?key=test&split-name=my-experiment&properties={"foo": {"bar": 1}}&impressions-disabled=lalala')
       .set('Authorization', 'test');
     expectOk(response, 200, 'on', 'my-experiment', '{"desc" : "this applies only to ON treatment"}');
   });
