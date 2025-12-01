@@ -285,7 +285,7 @@ describe('get-all-treatments', () => {
 
   test('should be 200 if impressionsDisabled parameter is valid (GET)', async () => {
     const response = await request(app)
-      .get('/client/get-all-treatments?keys=[{"matchingKey":"test","trafficType":"localhost"}]&properties={"foo": {"bar": 1}}&impressionsDisabled=true')
+      .get('/client/get-all-treatments?keys=[{"matchingKey":"test","trafficType":"localhost"}]&properties={"foo": {"bar": 1}}&impressions-disabled=true')
       .set('Authorization', 'test');
     expect(response.status).toBe(200);
   });
@@ -303,7 +303,7 @@ describe('get-all-treatments', () => {
 
   test('should be 200 if impressionsDisabled parameter is invalid (GET)', async () => {
     const response = await request(app)
-      .get('/client/get-all-treatments?keys=[{"matchingKey":"test","trafficType":"localhost"}]&properties={"foo": {"bar": 1}}&impressionsDisabled={"a":1}')
+      .get('/client/get-all-treatments?keys=[{"matchingKey":"test","trafficType":"localhost"}]&properties={"foo": {"bar": 1}}&impressions-disabled={"a":1}')
       .set('Authorization', 'test');
     expect(response.status).toBe(200);
   });

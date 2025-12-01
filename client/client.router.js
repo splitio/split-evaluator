@@ -39,7 +39,7 @@ const treatmentValidation = (req, res, next) => {
       featureFlagName: featureFlagNameValidation.value,
       attributes: attributesValidation.value,
       properties: propertiesValidation.value,
-      impressionsDisabled: req.query.impressionsDisabled === 'true',
+      impressionsDisabled: req.query['impressions-disabled'] === 'true',
     };
 
     if (bucketingKeyValidation && bucketingKeyValidation.valid) req.splitio.bucketingKey = bucketingKeyValidation.value;
@@ -74,7 +74,7 @@ const treatmentsValidation = (req, res, next) => {
       featureFlagNames: featureFlagsNameValidation.value,
       attributes: attributesValidation.value,
       properties: propertiesValidation.value,
-      impressionsDisabled: req.query.impressionsDisabled === 'true',
+      impressionsDisabled: req.query['impressions-disabled'] === 'true',
     };
 
     if (bucketingKeyValidation && bucketingKeyValidation.valid) req.splitio.bucketingKey = bucketingKeyValidation.value;
@@ -109,7 +109,7 @@ const flagSetsValidation = (req, res, next) => {
       flagSetNames: flagSetNameValidation.value,
       attributes: attributesValidation.value,
       properties: propertiesValidation.value,
-      impressionsDisabled: req.query.impressionsDisabled === 'true',
+      impressionsDisabled: req.query['impressions-disabled'] === 'true',
     };
 
     if (bucketingKeyValidation && bucketingKeyValidation.valid) req.splitio.bucketingKey = bucketingKeyValidation.value;
@@ -174,7 +174,7 @@ const allTreatmentValidation = (req, res, next) => {
       keys: keysValidation.value,
       attributes: attributesValidation.value,
       properties: propertiesValidation.value,
-      impressionsDisabled: req.query.impressionsDisabled === 'true',
+      impressionsDisabled: req.query['impressions-disabled'] === 'true',
     };
   }
 
