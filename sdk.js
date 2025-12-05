@@ -1,7 +1,7 @@
 //
 // SDK initialization and factory instanciation.
 //
-const SplitFactory = require('@splitsoftware/splitio').SplitFactory;
+const { SplitFactory } = require('./sdk/index.js');
 const utils = require('./utils/utils');
 
 const getSplitFactory = (settings) => {
