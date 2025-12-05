@@ -17,5 +17,5 @@ exports.defaults = {
   features: '.split',
 
   // Instance version.
-  version: `nodejs-11.8.1-rc.1`,
+  version: 'evaluator-2.8.1',
 };
