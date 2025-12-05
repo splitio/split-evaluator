@@ -16,6 +16,7 @@ function getEventSource() {
     return __isCustom ? __eventSource : require('./eventsource.js');
   } catch (error) {
     console.error(error);
+    // eslint-disable-next-line no-undef
     return typeof EventSource === 'function' ? EventSource : undefined;
   }
 }

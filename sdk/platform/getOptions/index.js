@@ -18,7 +18,7 @@ function getOptions(settings) {
   if (find(settings.urls, url => !url.startsWith('https:'))) return;
 
   return {
-    agent
+    agent,
   };
 }
 
