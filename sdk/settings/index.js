@@ -2,8 +2,8 @@ const { settingsValidation } = require('@splitsoftware/splitio-commons/cjs/utils
 const { validateLogger } = require('@splitsoftware/splitio-commons/cjs/utils/settingsValidation/logger/builtinLogger');
 
 const { defaults } = require('./defaults/node');
-const { validateStorage } = require('./storage/node');
-const { validateRuntime } = require('./runtime/node');
+const { validateStorage } = require('./storage');
+const { validateRuntime } = require('./runtime');
 
 const params = {
   defaults,

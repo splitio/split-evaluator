@@ -48,7 +48,6 @@ function ProcessEmitWarning(warning) {
   if (console && console.warn) console.warn(warning);
 }
 
-// eslint-disable-next-line compat/compat
 var NumberIsNaN = Number.isNaN || function NumberIsNaN(value) {
   return value !== value;
 };
@@ -81,7 +80,7 @@ Object.defineProperty(EventEmitter, 'defaultMaxListeners', {
       throw new RangeError('The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received ' + arg + '.');
     }
     defaultMaxListeners = arg;
-  }
+  },
 });
 
 EventEmitter.init = function () {

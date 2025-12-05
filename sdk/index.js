@@ -10,15 +10,12 @@ const { impressionObserverSSFactory } = require('@splitsoftware/splitio-commons/
 const { sdkFactory } = require('@splitsoftware/splitio-commons/cjs/sdkFactory');
 const { isConsumerMode } = require('@splitsoftware/splitio-commons/cjs/utils/settingsValidation/mode');
 
-const { settingsFactory } = require('./settings/node');
+const { settingsFactory } = require('./settings');
 const { platform, SignalListener } = require('./platform');
 const { bloomFilterFactory } = require('./platform/filter/bloomFilter');
 
 const syncManagerOnlineSSFactory = syncManagerOnlineFactory(pollingManagerSSFactory, pushManagerFactory);
 
-function getStorage(settings) {
-  return InMemoryStorageFactory;
-}
 
 /**
  *
@@ -31,7 +28,7 @@ function getModules(settings) {
 
     platform,
 
-    storageFactory: getStorage(settings),
+    storageFactory: InMemoryStorageFactory,
 
     splitApiFactory,
 
