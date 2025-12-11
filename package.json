@@ -40,7 +40,7 @@
     "test": "NODE_ENV=test jest"
   },
   "dependencies": {
-    "@splitsoftware/splitio-commons": "2.9.1-rc.0",
+    "@splitsoftware/splitio-commons": "2.9.1-rc.1",
     "bloom-filters": "^3.0.4",
     "config": "^3.3.9",
     "cors": "^2.8.5",
