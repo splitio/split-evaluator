@@ -1,21 +1,11 @@
-const { splitApiFactory } = require('@splitsoftware/splitio-commons/cjs/services/splitApi');
-const { syncManagerOnlineFactory } = require('@splitsoftware/splitio-commons/cjs/sync/syncManagerOnline');
-const { pushManagerFactory } = require('@splitsoftware/splitio-commons/cjs/sync/streaming/pushManager');
-const { pollingManagerSSFactory } = require('@splitsoftware/splitio-commons/cjs/sync/polling/pollingManagerSS');
-const { InMemoryStorageFactory } = require('@splitsoftware/splitio-commons/cjs/storages/inMemory/InMemoryStorage');
+const { serverSideModules } = require('@splitsoftware/splitio-commons/cjs/presets/serverSide');
 const { getRolloutPlan } = require('@splitsoftware/splitio-commons/cjs/storages/getRolloutPlan');
-const { sdkManagerFactory } = require('@splitsoftware/splitio-commons/cjs/sdkManager');
-const { sdkClientMethodFactory } = require('@splitsoftware/splitio-commons/cjs/sdkClient/sdkClientMethod');
-const { impressionObserverSSFactory } = require('@splitsoftware/splitio-commons/cjs/trackers/impressionObserver/impressionObserverSS');
-const { sdkFactory } = require('@splitsoftware/splitio-commons/cjs/sdkFactory');
-const { isConsumerMode } = require('@splitsoftware/splitio-commons/cjs/utils/settingsValidation/mode');
 
+const { sdkFactory } = require('@splitsoftware/splitio-commons/cjs/sdkFactory');
+const { isConsumerMode } = require('@splitsoftware/splitio-commons/cjs/utils/settingsValidation/mode')
 const { settingsFactory } = require('./settings');
 const { platform, SignalListener } = require('./platform');
 const { bloomFilterFactory } = require('./platform/filter/bloomFilter');
-
-const syncManagerOnlineSSFactory = syncManagerOnlineFactory(pollingManagerSSFactory, pushManagerFactory);
-
 
 /**
  *
@@ -24,34 +14,23 @@ const syncManagerOnlineSSFactory = syncManagerOnlineFactory(pollingManagerSSFact
 function getModules(settings) {
 
   const modules = {
+
+    ...serverSideModules,
+
     settings,
 
     platform,
 
-    storageFactory: InMemoryStorageFactory,
-
-    splitApiFactory,
-
-    syncManagerFactory: syncManagerOnlineSSFactory,
-
-    sdkManagerFactory,
-
-    sdkClientMethodFactory,
-
     SignalListener,
-
-    impressionsObserverFactory: impressionObserverSSFactory,
 
     filterAdapterFactory: bloomFilterFactory,
 
     extraProps: (params) => {
-      if (!isConsumerMode(params.settings.mode)) {
-        return {
-          getRolloutPlan(options) {
-            return getRolloutPlan(params.settings.log, params.storage, options);
-          },
-        };
-      }
+      return {
+        getRolloutPlan(options) {
+          return getRolloutPlan(params.settings.log, params.storage, options);
+        },
+      };
     },
   };
 
@@ -68,6 +47,14 @@ function getModules(settings) {
  */
 function SplitFactory(config, __updateModules) {
   const settings = settingsFactory(config);
+
+  if (isConsumerMode(settings.mode)) {
+    if (settings.log && typeof settings.log.warn === 'function') {
+      settings.log.warn("You are using 'mode: consumer' (Redis) which is not supported by this version of the Split Evaluator. Falling back to 'standalone' mode (In-Memory). Please update your configuration.");
+    }
+    settings.mode = 'standalone';
+  }
+
   const modules = getModules(settings);
   if (__updateModules) __updateModules(modules);
   return sdkFactory(modules);
