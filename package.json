@@ -40,9 +40,10 @@
     "test": "NODE_ENV=test jest"
   },
   "dependencies": {
-    "@splitsoftware/splitio-commons": "2.9.1-rc.1",
+    "@splitsoftware/splitio-commons": "2.9.1-rc.2",
     "bloom-filters": "^3.0.4",
     "config": "^3.3.9",
+    "js-yaml": "^4.1.0",
     "express": "^4.17.1",
     "morgan": "^1.10.1",
     "node-fetch": "^2.7.0",
@@ -57,7 +58,6 @@
     "babel-jest": "^29.7.0",
     "eslint": "^8.9.0",
     "jest": "^29.7.0",
-    "js-yaml": "^4.1.0",
     "nodemon": "^3.1.0",
     "superagent": "^8.0.9",
     "supertest": "^6.3.1"
