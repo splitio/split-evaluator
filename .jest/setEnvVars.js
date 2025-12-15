@@ -14,8 +14,9 @@ jest.mock('../sdk', () => ({
   getSplitFactory: jest.fn((settings) => {
     const { __dirname } = require('../utils/utils');
     const path = require('path');
-    const { apiKeyMocksMap } = require('../utils/mocks')
-
+    const { apiKeyMocksMap } = require('../utils/mocks');
+    const { syncManagerOfflineFactory } = require('@splitsoftware/splitio-commons/cjs/sync/offline/syncManagerOffline');
+    const { splitsParserFromFileFactory } = require('../sdk/sync/splitsParserFromFile');
     // Clients are configured in localhost mode if there is a features file maped to the authorizationKey value in mocksMap
 
     let features = '';
@@ -61,7 +62,16 @@ jest.mock('../sdk', () => ({
     };
 
     let sdk = jest.requireActual('../sdk');
-    const { factory, impressionsMode } = sdk.getSplitFactory(configForMock);
+    
+    const moduleOverrider = (modules) => {
+      if (features) {
+        modules.splitApiFactory = undefined;
+        modules.syncManagerFactory = syncManagerOfflineFactory(splitsParserFromFileFactory)
+        modules.SignalListener = undefined;
+      }
+    };
+
+    const { factory, impressionsMode } = sdk.getSplitFactory(configForMock, moduleOverrider);
 
     const mockedTelemetry = {
       splits: {

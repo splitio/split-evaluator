@@ -1,0 +1,109 @@
+inputSet:
+  name: split_evaluator_unstable
+  tags: {}
+  identifier: split_evaluator_unstable
+  orgIdentifier: PROD
+  projectIdentifier: Harness_Split
+  pipeline:
+    identifier: deploy_qos_v3
+    stages:
+      - parallel:
+          - stage:
+              identifier: CI
+              type: CI
+              spec:
+                execution:
+                  steps:
+                    - step:
+                        identifier: custom_tag
+                        type: Run
+                        spec:
+                          command: |-
+                            VERSION="$(git rev-parse --short HEAD)"
+
+                            # Logging to DockeHub
+                            echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+                            # Install the necessary QEMU binaries for multi-platform builds
+                            docker run --privileged --rm tonistiigi/binfmt --install all
+                          envVariables:
+                            DOCKERHUB_USERNAME: infrasplit
+                            DOCKERHUB_TOKEN: <+secrets.getValue("dockerhub-infrasplit-token")>
+                        when:
+                          condition: "true"
+                    - step:
+                        identifier: BuildAndPush
+                        type: BuildAndPushDockerRegistry
+                        spec:
+                          repo: <+trigger.payload.repository.name>
+                          tags:
+                            - <+pipeline.stages.CI_split_evaluator.spec.execution.steps.custom_tag.output.outputVariables.VERSION>
+                            - latest
+                          dockerfile: ""
+                          context: ""
+                          buildArgs:
+                            CODEARTIFACT_AUTH_TOKEN: <+secrets.getValue("codeartifact-token")>
+                            GH_TOKEN: <+secrets.getValue("fme-github-netrc-token")>
+                          envVariables:
+                            PLUGIN_PLATFORM: linux/amd64,linux/arm64
+              strategy:
+                matrix:
+                  service:
+                    - <+trigger.payload.repository.name>
+          - stage:
+              identifier: ECR
+              type: CI
+              spec:
+                execution:
+                  steps:
+                    - step:
+                        identifier: custom_tag
+                        type: Run
+                        spec:
+                          command: |-
+                            VERSION="$(git rev-parse --short HEAD)"
+
+                            # Logging to DockeHub
+                            echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+                            # Install the necessary QEMU binaries for multi-platform builds
+                            docker run --privileged --rm tonistiigi/binfmt --install all
+                          envVariables:
+                            DOCKERHUB_USERNAME: infrasplit
+                            DOCKERHUB_TOKEN: <+secrets.getValue("dockerhub-infrasplit-token")>
+                        when:
+                          condition: "true"
+                    - step:
+                        identifier: BuildAndPushECR
+                        type: BuildAndPushECR
+                        spec:
+                          imageName: <+trigger.payload.repository.name>
+                          tags:
+                            - <+pipeline.stages.ECR_split_evaluator.spec.execution.steps.custom_tag.output.outputVariables.VERSION>
+                            - latest
+                          dockerfile: ""
+                          context: ""
+                          buildArgs:
+                            CODEARTIFACT_AUTH_TOKEN: <+secrets.getValue("codeartifact-token")>
+                            GH_TOKEN: <+secrets.getValue("fme-github-netrc-token")>
+                          envVariables:
+                            PLUGIN_PLATFORM: linux/amd64,linux/arm64
+              strategy:
+                matrix:
+                  service:
+                    - <+trigger.payload.repository.name>
+      - stage:
+          identifier: deploy
+          type: Deployment
+          spec:
+            services:
+              values: <+input>
+              metadata:
+                parallel: <+input>
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: <+trigger.branch>
