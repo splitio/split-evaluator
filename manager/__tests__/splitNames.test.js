@@ -23,8 +23,8 @@ describe('names', () => {
       .set('Authorization', 'test');
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('splits');
-    expect(response.body.splits.length).toEqual(4);
+    expect(response.body.splits.length).toEqual(5);
     expect(response.body.splits)
-      .toEqual(expect.arrayContaining(['my-experiment', 'other-experiment-3', 'other-experiment', 'other-experiment-2']));
+      .toEqual(expect.arrayContaining(['my-experiment', 'other-experiment-4', 'other-experiment-3', 'other-experiment', 'other-experiment-2']));
   });
 });

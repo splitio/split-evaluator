@@ -16,3 +16,5 @@
     keys: ["test2","test3"]
 - other-experiment-2:
     treatment: "on"  
+- other-experiment-4:
+    treatment: "on"

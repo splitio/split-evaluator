@@ -306,4 +306,60 @@ describe('get-treatments-with-config', () => {
       },
     }, 1);
   });
+
+  test('should be 200 if impressionsDisabled is valid (GET)', async () => {
+    const response = await request(app)
+      .get('/client/get-treatments-with-config?key=test&split-names=my-experiment&properties={"package":"premium","admin":true,"discount":50}&impressions-disabled=true')
+      .set('Authorization', 'test');
+    expectOkMultipleResults(response, 200, {
+      'my-experiment': {
+        treatment: 'on',
+        config: '{"desc" : "this applies only to ON treatment"}',
+      },
+    }, 1);
+  });
+
+  test('should be 200 if impressionsDisabled is valid (POST)', async () => {
+    const response = await request(app)
+      .post('/client/get-treatments-with-config?key=test&split-names=my-experiment')
+      .send({
+        properties: { package: 'premium', admin: true, discount: 50 },
+        impressionsDisabled: true,
+      })
+      .set('Authorization', 'test');
+    expectOkMultipleResults(response, 200, {
+      'my-experiment': {
+        treatment: 'on',
+        config: '{"desc" : "this applies only to ON treatment"}',
+      },
+    }, 1);
+  });
+
+  test('should be 200 if impressionsDisabled is invalid (GET)', async () => {
+    const response = await request(app)
+      .get('/client/get-treatments-with-config?key=test&split-names=my-experiment&properties={"foo": {"bar": 1}}&impressions-disabled=lalala')
+      .set('Authorization', 'test');
+    expectOkMultipleResults(response, 200, {
+      'my-experiment': {
+        treatment: 'on',
+        config: '{"desc" : "this applies only to ON treatment"}',
+      },
+    }, 1);
+  });
+
+  test('should be 200 if impressionsDisabled is invalid (POST)', async () => {
+    const response = await request(app)
+      .post('/client/get-treatments-with-config?key=test&split-names=my-experiment')
+      .send({
+        properties: { foo: { bar: 1 } },
+        impressionsDisabled: 'lalala',
+      })
+      .set('Authorization', 'test');
+    expectOkMultipleResults(response, 200, {
+      'my-experiment': {
+        treatment: 'on',
+        config: '{"desc" : "this applies only to ON treatment"}',
+      },
+    }, 1);
+  });
 });
