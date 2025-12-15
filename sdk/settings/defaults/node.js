@@ -1,3 +1,5 @@
+const version = require('../../../utils/utils').getVersion();
+
 exports.defaults = {
   core: {
     // Default is true.
@@ -17,5 +19,5 @@ exports.defaults = {
   features: '.split',
 
   // Instance version.
-  version: 'evaluator-2.8.1',
+  version: `evaluator-${version}`,
 };
