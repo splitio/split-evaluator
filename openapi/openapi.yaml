@@ -68,6 +68,13 @@ components:
         type: string
       description:  A JSON string of the properties to include in the evaluation. Must be a flat object with up to 15 keys for GET requests. Values must be boolean, string, number, or null.
       example: "{\"package\": \"premium\", \"admin\": true, \"discount\": 50 }"
+    impressions-disabled:
+      in: query
+      name: impressionsDisabled
+      schema:
+        type: boolean
+      description:  A boolean to indicate whether impressions should be disabled for this evaluation.
+      example: true
     keys:
       in: query
       name: keys
@@ -122,7 +129,9 @@ components:
           type: object
         properties:
           type: object
-      example: { attributes: { myattr1: "test" }, properties: { package: "premium", admin: true, discount: 50 }}
+        impressionsDisabled:
+          type: boolean
+      example: { attributes: { myattr1: "test" }, properties: { package: "premium", admin: true, discount: 50 }, impressionsDisabled: false }
     InputValidation:
       type: object
       properties:
@@ -222,6 +231,7 @@ paths:
         - $ref: '#/components/parameters/bucketing-key'
         - $ref: '#/components/parameters/attributes'
         - $ref: '#/components/parameters/evaluation-properties'
+        - $ref: '#/components/parameters/impressions-disabled'
       responses:
         '200':
           description: Evaluation result
@@ -303,6 +313,7 @@ paths:
         - $ref: '#/components/parameters/bucketing-key'
         - $ref: '#/components/parameters/attributes'
         - $ref: '#/components/parameters/evaluation-properties'
+        - $ref: '#/components/parameters/impressions-disabled'
       responses:
         '200':
           description: Evaluation result
@@ -390,6 +401,7 @@ paths:
         - $ref: '#/components/parameters/bucketing-key'
         - $ref: '#/components/parameters/attributes'
         - $ref: '#/components/parameters/evaluation-properties'
+        - $ref: '#/components/parameters/impressions-disabled'
       responses:
         '200':
           description: Evaluation result
@@ -465,6 +477,7 @@ paths:
         - $ref: '#/components/parameters/bucketing-key'
         - $ref: '#/components/parameters/attributes'
         - $ref: '#/components/parameters/evaluation-properties'
+        - $ref: '#/components/parameters/impressions-disabled'
       responses:
         '200':
           description: Evaluation result
@@ -544,6 +557,7 @@ paths:
         - $ref: '#/components/parameters/bucketing-key'
         - $ref: '#/components/parameters/attributes'
         - $ref: '#/components/parameters/evaluation-properties'
+        - $ref: '#/components/parameters/impressions-disabled'
       responses:
         '200':
           description: Evaluation result
@@ -619,6 +633,7 @@ paths:
         - $ref: '#/components/parameters/bucketing-key'
         - $ref: '#/components/parameters/attributes'
         - $ref: '#/components/parameters/evaluation-properties'
+        - $ref: '#/components/parameters/impressions-disabled'
       responses:
         '200':
           description: Evaluation result
@@ -696,6 +711,7 @@ paths:
         - $ref: '#/components/parameters/keys'
         - $ref: '#/components/parameters/attributes'
         - $ref: '#/components/parameters/evaluation-properties'
+        - $ref: '#/components/parameters/impressions-disabled'
       responses:
         '200':
           description: Evaluation result
@@ -793,6 +809,7 @@ paths:
         - $ref: '#/components/parameters/keys'
         - $ref: '#/components/parameters/attributes'
         - $ref: '#/components/parameters/evaluation-properties'
+        - $ref: '#/components/parameters/impressions-disabled'
       responses:
         '200':
           description: Evaluation result

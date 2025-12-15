@@ -1,7 +1,7 @@
 const apiKeyMocksMap = {
   'localhost': {
     splitUrl: '/parserConfigs/split.yml',
-    splitNames: ['my-experiment','other-experiment-3','other-experiment','other-experiment-2'],
+    splitNames: ['my-experiment','other-experiment-4','other-experiment-3','other-experiment','other-experiment-2'],
     segments: [],
     lastSynchronization: {
       sp: 1674855033145,
