@@ -1,3 +1,7 @@
+2.10.0 (Dec 16, 2025)
+  - Updated @splitsoftware/splitio library, using @splitsoftware/splitio-commons:2.10.0 instead that includes
+    - Added property `impressionsDisabled` in getTreatment(s) `evaluationOptions` parameter, to disable impressions per evaluations.
+
 2.8.1 (Oct 13, 2025)
   - Updated base image to node:24.10.0-alpine3.22
 

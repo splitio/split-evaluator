@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const fetch = require('../sdk/platform/getFetch').getFetch();
 const config = require('config');
 const repeat = require('./repeat');
 const ImpressionQueue = require('./queue');
