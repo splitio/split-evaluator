@@ -24,6 +24,6 @@ describe('splits', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('splits');
     const keys = Object.keys(response.body.splits);
-    expect(keys.length).toEqual(4);
+    expect(keys.length).toEqual(5);
   });
 });

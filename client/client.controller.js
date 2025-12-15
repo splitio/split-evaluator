@@ -13,9 +13,10 @@ const getTreatment = async (req, res) => {
   const featureFlag = req.splitio.featureFlagName;
   const attributes = req.splitio.attributes;
   const properties = req.splitio.properties;
+  const impressionsDisabled = req.splitio.impressionsDisabled;
 
   try {
-    const evaluationResult = await client.getTreatment(key, featureFlag, attributes, { properties });
+    const evaluationResult = await client.getTreatment(key, featureFlag, attributes, { impressionsDisabled, properties });
     environmentManager.updateLastEvaluation(req.headers.authorization);
 
     res.send({
@@ -38,10 +39,11 @@ const getTreatmentWithConfig = async (req, res) => {
   const featureFlag = req.splitio.featureFlagName;
   const attributes = req.splitio.attributes;
   const properties = req.splitio.properties;
+  const impressionsDisabled = req.splitio.impressionsDisabled;
 
 
   try {
-    const evaluationResult = await client.getTreatmentWithConfig(key, featureFlag, attributes, { properties });
+    const evaluationResult = await client.getTreatmentWithConfig(key, featureFlag, attributes, { impressionsDisabled, properties });
     environmentManager.updateLastEvaluation(req.headers.authorization);
 
     res.send({
@@ -65,9 +67,10 @@ const getTreatments = async (req, res) => {
   const featureFlags = req.splitio.featureFlagNames;
   const attributes = req.splitio.attributes;
   const properties = req.splitio.properties;
+  const impressionsDisabled = req.splitio.impressionsDisabled;
 
   try {
-    const evaluationResults = await client.getTreatments(key, featureFlags, attributes, { properties });
+    const evaluationResults = await client.getTreatments(key, featureFlags, attributes, { impressionsDisabled, properties });
     environmentManager.updateLastEvaluation(req.headers.authorization);
 
     const result = {};
@@ -94,9 +97,10 @@ const getTreatmentsWithConfig = async (req, res) => {
   const featureFlags = req.splitio.featureFlagNames;
   const attributes = req.splitio.attributes;
   const properties = req.splitio.properties;
+  const impressionsDisabled = req.splitio.impressionsDisabled;
 
   try {
-    const evaluationResults = await client.getTreatmentsWithConfig(key, featureFlags, attributes, { properties });
+    const evaluationResults = await client.getTreatmentsWithConfig(key, featureFlags, attributes, { impressionsDisabled, properties });
     environmentManager.updateLastEvaluation(req.headers.authorization);
 
     res.send(evaluationResults);
@@ -116,9 +120,10 @@ const getTreatmentsByFlagSets = async (req, res) => {
   const flagSets = req.splitio.flagSetNames;
   const attributes = req.splitio.attributes;
   const properties = req.splitio.properties;
+  const impressionsDisabled = req.splitio.impressionsDisabled;
 
   try {
-    const evaluationResults = await client.getTreatmentsByFlagSets(key, flagSets, attributes, { properties });
+    const evaluationResults = await client.getTreatmentsByFlagSets(key, flagSets, attributes, { impressionsDisabled, properties });
     environmentManager.updateLastEvaluation(req.headers.authorization);
 
     const result = {};
@@ -145,9 +150,10 @@ const getTreatmentsWithConfigByFlagSets = async (req, res) => {
   const flagSets = req.splitio.flagSetNames;
   const attributes = req.splitio.attributes;
   const properties = req.splitio.properties;
+  const impressionsDisabled = req.splitio.impressionsDisabled;
 
   try {
-    const evaluationResults = await client.getTreatmentsWithConfigByFlagSets(key, flagSets, attributes, { properties });
+    const evaluationResults = await client.getTreatmentsWithConfigByFlagSets(key, flagSets, attributes, { impressionsDisabled, properties });
     environmentManager.updateLastEvaluation(req.headers.authorization);
 
     const result = evaluationResults;
@@ -185,7 +191,7 @@ const track = async (req, res) => {
  * @param {Object} attributes
  * @param {Object} evaluationOptions
  */
-const allTreatments = async (authorization, keys, attributes, properties) => {
+const allTreatments = async (authorization, keys, attributes, evaluationOptions) => {
   const manager = environmentManager.getManager(authorization);
   const client = environmentManager.getClient(authorization);
   try {
@@ -201,7 +207,7 @@ const allTreatments = async (authorization, keys, attributes, properties) => {
         parseKey(key.matchingKey, key.bucketingKey),
         featureFlagNames,
         attributes,
-        { properties }
+        evaluationOptions
       );
       // Saves result for each trafficType
       evaluations[key.trafficType] = evaluation;
@@ -223,9 +229,10 @@ const getAllTreatmentsWithConfig = async (req, res) => {
   const keys = req.splitio.keys;
   const attributes = req.splitio.attributes;
   const properties = req.splitio.properties;
+  const impressionsDisabled = req.splitio.impressionsDisabled;
 
   try {
-    const treatments = await allTreatments(req.headers.authorization, keys, attributes, properties);
+    const treatments = await allTreatments(req.headers.authorization, keys, attributes, { impressionsDisabled, properties });
     environmentManager.updateLastEvaluation(req.headers.authorization);
     res.send(treatments);
   } catch (error) {
@@ -242,9 +249,10 @@ const getAllTreatments = async (req, res) => {
   const keys = req.splitio.keys;
   const attributes = req.splitio.attributes;
   const properties = req.splitio.properties;
+  const impressionsDisabled = req.splitio.impressionsDisabled;
 
   try {
-    const treatments = await allTreatments(req.headers.authorization, keys, attributes, properties);
+    const treatments = await allTreatments(req.headers.authorization, keys, attributes, { impressionsDisabled, properties });
     // Erases the config property for treatments
     const trafficTypes = Object.keys(treatments);
     trafficTypes.forEach(trafficType => {
