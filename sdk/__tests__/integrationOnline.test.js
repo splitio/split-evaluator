@@ -49,11 +49,9 @@ describe('Evaluator Integration (Online Mode)', () => {
       client.on(client.Event.SDK_READY_TIMED_OUT, () => reject(new Error('Timeout waiting for SDK_READY')));
     });
 
-    // 2. Verify Evaluation (Storage working)
     const treatment = client.getTreatment('user1', 'always_on');
     expect(treatment).toBe('on');
 
-    // 3. Verify Cleanup
     await client.destroy();
   });
 });
