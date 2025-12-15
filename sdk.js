@@ -1,10 +1,10 @@
 //
 // SDK initialization and factory instanciation.
 //
-const SplitFactory = require('@splitsoftware/splitio').SplitFactory;
+const { SplitFactory } = require('./sdk/index.js');
 const utils = require('./utils/utils');
 
-const getSplitFactory = (settings) => {
+const getSplitFactory = (settings, moduleOverrider) => {
   const logLevel = settings.logLevel;
   delete settings.logLevel;
 
@@ -21,6 +21,8 @@ const getSplitFactory = (settings) => {
       telemetry = storage.telemetry;
       return storage;
     };
+    if (moduleOverrider) moduleOverrider(modules);
+
   });
 
   if (logLevel) {
