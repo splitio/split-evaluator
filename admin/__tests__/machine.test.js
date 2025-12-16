@@ -1,5 +1,5 @@
 const os = require('os');
-const ip = require('@splitsoftware/splitio/cjs/utils/ip');
+const ip = require('../../sdk/utils/ip');
 const request = require('supertest');
 const app = require('../../app');
 const { expectError } = require('../../utils/testWrapper/index');

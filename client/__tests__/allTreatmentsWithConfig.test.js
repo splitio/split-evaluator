@@ -231,6 +231,10 @@ describe('get-all-treatments-with-config', () => {
           treatment: 'on',
           config: null,
         },
+        'other-experiment-4': {
+          treatment: 'on',
+          config: null,
+        },
       },
     };
     const response = await request(app)
@@ -259,6 +263,10 @@ describe('get-all-treatments-with-config', () => {
           treatment: 'on',
           config: null,
         },
+        'other-experiment-4': {
+          treatment: 'on',
+          config: null,
+        },
       },
       account: {},
     };
@@ -284,6 +292,43 @@ describe('get-all-treatments-with-config', () => {
       .set('Authorization', 'test');
     expect(response.status).toBe(200);
   });
+
+  test('should be 200 if impressionsDisabled parameter is valid (GET)', async () => {
+    const response = await request(app)
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"}]&properties={"foo": {"bar": 1}}&impressions-disabled=true')
+      .set('Authorization', 'test');
+    expect(response.status).toBe(200);
+  });
+
+  test('should be 200 if impressionsDisabled parameter is valid (POST)', async () => {
+    const response = await request(app)
+      .post('/client/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"}]')
+      .send({
+        properties: { foo: { bar: 1 } },
+        impressionsDisabled: true,
+      })
+      .set('Authorization', 'test');
+    expect(response.status).toBe(200);
+  });
+
+  test('should be 200 if impressionsDisabled parameter is invalid (GET)', async () => {
+    const response = await request(app)
+      .get('/client/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"}]&properties={"foo": {"bar": 1}}&impressions-disabled={"a":1}')
+      .set('Authorization', 'test');
+    expect(response.status).toBe(200);
+  });
+
+  test('should be 200 if impressionsDisabled parameter is invalid (POST)', async () => {
+    const response = await request(app)
+      .post('/client/get-all-treatments-with-config?keys=[{"matchingKey":"test","trafficType":"localhost"}]')
+      .send({
+        properties: { foo: { bar: 1 } },
+        impressionsDisabled: { a: 1 },
+      })
+      .set('Authorization', 'test');
+    expect(response.status).toBe(200);
+  });
+
 
   test('should be 200 if properties is invalid (GET)', async () => {
     const response = await request(app)

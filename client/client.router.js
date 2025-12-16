@@ -39,6 +39,7 @@ const treatmentValidation = (req, res, next) => {
       featureFlagName: featureFlagNameValidation.value,
       attributes: attributesValidation.value,
       properties: propertiesValidation.value,
+      impressionsDisabled: req.query['impressions-disabled'] === 'true',
     };
 
     if (bucketingKeyValidation && bucketingKeyValidation.valid) req.splitio.bucketingKey = bucketingKeyValidation.value;
@@ -73,6 +74,7 @@ const treatmentsValidation = (req, res, next) => {
       featureFlagNames: featureFlagsNameValidation.value,
       attributes: attributesValidation.value,
       properties: propertiesValidation.value,
+      impressionsDisabled: req.query['impressions-disabled'] === 'true',
     };
 
     if (bucketingKeyValidation && bucketingKeyValidation.valid) req.splitio.bucketingKey = bucketingKeyValidation.value;
@@ -107,6 +109,7 @@ const flagSetsValidation = (req, res, next) => {
       flagSetNames: flagSetNameValidation.value,
       attributes: attributesValidation.value,
       properties: propertiesValidation.value,
+      impressionsDisabled: req.query['impressions-disabled'] === 'true',
     };
 
     if (bucketingKeyValidation && bucketingKeyValidation.valid) req.splitio.bucketingKey = bucketingKeyValidation.value;
@@ -171,6 +174,7 @@ const allTreatmentValidation = (req, res, next) => {
       keys: keysValidation.value,
       attributes: attributesValidation.value,
       properties: propertiesValidation.value,
+      impressionsDisabled: req.query['impressions-disabled'] === 'true',
     };
   }
 
@@ -187,6 +191,12 @@ const fwdAttributesFromPost = function parseAttributesMiddleware(req, res, next)
 
 const fwdPropertiesFromPost = function parsePropertiesMiddleware(req, res, next) {
   req.query.properties = req.body.properties;
+  next();
+};
+
+const fwdImpressionsDisabledFromPost = function parseImpressionsDisabledMiddleware(req, res, next) {
+  const impressionsDisabled = req.body.impressionsDisabled;
+  if (impressionsDisabled !== undefined) req.query['impressions-disabled'] = impressionsDisabled.toString();
   next();
 };
 
@@ -214,14 +224,14 @@ router.get('/get-all-treatments-with-config', allTreatmentValidation, clientCont
 
 // Getting treatments as POST's for big attribute sets
 const JSON_PARSE_OPTS = { limit: '300kb' };
-router.post('/get-treatment',express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdPropertiesFromPost, handleBodyParserErr, treatmentValidation, clientController.getTreatment);
-router.post('/get-treatment-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdPropertiesFromPost, handleBodyParserErr, treatmentValidation, clientController.getTreatmentWithConfig);
-router.post('/get-treatments', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdPropertiesFromPost, handleBodyParserErr, treatmentsValidation, clientController.getTreatments);
-router.post('/get-treatments-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdPropertiesFromPost, handleBodyParserErr, treatmentsValidation, clientController.getTreatmentsWithConfig);
-router.post('/get-treatments-by-sets', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdPropertiesFromPost, handleBodyParserErr, flagSetsValidation, clientController.getTreatmentsByFlagSets);
-router.post('/get-treatments-with-config-by-sets', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdPropertiesFromPost, handleBodyParserErr, flagSetsValidation, clientController.getTreatmentsWithConfigByFlagSets);
-router.post('/get-all-treatments', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdPropertiesFromPost, handleBodyParserErr, allTreatmentValidation, clientController.getAllTreatments);
-router.post('/get-all-treatments-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdPropertiesFromPost, handleBodyParserErr, allTreatmentValidation, clientController.getAllTreatmentsWithConfig);
+router.post('/get-treatment',express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdPropertiesFromPost, fwdImpressionsDisabledFromPost, handleBodyParserErr, treatmentValidation, clientController.getTreatment);
+router.post('/get-treatment-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdPropertiesFromPost, fwdImpressionsDisabledFromPost, handleBodyParserErr, treatmentValidation, clientController.getTreatmentWithConfig);
+router.post('/get-treatments', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdPropertiesFromPost, fwdImpressionsDisabledFromPost, handleBodyParserErr, treatmentsValidation, clientController.getTreatments);
+router.post('/get-treatments-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdPropertiesFromPost, fwdImpressionsDisabledFromPost, handleBodyParserErr, treatmentsValidation, clientController.getTreatmentsWithConfig);
+router.post('/get-treatments-by-sets', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdPropertiesFromPost, fwdImpressionsDisabledFromPost, handleBodyParserErr, flagSetsValidation, clientController.getTreatmentsByFlagSets);
+router.post('/get-treatments-with-config-by-sets', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdPropertiesFromPost, fwdImpressionsDisabledFromPost, handleBodyParserErr, flagSetsValidation, clientController.getTreatmentsWithConfigByFlagSets);
+router.post('/get-all-treatments', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdPropertiesFromPost, fwdImpressionsDisabledFromPost, handleBodyParserErr, allTreatmentValidation, clientController.getAllTreatments);
+router.post('/get-all-treatments-with-config', express.json(JSON_PARSE_OPTS), fwdAttributesFromPost, fwdPropertiesFromPost, fwdImpressionsDisabledFromPost, handleBodyParserErr, allTreatmentValidation, clientController.getAllTreatmentsWithConfig);
 
 // Other methods
 router.get('/track', trackValidation, clientController.track);
