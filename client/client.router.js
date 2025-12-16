@@ -196,7 +196,7 @@ const fwdPropertiesFromPost = function parsePropertiesMiddleware(req, res, next)
 
 const fwdImpressionsDisabledFromPost = function parseImpressionsDisabledMiddleware(req, res, next) {
   const impressionsDisabled = req.body.impressionsDisabled;
-  if (impressionsDisabled !== undefined) req.query['impressions-disabled'] = req.body.impressionsDisabled.toString();
+  if (impressionsDisabled !== undefined) req.query['impressions-disabled'] = impressionsDisabled.toString();
   next();
 };
 
