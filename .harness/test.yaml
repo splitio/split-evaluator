@@ -92,10 +92,10 @@ pipeline:
                     image: ubuntu:22.04
                     shell: Bash
                     command: |
-                      node -v || echo "Node NOT FOUND"
-                      npm -v  || echo "NPM NOT FOUND"
                       apt-get update
                       apt-get install -y nodejs npm
+                      node -v || echo "Node NOT FOUND"
+                      npm -v  || echo "NPM NOT FOUND"
                       npm test
                   timeout: 10m
   tags:
