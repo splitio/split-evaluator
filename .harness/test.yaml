@@ -38,7 +38,7 @@ pipeline:
                   type: Run
                   spec:
                     connectorRef: account.harnessImage
-                    image: Ubuntu:22.04
+                    image: ubuntu:22.04
                     shell: Bash
                     command: |
                       echo "Installing Node.js version <+matrix.nodeVersion>"
@@ -60,7 +60,7 @@ pipeline:
                       identifier: run_npm_ci
                       spec:
                         connectorRef: account.harnessImage
-                        image: Ubuntu:22.04
+                        image: ubuntu:22.04
                         shell: Bash
                         command: |
                           npm ci
@@ -72,7 +72,7 @@ pipeline:
                       identifier: run_npm_lint
                       spec:
                         connectorRef: account.harnessImage
-                        image: Ubuntu:22.04
+                        image: ubuntu:22.04
                         shell: Bash
                         command: |
                           npm run lint
@@ -83,12 +83,12 @@ pipeline:
                       identifier: run_npm_test
                       spec:
                         connectorRef: account.harnessImage
-                        image: Ubuntu:22.04
+                        image: ubuntu:22.04
                         shell: Bash
                         command: |
                           npm test
                       timeout: 10m
             rollbackSteps: []
-  description: This pipeline was updated by Harness AI on 2026-02-05 14:49:20 UTC by Martin Cardozo.
+  description: This pipeline was updated by Harness AI on 2026-02-05 15:14:58 UTC by Martin Cardozo.
   tags:
     ai_generated: "true"
