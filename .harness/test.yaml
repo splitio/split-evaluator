@@ -6,8 +6,8 @@ pipeline:
   properties:
     ci:
       codebase:
-        connectorRef: <+input>
-        repoName: <+input>
+        connectorRef: splitio
+        repoName: split-evaluator
         build:
           type: branch
           spec:
@@ -33,12 +33,10 @@ pipeline:
           execution:
             steps:
               - step:
-                  identifier: setup_node_matrix
+                  identifier: setup_node
                   name: Setup NodeJS Matrix
                   type: Run
                   spec:
-                    connectorRef: account.harnessImage
-                    image: ubuntu:22.04
                     shell: Bash
                     command: |
                       echo "Installing Node.js version <+matrix.nodeVersion>"
@@ -46,7 +44,6 @@ pipeline:
                       apt-get install -y curl
                       curl -fsSL https://deb.nodesource.com/setup_<+matrix.nodeVersion>.x | bash -
                       apt-get install -y nodejs npm
-                      node --version
                     envVariables:
                       NODE_VERSION: <+matrix.nodeVersion>
                   strategy:
