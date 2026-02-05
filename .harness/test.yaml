@@ -37,6 +37,8 @@ pipeline:
                   name: Setup NodeJS Matrix
                   type: Run
                   spec:
+                    connectorRef: account.harnessImage
+                    image: ubuntu:22.04
                     shell: Bash
                     command: |
                       echo "Installing Node.js version <+matrix.nodeVersion>"
