@@ -89,7 +89,7 @@ pipeline:
                   identifier: run_npm_test
                   spec:
                     connectorRef: account.harnessImage
-                    image: node:20-ubuntu
+                    image: ubuntu-24.04
                     shell: Bash
                     command: |
                       apt-get update
