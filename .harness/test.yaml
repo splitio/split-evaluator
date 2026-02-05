@@ -38,7 +38,7 @@ pipeline:
                   type: Run
                   spec:
                     connectorRef: account.harnessImage
-                    image: ubuntu:22.04
+                    image: node:16-ubuntu
                     shell: Bash
                     command: |
                       echo "Installing Node.js version <+matrix.nodeVersion>"
@@ -59,7 +59,7 @@ pipeline:
                   identifier: run_npm_ci
                   spec:
                     connectorRef: account.harnessImage
-                    image: ubuntu:22.04
+                    image: node:16-ubuntu
                     shell: Bash
                     command: |
                       apt-get update
@@ -73,7 +73,7 @@ pipeline:
                   identifier: run_npm_lint
                   spec:
                     connectorRef: account.harnessImage
-                    image: ubuntu:22.04
+                    image: node:16-ubuntu
                     shell: Bash
                     command: |
                       apt-get update
@@ -89,7 +89,7 @@ pipeline:
                   identifier: run_npm_test
                   spec:
                     connectorRef: account.harnessImage
-                    image: ubuntu:22.04
+                    image: node:16-ubuntu
                     shell: Bash
                     command: |
                       apt-get update
