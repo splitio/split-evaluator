@@ -1,0 +1,16 @@
+inputSet:
+  pipeline:
+    identifier: FMEsplitevaluator
+    properties:
+      ci:
+        codebase:
+          connectorRef: splitio
+          repoName: split-evaluator
+          build:
+            spec:
+              branch: <+input>
+            type: branch
+  name: Default
+  identifier: Default
+  orgIdentifier: PROD
+  projectIdentifier: Harness_Split
