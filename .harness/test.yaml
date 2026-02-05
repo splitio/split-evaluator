@@ -38,8 +38,8 @@ pipeline:
                   type: Run
                   spec:
                     connectorRef: account.harnessImage
-                    image: alpine
-                    shell: Sh
+                    image: Ubuntu:22.04
+                    shell: Bash
                     command: |
                       echo "Installing Node.js version <+matrix.nodeVersion>"
                       apt-get update
@@ -60,8 +60,8 @@ pipeline:
                       identifier: run_npm_ci
                       spec:
                         connectorRef: account.harnessImage
-                        image: alpine
-                        shell: Sh
+                        image: Ubuntu:22.04
+                        shell: Bash
                         command: |
                           npm ci
                         envVariables: {}
@@ -72,8 +72,8 @@ pipeline:
                       identifier: run_npm_lint
                       spec:
                         connectorRef: account.harnessImage
-                        image: alpine
-                        shell: Sh
+                        image: Ubuntu:22.04
+                        shell: Bash
                         command: |
                           npm run lint
                       timeout: 10m
@@ -83,8 +83,8 @@ pipeline:
                       identifier: run_npm_test
                       spec:
                         connectorRef: account.harnessImage
-                        image: alpine
-                        shell: Sh
+                        image: Ubuntu:22.04
+                        shell: Bash
                         command: |
                           npm test
                       timeout: 10m
