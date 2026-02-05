@@ -39,7 +39,7 @@ pipeline:
                   spec:
                     connectorRef: account.harnessImage
                     image: alpine
-                    shell: Bash
+                    shell: Sh
                     command: |
                       echo "Installing Node.js version <+matrix.nodeVersion>"
                       apt-get update
@@ -61,7 +61,7 @@ pipeline:
                       spec:
                         connectorRef: account.harnessImage
                         image: alpine
-                        shell: Bash
+                        shell: Sh
                         command: |
                           npm ci
                         envVariables: {}
@@ -73,7 +73,7 @@ pipeline:
                       spec:
                         connectorRef: account.harnessImage
                         image: alpine
-                        shell: Bash
+                        shell: Sh
                         command: |
                           npm run lint
                       timeout: 10m
@@ -84,11 +84,11 @@ pipeline:
                       spec:
                         connectorRef: account.harnessImage
                         image: alpine
-                        shell: Bash
+                        shell: Sh
                         command: |
                           npm test
                       timeout: 10m
             rollbackSteps: []
-  description: This pipeline was updated by Harness AI on 2026-02-05 14:41:40 UTC by Martin Cardozo.
+  description: This pipeline was updated by Harness AI on 2026-02-05 14:49:20 UTC by Martin Cardozo.
   tags:
     ai_generated: "true"
