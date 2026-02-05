@@ -57,6 +57,8 @@ pipeline:
                   name: Install NPM Dependencies
                   identifier: run_npm_ci
                   spec:
+                    connectorRef: account.harnessImage
+                    image: ubuntu:22.04
                     shell: Bash
                     command: |
                       npm ci
