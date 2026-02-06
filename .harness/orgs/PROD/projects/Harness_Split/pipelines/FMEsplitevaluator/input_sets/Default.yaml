@@ -1,0 +1,15 @@
+inputSet:
+  name: DefaultInput
+  tags: {}
+  identifier: Default
+  orgIdentifier: PROD
+  projectIdentifier: Harness_Split
+  pipeline:
+    identifier: FMEsplitevaluator
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: <+input>
