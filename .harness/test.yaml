@@ -77,5 +77,6 @@ pipeline:
                   spec:
                     shell: Bash
                     command: |
+                      npm ci --cache /tmp/empty-cache
                       npm test
                   timeout: 10m
