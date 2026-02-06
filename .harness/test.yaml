@@ -11,7 +11,7 @@ pipeline:
         build:
           type: branch
           spec:
-            branch: main
+            branch: <+trigger.branch>
   variables:
     - name: nodeVersions
       type: String
