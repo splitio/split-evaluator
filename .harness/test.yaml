@@ -79,6 +79,7 @@ pipeline:
                     image: ubuntu:22.04
                     shell: Bash
                     command: |
-                      npm ci --cache /tmp/empty-cache
+                      apt-get update
+                      apt-get install -y nodejs npm
                       npm test
                   timeout: 10m
