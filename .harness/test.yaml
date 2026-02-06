@@ -66,8 +66,6 @@ pipeline:
                   name: NPM Lint
                   identifier: run_npm_lint
                   spec:
-                    connectorRef: account.harnessImage
-                    image: ubuntu:24.04
                     shell: Bash
                     command: |
                       npm run lint
