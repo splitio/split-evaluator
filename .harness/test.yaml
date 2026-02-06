@@ -38,7 +38,7 @@ pipeline:
                   type: Run
                   spec:
                     connectorRef: account.harnessImage
-                    image: ubuntu:24.04
+                    image: ubuntu:22.04
                     shell: Bash
                     command: |
                       echo "Installing Node.js version <+matrix.nodeVersion>"
@@ -79,9 +79,10 @@ pipeline:
                   name: Test
                   identifier: run_npm_test
                   spec:
-                    runtime:
-                      type: SameAsPrevious
+                    connectorRef: account.harnessImage
+                    image: ubuntu:24.04
                     shell: Bash
                     command: |
+                      apt-get install -y nodejs npm
                       npm test
                   timeout: 10m
