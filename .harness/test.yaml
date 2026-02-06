@@ -75,8 +75,6 @@ pipeline:
                   name: Test
                   identifier: run_npm_test
                   spec:
-                    connectorRef: account.harnessImage
-                    image: ubuntu:24.04
                     shell: Bash
                     command: |
                       npm test
