@@ -63,7 +63,7 @@ pipeline:
                   timeout: 10m
               - step:
                   type: Run
-                  name: Lint
+                  name: NPM Lint
                   identifier: run_npm_lint
                   spec:
                     shell: Bash
