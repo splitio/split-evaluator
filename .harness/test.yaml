@@ -57,8 +57,6 @@ pipeline:
                   name: Install NPM Dependencies
                   identifier: run_npm_ci
                   spec:
-                    connectorRef: account.harnessImage
-                    image: ubuntu:22.04
                     shell: Bash
                     command: |
                       npm ci
@@ -68,8 +66,6 @@ pipeline:
                   name: Lint
                   identifier: run_npm_lint
                   spec:
-                    connectorRef: account.harnessImage
-                    image: ubuntu:22.04
                     shell: Bash
                     command: |
                       npm run lint
@@ -79,8 +75,6 @@ pipeline:
                   name: Test
                   identifier: run_npm_test
                   spec:
-                    connectorRef: account.harnessImage
-                    image: ubuntu:22.04
                     shell: Bash
                     command: |
                       npm test
