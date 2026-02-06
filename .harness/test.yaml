@@ -83,6 +83,7 @@ pipeline:
                     image: ubuntu:24.04
                     shell: Bash
                     command: |
+                      apt-get update
                       apt-get install -y nodejs npm
                       npm test
                   timeout: 10m
