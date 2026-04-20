@@ -4,8 +4,8 @@ const { getRolloutPlan } = require('@splitsoftware/splitio-commons/cjs/storages/
 const { sdkFactory } = require('@splitsoftware/splitio-commons/cjs/sdkFactory');
 const { isConsumerMode } = require('@splitsoftware/splitio-commons/cjs/utils/settingsValidation/mode');
 const { settingsFactory } = require('./settings');
-const { platform, SignalListener } = require('./platform');
-const { bloomFilterFactory } = require('./platform/filter/bloomFilter');
+const { platform } = require('@splitsoftware/splitio-commons/cjs/platform/node');
+const { bloomFilterFactory } = require('@splitsoftware/splitio-commons/cjs/utils/filter/bloomFilter');
 
 /**
  *
@@ -20,8 +20,6 @@ function getModules(settings) {
     settings,
 
     platform,
-
-    SignalListener,
 
     filterAdapterFactory: bloomFilterFactory,
 
