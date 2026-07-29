@@ -54,7 +54,7 @@
     "node": ">=16"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.5",
+    "@babel/core": "^7.29.6",
     "@babel/preset-env": "^7.15.6",
     "babel-jest": "^29.7.0",
     "eslint": "^8.9.0",
