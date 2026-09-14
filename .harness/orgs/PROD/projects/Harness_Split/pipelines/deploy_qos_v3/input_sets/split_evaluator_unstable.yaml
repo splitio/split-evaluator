@@ -43,7 +43,6 @@ inputSet:
                           context: ""
                           buildArgs:
                             CODEARTIFACT_AUTH_TOKEN: <+secrets.getValue("codeartifact-token")>
-                            GH_TOKEN: <+secrets.getValue("fme-github-netrc-token")>
                           envVariables:
                             PLUGIN_PLATFORM: linux/amd64,linux/arm64
               strategy:
@@ -85,7 +84,6 @@ inputSet:
                           context: ""
                           buildArgs:
                             CODEARTIFACT_AUTH_TOKEN: <+secrets.getValue("codeartifact-token")>
-                            GH_TOKEN: <+secrets.getValue("fme-github-netrc-token")>
                           envVariables:
                             PLUGIN_PLATFORM: linux/amd64,linux/arm64
               strategy:
