@@ -62,7 +62,7 @@ function arrangeConditions(mocksData) {
   });
 }
 
-export function splitsParserFromFileFactory() {
+function splitsParserFromFileFactory() {
 
   let previousMock = 'NO_MOCK_LOADED';
 
@@ -173,3 +173,7 @@ export function splitsParserFromFileFactory() {
   };
 
 }
+
+module.exports = {
+  splitsParserFromFileFactory,
+};
