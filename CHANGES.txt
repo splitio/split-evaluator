@@ -1,5 +1,8 @@
-2.9.1 (Sep 30, 2026)
+2.10.0 (Sep 30, 2026)
+  - Fixed localhost mode (SPLIT_EVALUATOR_API_KEY=localhost) not loading feature flags from the bundled YAML file, causing the SDK to time out. Regression introduced in 2.9.0.
+  - Fixed EACCES error on startup when running the container as a non-root user (e.g. Kubernetes runAsNonRoot / readOnlyRootFilesystem).
   - Fixed SPLIT_EVALUATOR_LOG_LEVEL (and `logLevel` in SPLIT_EVALUATOR_GLOBAL_CONFIG) not being applied to the 2nd..Nth environments when SPLIT_EVALUATOR_ENVIRONMENTS defined multiple environments.
+  - Added per-environment prefix (obfuscated apiKey) on SDK log lines so messages from concurrent environments can be told apart.
   - Updated base image to node:24.21.0-alpine3.24
   - Updated @splitsoftware/splitio-commons to 2.13.0
 
