@@ -16,6 +16,8 @@ COPY --from=builder /usr/src/split-evaluator/node_modules ./node_modules
 
 COPY . .
 
+RUN chmod -R a+rX /usr/src/split-evaluator
+
 EXPOSE 7548
 
 ENV SPLIT_EVALUATOR_SERVER_PORT=7548
