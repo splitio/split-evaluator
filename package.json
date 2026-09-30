@@ -1,6 +1,6 @@
 {
   "name": "split-evaluator",
-  "version": "2.9.0",
+  "version": "2.9.1",
   "description": "Split-Evaluator",
   "repository": "splitio/split-evaluator",
   "homepage": "https://github.com/splitio/split-evaluator#readme",
@@ -41,7 +41,7 @@
     "test": "NODE_ENV=test jest"
   },
   "dependencies": {
-    "@splitsoftware/splitio-commons": "2.10.0",
+    "@splitsoftware/splitio-commons": "2.13.0",
     "bloom-filters": "^3.0.4",
     "config": "^3.3.9",
     "js-yaml": "^3.14.2",

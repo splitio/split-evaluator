@@ -5,6 +5,7 @@ const { SplitFactory } = require('./sdk/index.js');
 const utils = require('./utils/utils');
 
 const getSplitFactory = (settings, moduleOverrider) => {
+  settings = { ...settings };
   const logLevel = settings.logLevel;
   delete settings.logLevel;
 
