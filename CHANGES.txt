@@ -1,4 +1,4 @@
-2.10.0 (Sep 30, 2026)
+2.10.0 (Oct 1, 2026)
   - Fixed localhost mode (SPLIT_EVALUATOR_API_KEY=localhost) not loading feature flags from the bundled YAML file, causing the SDK to time out. Regression introduced in 2.9.0.
   - Fixed EACCES error on startup when running the container as a non-root user (e.g. Kubernetes runAsNonRoot / readOnlyRootFilesystem).
   - Fixed SPLIT_EVALUATOR_LOG_LEVEL (and `logLevel` in SPLIT_EVALUATOR_GLOBAL_CONFIG) not being applied to the 2nd..Nth environments when SPLIT_EVALUATOR_ENVIRONMENTS defined multiple environments.
