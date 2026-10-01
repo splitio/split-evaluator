@@ -3,9 +3,13 @@ const { getRolloutPlan } = require('@splitsoftware/splitio-commons/cjs/storages/
 
 const { sdkFactory } = require('@splitsoftware/splitio-commons/cjs/sdkFactory');
 const { isConsumerMode } = require('@splitsoftware/splitio-commons/cjs/utils/settingsValidation/mode');
+const { syncManagerOfflineFactory } = require('@splitsoftware/splitio-commons/cjs/sync/offline/syncManagerOffline');
 const { settingsFactory } = require('./settings');
 const { platform, SignalListener } = require('./platform');
 const { bloomFilterFactory } = require('./platform/filter/bloomFilter');
+const { splitsParserFromFileFactory } = require('./sync/splitsParserFromFile');
+
+const LOCALHOST_MODE = 'localhost';
 
 /**
  *
@@ -56,6 +60,13 @@ function SplitFactory(config, __updateModules) {
   }
 
   const modules = getModules(settings);
+
+  if (settings.mode === LOCALHOST_MODE) {
+    modules.splitApiFactory = undefined;
+    modules.syncManagerFactory = syncManagerOfflineFactory(splitsParserFromFileFactory);
+    modules.SignalListener = undefined;
+  }
+
   if (__updateModules) __updateModules(modules);
   return sdkFactory(modules);
 }
