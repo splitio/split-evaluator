@@ -1,5 +1,5 @@
 # Builder stage
-FROM node:24.12.0-alpine3.22 AS builder
+FROM node:24.21.0-alpine3.24 AS builder
 
 WORKDIR /usr/src/split-evaluator
 
@@ -8,13 +8,15 @@ COPY package.json package-lock.json ./
 RUN npm install --only=production
 
 # Runner stage
-FROM node:24.12.0-alpine3.22 AS runner
+FROM node:24.21.0-alpine3.24 AS runner
 
 WORKDIR /usr/src/split-evaluator
 
 COPY --from=builder /usr/src/split-evaluator/node_modules ./node_modules
 
 COPY . .
+
+RUN chmod -R a+rX /usr/src/split-evaluator
 
 EXPOSE 7548
 
