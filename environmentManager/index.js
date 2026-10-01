@@ -71,7 +71,7 @@ const EnvironmentManagerFactory = (function(){
           };
         }
 
-        const { factory, telemetry, impressionsMode} = getSplitFactory(settings);
+        const { factory, telemetry, impressionsMode} = getSplitFactory(settings, obfuscate(apiKey));
 
         // Creates an environment for authToken
         this._environments[authToken] = {
