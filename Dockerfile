@@ -1,5 +1,7 @@
 # Builder stage
-FROM node:24.22.1-alpine3.24 AS builder
+FROM harness0.harness.io/oci/docker_artifacts/rf-curated/node:24.22.1-alpine3.23-rfcurated AS builder
+
+USER root
 
 WORKDIR /usr/src/split-evaluator
 
@@ -8,7 +10,9 @@ COPY package.json package-lock.json ./
 RUN npm install --only=production
 
 # Runner stage
-FROM node:24.22.1-alpine3.24 AS runner
+FROM harness0.harness.io/oci/docker_artifacts/rf-curated/node:24.22.1-alpine3.23-rfcurated AS runner
+
+USER root
 
 WORKDIR /usr/src/split-evaluator
 
