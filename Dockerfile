@@ -1,6 +1,7 @@
 # Builder stage
-FROM harness0.harness.io/oci/docker_artifacts/rf-curated/node:24.22.1-alpine3.23-rfcurated AS builder
+FROM harness0.harness.io/oci/docker_artifacts/hhi/node:24.22.0 AS builder
 
+# Build stage only: needed to create and write the work dir. Not used at runtime.
 USER root
 
 WORKDIR /usr/src/split-evaluator
@@ -10,17 +11,18 @@ COPY package.json package-lock.json ./
 RUN npm install --only=production
 
 # Runner stage
-FROM harness0.harness.io/oci/docker_artifacts/rf-curated/node:24.22.1-alpine3.23-rfcurated AS runner
+FROM harness0.harness.io/oci/docker_artifacts/hhi/node:24.22.0 AS runner
 
+# The base image runs as uid 1000 (non-root) by default.
 USER root
-
 WORKDIR /usr/src/split-evaluator
+RUN chown 1000:1000 /usr/src/split-evaluator
 
-COPY --from=builder /usr/src/split-evaluator/node_modules ./node_modules
+USER 1000
 
-COPY . .
+COPY --from=builder --chown=1000:1000 /usr/src/split-evaluator/node_modules ./node_modules
 
-RUN chmod -R a+rX /usr/src/split-evaluator
+COPY --chown=1000:1000 . .
 
 EXPOSE 7548
 
