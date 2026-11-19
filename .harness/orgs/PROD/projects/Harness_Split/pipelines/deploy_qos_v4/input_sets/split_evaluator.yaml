@@ -1,0 +1,52 @@
+inputSet:
+  name: split_evaluator
+  tags: {}
+  identifier: split_evaluator
+  orgIdentifier: PROD
+  projectIdentifier: Harness_Split
+  pipeline:
+    identifier: deploy_qos_v4
+    stages:
+      - stage:
+          identifier: CI
+          type: CI
+          spec:
+            execution:
+              steps:
+                - step:
+                    identifier: custom_tag
+                    type: Run
+                    spec:
+                      command: |-
+                        docker run --privileged --rm tonistiigi/binfmt --install all
+                        export VERSION="$(cat package.json | grep version | head -1 | awk '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')"
+                      envVariables: {}
+                    when:
+                      condition: "true"
+                - step:
+                    identifier: BuildAndPush
+                    type: BuildAndPushDockerRegistry
+                    spec:
+                      repo: <+trigger.payload.repo.identifier>
+                      tags:
+                        - <+pipeline.stages.CI<+strategy.identifierPostFix>.spec.execution.steps.custom_tag.output.outputVariables.VERSION>
+                        - latest
+                      dockerfile: ""
+                      context: ""
+                      buildArgs:
+                        CODEARTIFACT_AUTH_TOKEN: <+secrets.getValue("codeartifact-token")>
+                      envVariables:
+                        PLUGIN_NO_PUSH: <+<+trigger.payload.ref.name>!="refs/heads/main"?"true":"false">
+                        PLUGIN_BUILDX_LOAD: "false"
+                        PLUGIN_PLATFORM: linux/amd64,linux/arm64
+          strategy:
+            matrix:
+              service:
+                - <+trigger.payload.repo.identifier>
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: <+trigger.branch>
