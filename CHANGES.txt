@@ -1,3 +1,12 @@
+2.10.1 (Nov 20, 2026)
+  - Updated base image to node:24.22.3-alpine3.24, fixing vulnerabilities in:
+    - Alpine packages: zlib (CVE-2026-4738 critical, CVE-2026-85091), openssl, musl.
+    - npm bundled with the Node image: undici, brace-expansion, tar, ip-address.
+  - Added `apk upgrade` to the Dockerfile to pick up Alpine security fixes ahead of the base image, including zlib 1.4-r0 (CVE-2026-4738, critical) and openssl 3.5.9-r1.
+  - Updated the npm bundled in the image to 12.2.3, fixing the bundled undici (6.29.1) and brace-expansion (5.0.12) vulnerabilities.
+  - Updated proxy-addr to 2.0.8 (transitive via express), fixing CVE-2026-90711 (critical, authentication bypass by spoofing).
+  - Updated body-parser to 1.20.9 (transitive via express), fixing a high severity vulnerability.
+
 2.10.0 (Oct 1, 2026)
   - Fixed localhost mode (SPLIT_EVALUATOR_API_KEY=localhost) not loading feature flags from the bundled YAML file, causing the SDK to time out. Regression introduced in 2.9.0.
   - Fixed EACCES error on startup when running the container as a non-root user (e.g. Kubernetes runAsNonRoot / readOnlyRootFilesystem).
